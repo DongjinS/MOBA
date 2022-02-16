@@ -37,7 +37,7 @@ const CreateRoom = props => {
     console.log(token);
 
     axios
-      .get(`/privatebasket`, { token })
+      .get(`/privatebasket/${token}`)
       .then(Response => {
         console.log(Response);
         setProducts([...Response.data]);

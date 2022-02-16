@@ -4,6 +4,11 @@ const User = require("../models/User");
 
 // TODO : 함께 쇼핑 종료시 유저의 위시리스트에 공유위시리스트 품목 넣기 + 공유 위시리스트 삭제
 
+basketRouter.param("id", async (req, res, next, value) => {
+  req.id = value;
+  next();
+});
+
 // 선택 품목 유저 위시리스트 넣기
 // url : http://www.moba.com/privatebasket
 // method: post
@@ -78,7 +83,7 @@ async function deleteProduct(token, products, del_product) {
 basketRouter.delete("/", async (req, res) => {
   console.log("IN private basket, try to delete the selected products");
   console.log(req.body);
-  
+
   const cur_user = await User.findOne({
     token: req.body.data.token,
   });
@@ -93,10 +98,11 @@ basketRouter.delete("/", async (req, res) => {
   }
 });
 
-basketRouter.get("/", async (req, res) => {
+basketRouter.get("/:id", async (req, res) => {
   console.log("IN private basket, try to get the products");
+  console.log(req.id);
   const cur_user = await User.findOne({
-    token: req.body.token,
+    token: req.id,
   });
 
   console.log(cur_user);
