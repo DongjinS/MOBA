@@ -34,9 +34,12 @@ const CreateRoom = props => {
   서버에서 내 장바구니 물건 정보 받아옴 */
   useEffect(() => {
     const token = getCookie("x_auth");
+    console.log(token);
+
     axios
-      .post(`/createroom`, { token })
+      .get(`/privatebasket`, { token })
       .then(Response => {
+        console.log(Response);
         setProducts([...Response.data]);
       })
       .catch(Error => {
