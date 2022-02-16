@@ -4,6 +4,8 @@ import axios from 'axios';
 import styles from './RoomMemu.module.css';
 import WishList from '../wishlist/Wishlist';
 import Loading from '../loading/Loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useParams } from 'react-router-dom';
 
@@ -35,6 +37,18 @@ const RoomMemu = (props) => {
       }
     }
     return cookieValue;
+  };
+
+  const handleVotes = () => {
+    toast.warn('이 기능은 아직 활성화되지 않았습니다.', {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const handleMylistClick = () => {
@@ -116,13 +130,6 @@ const RoomMemu = (props) => {
         return (document.location.href = '/');
       }
     });
-
-    // 두명 다 나갈때만 해야함
-    // axios.delete(`/room/${roomID}`).then(response => {
-    //   if (response.data.success) {
-    //     return (document.location.href = "/");
-    //   }
-    // });
   });
 
   return (
@@ -147,9 +154,20 @@ const RoomMemu = (props) => {
           </button>
 
           {/* 투표 결과 확인 */}
-          <button className={styles.buttons}>
+          <button className={styles.buttons} onClick={handleVotes}>
             <i class="fa-solid fa-check-to-slot fa-xl"></i>
           </button>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </div>
       </div>
       <div>

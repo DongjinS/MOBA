@@ -29,7 +29,7 @@ const CreateRoom = (props) => {
     window.open(
       `/room/${id}`,
       `videochat`,
-      `width=${userWidth}, top=0, left=-10000, height=10000, scrollbars=yes, resizable=no`,
+      `width=${userWidth}, top=0, left=0, height=10000, scrollbars=yes, resizable=no`,
       'target'
     );
     // props.history.push(`/room/${id}`);
