@@ -38,10 +38,10 @@ const RoomMemu = (props) => {
   };
 
   const handleMylistClick = () => {
-    const cookie = getCookie('x_auth');
+    const token = getCookie('x_auth');
 
     console.log('changeHandler : ', checkedInputs);
-    console.log('cookie : ', cookie);
+    console.log('cookie : ', token);
 
     if (checkedInputs.length === 0) {
       console.log('선택된 상품이 없습니다.');
@@ -49,8 +49,8 @@ const RoomMemu = (props) => {
     }
     axios
       .post(`/privatebasket`, {
-        cookie,
-        checkedInputs,
+        token: token,
+        products: checkedInputs,
       })
       .then((Response) => {
         console.log(Response.data);
@@ -108,17 +108,6 @@ const RoomMemu = (props) => {
     setProducts([...products, new_product]);
   };
 
-  function getCookie(cookieName) {
-    var cookieValue = null;
-    if (document.cookie) {
-      var array = document.cookie.split(escape(cookieName) + '=');
-      if (array.length >= 2) {
-        var arraySub = array[1].split(';');
-        cookieValue = unescape(arraySub[0]);
-      }
-    }
-    return cookieValue;
-  };
   // 화상 창 닫으면 - 유저 토큰 + 위시리스트 상품들 정보 긁어서 post privatebasket
   window.addEventListener("unload" , () => {
     const token = getCookie('x_auth')
