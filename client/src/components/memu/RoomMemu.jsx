@@ -110,12 +110,13 @@ const RoomMemu = (props) => {
 
   // 화상 창 닫으면 - 유저 토큰 + 위시리스트 상품들 정보 긁어서 post privatebasket
   window.addEventListener('unload', () => {
-    const token = getCookie('x_auth');
-    axios.post(`/privatebasket`, { token, products }).then((response) => {
-      if (response.data.success) {
-        return (document.location.href = '/');
-      }
-    });
+    /*방 닫히면 위시리스트에 있던 상품들 개인 장바구니에 넣기 - 잠시 주석 */
+    // const token = getCookie('x_auth');
+    // axios.post(`/privatebasket`, { token, products }).then((response) => {
+    //   if (response.data.success) {
+    //     return (document.location.href = '/');
+    //   }
+    // });
 
     // 두명 다 나갈때만 해야함
     // axios.delete(`/room/${roomID}`).then(response => {

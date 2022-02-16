@@ -51,9 +51,9 @@ basketRouter.post("/", async (req, res) => {
   );
 
   // 잘 들어갔는지 확인 용도 - 추후에 지워야함
-  post_cur_user = await User.findOne({ token: req.body.token });
-  console.log(post_cur_user);
-  res.send("hello, this is server");
+  // post_cur_user = await User.findOne({ token: req.body.token });
+  // console.log(post_cur_user);
+  res.send("success post new product in private basket");
 });
 
 // delete helper
@@ -77,6 +77,8 @@ async function deleteProduct(token, products, del_product) {
 // res: success or fail
 basketRouter.delete("/", async (req, res) => {
   console.log("IN private basket, try to delete the selected products");
+  console.log(req.body);
+  
   const cur_user = await User.findOne({
     token: req.body.data.token,
   });
@@ -89,6 +91,18 @@ basketRouter.delete("/", async (req, res) => {
     console.log("fail to delete");
     res.send("no product to delete in privated basket");
   }
+});
+
+basketRouter.get("/", async (req, res) => {
+  console.log("IN private basket, try to get the products");
+  const cur_user = await User.findOne({
+    token: req.body.token,
+  });
+
+  console.log(cur_user);
+  console.log(cur_user.products);
+
+  res.send(cur_user.products);
 });
 
 module.exports = basketRouter;
