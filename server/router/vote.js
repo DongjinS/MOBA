@@ -43,4 +43,50 @@ voteRouter.delete("/", async (req, res) => {
   }
 });
 
+// 함께 쇼핑(외부) : 개인 투표리스트 보기(영상통화, 화상통화)
+// url : [www.moba.com/](http://www.moba.com/)myPage/vote
+// method : get
+
+voteRouter.get("/", async (req, res) => {
+	console.log(req.body);
+	if (req.body.creater) {
+			console.log("here");
+			res.send(await voteList.find({ creater: req.body.creater }));
+	} else if (req.body.room_info) {
+			res.send(await voteList.find({ room_info: req.body.room_info }));
+	} else {
+			res.send(
+					'missing argument, "room_info" or "creater" needed for update the vote'
+			);
+	}
+});
+
+// 투표 받기 (외부 사용자)
+// url: http://www.moba.com/vote/
+// method: PUT
+// data: ObjectId(vote) && Product(선택한 상품 정보)
+// res: success || fail
+voteRouter.put("/", async (req, res) => {
+	const oldBoard = await voteList.findById(req.body._id);
+	const newBoard = await oldBoard.products?.map((element) => {
+			if (element.product_name === req.body.product_name) {
+					element.likes += 1;
+					return element;
+			} else {
+					return element;
+			}
+	});
+	console.log(newBoard, "newBoard");
+	await voteList.updateOne(
+			{ _id: req.body._id },
+			{
+					$set: {
+							products: newBoard,
+					},
+			}
+	);
+	res.send("check it yourself");
+});
+
+
 module.exports = voteRouter;
