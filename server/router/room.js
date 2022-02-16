@@ -272,6 +272,7 @@ async function deleteProduct(products, room_info, del_product) {
 // data: 상품명 or id
 roomRouter.delete("/:id/wishlist", async (req, res) => {
   console.log("delete the selected products");
+  console.log(req.body);
 
   if (req.wishlist && req.body) {
     await deleteProduct(
