@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { v1 as uuid } from 'uuid';
 import styles from './CreateRoom.module.css';
 import Auth from '../../../hoc/auth';
@@ -6,15 +6,49 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../header/Header';
 import Cookies from 'universal-cookie';
+import Modal from '../../Modal/Modal';
 
 const CreateRoom = (props) => {
+  // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  // 쿠키 받아옴
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
   }
+
   if (getCookie('room')) {
     document.location.href = '/invited';
   }
+
+  /* create room 페이지 들어오면 토큰을 서버에 전달, 
+  서버에서 내 장바구니 물건 정보 받아옴 */
+  useEffect(() => {
+    const token = getCookie('x_auth');
+    console.log(token);
+
+    axios
+      .get(`/privatebasket/${token}`)
+      .then((Response) => {
+        console.log(Response);
+        setProducts(Response.data);
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
+  }, []);
+
+  console.log('Create Room : ', products);
+
   function create() {
     const id = uuid();
     const shopWidth = window.screen.width * 0.85;
@@ -52,7 +86,9 @@ const CreateRoom = (props) => {
           <button className={styles.buttons}>친구관리</button>
         </div>
         <div className={styles.btnWrapper}>
-          <button className={styles.buttons}>장바구니</button>
+          <button className={styles.buttons} onClick={openModal}>
+            장바구니
+          </button>
         </div>
         <div className={styles.btnWrapper}>
           <button
@@ -63,6 +99,12 @@ const CreateRoom = (props) => {
             쇼핑시작
           </button>
         </div>
+        <Modal
+          open={modalOpen}
+          close={closeModal}
+          header="나의 장바구니"
+          products={products}
+        />
         <div className={styles.btnWrapper}>
           <button
             className={styles.buttons}
