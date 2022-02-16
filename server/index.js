@@ -12,6 +12,9 @@ const roomRouter = require('./router/room');
 const userRouter = require('./router/user');
 const oauthRouter = require('./router/oauth')
 
+const basketRouter = require('./router/privatebasket');
+const voteRouter = require('./router/vote');
+
 const app = express();
 
 ///// 소셜 로그인 관련 /////
@@ -36,6 +39,12 @@ app.use('/api/users', userRouter);
 
 ///// 공유 위시리스트 관련 /////
 app.use('/room', roomRouter);
+//////////////////////////////
+///// 개인 장바구니 라우팅 /////
+app.use('/privatebasket', basketRouter);
+//////////////////////////////
+///// 투표 라우팅 /////
+app.use('/vote', voteRouter);
 //////////////////////////////
 
 app.get("/", (req, res) => {

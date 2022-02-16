@@ -8,7 +8,9 @@ import LandingPage from "./components/views/LandingPage/LandingPage";
 import LoginPage from "./components/views/LoginPage/LoginPage";
 import RegisterPage from "./components/views/RegisterPage/RegisterPage";
 import Room from "../src/components/views/RoomPage/Room";
-import InvitedPage from '../src/components/views/InvitedPage/InvitedPage';
+import InvitedPage from "../src/components/views/InvitedPage/InvitedPage";
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App() {
   document.body.style.backgroundColor = "black";
@@ -23,7 +25,7 @@ function App() {
           <Route path="/chooseshop" element={<ChooseShop />} />
           <Route path="/room/:roomID" element={<Room />} />
           <Route path="/invited" element={<InvitedPage />} />
-          <Route path="*" element={<Navigate replace to='/' />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>
     </Router>

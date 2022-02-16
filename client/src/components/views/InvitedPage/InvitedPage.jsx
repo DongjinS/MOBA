@@ -16,7 +16,21 @@ function InvitedPage(props) {
   const navigate = useNavigate();
   const handleClick = () => {
     const room = getCookie('room');
-    navigate(`/room/${room}`);
+    const shopWidth = window.screen.width * 0.85;
+    const userWidth = window.screen.width * 0.15;
+
+    window.open(
+      './chooseshop',
+      'shops',
+      `width=${shopWidth}, left=${userWidth}, top=0, height=10000, scrollbars=yes, resizable, status=yes, menubar=yes, titlebar=yes`
+    );
+
+    window.open(
+      `/room/${room}`,
+      `videochat`,
+      `width=${userWidth}, top=0, left=-10000, height=10000, scrollbars=yes, resizable=no`,
+      'target'
+    );
   };
   return (
     <>
