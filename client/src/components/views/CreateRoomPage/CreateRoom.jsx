@@ -37,17 +37,17 @@ const CreateRoom = props => {
     console.log(token);
 
     axios
-      .get(`/privatebasket`, { token })
+      .put(`/privatebasket`, { token })
       .then(Response => {
         console.log(Response);
-        setProducts([...Response.data]);
+        setProducts(Response.data);
       })
       .catch(Error => {
         console.log(Error);
       });
-
-    console.log("Create Room Products: ", products);
   }, []);
+
+  console.log("Create Room : ", products);
 
   function create() {
     const id = uuid();
@@ -89,8 +89,8 @@ const CreateRoom = props => {
           <button id={styles.shoppingStart} className={styles.buttons} onClick={create}>
             쇼핑시작
           </button>
-          <Modal open={modalOpen} close={closeModal} header="나의 장바구니" />
         </div>
+        <Modal open={modalOpen} close={closeModal} header="나의 장바구니" products={products} />
         <div className={styles.btnWrapper}>
           <button className={styles.buttons} id={styles.logoutBtn} onClick={logout}>
             {" "}

@@ -96,3 +96,9 @@
 .buttons:focus {
   box-shadow: #f37423 2px 8px 4px -6px;
 }
+
+/* .modalContainer {
+  background-color: aliceblue;
+  width: 80vh;
+  height: 80vh;
+} */

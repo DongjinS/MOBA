@@ -3,10 +3,12 @@ import styles from "./Wishlist.module.css";
 
 const Product = props => {
   const item = props.item;
-
+  console.log("products :", item);
   const onChange = e => {
     props.changeHandler(e.target.checked, item);
   };
+
+  // console.log("product : ", props.item[0]);
 
   return (
     <div className={styles.productItem}>

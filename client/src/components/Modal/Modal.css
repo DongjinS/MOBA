@@ -5,8 +5,14 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 99;
+  z-index: 0;
   background-color: rgba(0, 0, 0, 0.6);
+
+  margin: auto;
+  height: 300px;
+  /* max-height: 200px; */
+  /*  */
+  /* overflow: auto; */
 }
 .modal button {
   outline: none;
@@ -14,14 +20,15 @@
   border: 0;
 }
 .modal > section {
-  width: 90%;
-  max-width: 450px;
+  width: 200%;
+  max-width: 1300px;
   margin: 0 auto;
   border-radius: 0.3rem;
   background-color: #fff;
   /* 팝업이 열릴때 스르륵 열리는 효과 */
   animation: modal-show 0.3s;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow-y: scroll;
 }
 .modal > section > header {
   position: relative;
@@ -80,3 +87,19 @@
     opacity: 1;
   }
 }
+
+/**/
+.main {
+  display: flex;
+  /* flex-wrap: wrap; */
+}
+
+.section__ {
+  overflow-y: scroll;
+  width: 300px;
+}
+
+/* .container {
+  width: 80%;
+  height: 80%;
+} */

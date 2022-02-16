@@ -70,7 +70,7 @@ const RoomMemu = props => {
       .then(Response => {
         console.log("axios get");
         setIsLoading(false);
-        setProducts([...Response.data]);
+        setProducts(Response.data);
       })
       .catch(Error => {
         console.log(Error);
