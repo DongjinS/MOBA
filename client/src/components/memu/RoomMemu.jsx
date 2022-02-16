@@ -3,6 +3,7 @@ import AddProduct from '../addUrl/AddProduct';
 import axios from 'axios';
 import styles from './RoomMemu.module.css';
 import WishList from '../wishlist/Wishlist';
+import Loading from '../loading/Loading';
 
 import { useParams } from "react-router-dom";
 
@@ -10,14 +11,64 @@ const RoomMemu = (props) => {
   const [isWishlistOpen, setWishlistOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const roomNumber = window.location.pathname.split('/')[2];
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [checkedInputs, setCheckedInputs] = useState([]);
+
+  const changeHandler = (checked, id) => {
+    if (checked) {
+      setCheckedInputs([...checkedInputs, id]);
+    } else {
+      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    }
+
+    console.log('changeHandler : ', checkedInputs);
+  };
+
+  const getCookie = (cookieName) => {
+    var cookieValue = null;
+    if (document.cookie) {
+      var array = document.cookie.split(escape(cookieName) + '=');
+      if (array.length >= 2) {
+        var arraySub = array[1].split(';');
+        cookieValue = unescape(arraySub[0]);
+      }
+    }
+    return cookieValue;
+  };
+
+  const handleMylistClick = () => {
+    const cookie = getCookie('x_auth');
+
+    console.log('changeHandler : ', checkedInputs);
+    console.log('cookie : ', cookie);
+
+    if (checkedInputs.length === 0) {
+      console.log('선택된 상품이 없습니다.');
+      return;
+    }
+    axios
+      .post(`/privatebasket`, {
+        cookie,
+        checkedInputs,
+      })
+      .then((Response) => {
+        console.log(Response.data);
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
+  };
 
   const roomID = useParams().roomID;
 
   const getWishList = () => {
+    setIsLoading(true);
     axios
       .get(`/room/${roomNumber}/wishlist`)
       .then((Response) => {
         console.log('axios get');
+        setIsLoading(false);
         setProducts([...Response.data]);
       })
       .catch((Error) => {
@@ -53,7 +104,7 @@ const RoomMemu = (props) => {
     deleteAPIWishlistItem(shop_url);
   };
 
-  const handleAddProduct = new_product => {
+  const handleAddProduct = (new_product) => {
     setProducts([...products, new_product]);
   };
 
@@ -88,31 +139,48 @@ const RoomMemu = (props) => {
 
 
   return (
-    <div>
-      <AddProduct handleAddProduct={handleAddProduct} />
+    <>
+      <div className={styles.menus}>
+        <AddProduct handleAddProduct={handleAddProduct} />
 
-      <div className={styles.menuList}>
-        <button className={styles.buttons} onClick={props.onShareScreen}>
-          <i class="fa-brands fa-slideshare fa-xl"></i>
-        </button>
-        <button className={styles.buttons} onClick={HandleWishlist}>
-          <i class="fa-solid fa-hand-holding-heart fa-xl"></i>
-        </button>
-        <button className={styles.buttons}>
-          <i class="fa-solid fa-cart-plus fa-xl"></i>
-        </button>
-        <button className={styles.buttons}>
-          <i class="fa-solid fa-check-to-slot fa-xl"></i>
-        </button>
+        <div className={styles.menuList}>
+          {/* 화면 공유 */}
+          <button className={styles.buttons} onClick={props.onShareScreen}>
+            <i class="fa-brands fa-slideshare fa-xl"></i>
+          </button>
+
+          {/* 공유 위시리스트  */}
+          <button className={styles.buttons} onClick={HandleWishlist}>
+            <i class="fa-solid fa-hand-holding-heart fa-xl"></i>
+          </button>
+
+          {/* 장바구니 */}
+          <button className={styles.buttons} onClick={handleMylistClick}>
+            <i class="fa-solid fa-cart-plus fa-xl"></i>
+          </button>
+
+          {/* 투표 결과 확인 */}
+          <button className={styles.buttons}>
+            <i class="fa-solid fa-check-to-slot fa-xl"></i>
+          </button>
+        </div>
       </div>
       <div>
         {isWishlistOpen ? (
-          <WishList data={products} deleteItem={deleteItem} />
+          isLoading === true ? (
+            <Loading />
+          ) : (
+            <WishList
+              data={products}
+              deleteItem={deleteItem}
+              changeHandler={changeHandler}
+            />
+          )
         ) : (
           <></>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

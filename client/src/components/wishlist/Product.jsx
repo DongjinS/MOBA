@@ -5,7 +5,7 @@ const Product = props => {
   const item = props.item;
 
   const onChange = e => {
-    props.changeHandler(e.target.checked, item.product_name);
+    props.changeHandler(e.target.checked, item);
   };
 
   return (

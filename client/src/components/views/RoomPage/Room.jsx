@@ -153,15 +153,22 @@ const Room = props => {
   function shareScreen() {
     window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
 
-    navigator.mediaDevices.getDisplayMedia({ cursor: true }).then(stream => {
-      const screenTrack = stream.getTracks()[0];
-      //face를 screen으로 바꿔줌
-      senders.current.find(sender => sender.track.kind === "video").replaceTrack(screenTrack);
-      //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
-      screenTrack.onended = function () {
-        senders.current.find(sender => sender.track.kind === "video").replaceTrack(userStream.current.getTracks()[1]);
-      };
-    });
+    navigator.mediaDevices
+      .getDisplayMedia({ cursor: true })
+      .then(stream => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+
+        const screenTrack = stream.getTracks()[0];
+        //face를 screen으로 바꿔줌
+        senders.current.find(sender => sender.track.kind === "video").replaceTrack(screenTrack);
+        //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
+        screenTrack.onended = function () {
+          senders.current.find(sender => sender.track.kind === "video").replaceTrack(userStream.current.getTracks()[1]);
+        };
+      })
+      .catch(() => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+      });
   }
 
   return (

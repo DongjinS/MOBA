@@ -24,7 +24,7 @@ const WishList = props => {
     <>
       <div className={styles.productContainer}>
         {products.length > 0 ? (
-          products.map((item, index) => <Product changeHandler={changeHandler} key={index} item={item} deleteItem={props.deleteItem} />)
+          products.map((item, index) => <Product changeHandler={props.changeHandler} key={index} item={item} deleteItem={props.deleteItem} />)
         ) : (
           <></>
         )}

@@ -1,34 +1,39 @@
-/* .search {
-  text-align: center;
-  margin: auto;
-  position: relative;
-  width: 80%;
-  font-size: 5px;
+.AddWishList {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-
-.addInput {
-  width: 100%;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 14px;
-}
-
-.addImg {
-  position: absolute;
-  width: 17px;
-  top: 10px;
-  right: 12px;
-  margin: 0;
-} */
-
-.input {
+.inputs {
   outline-style: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  background-color: black;
+  border: none;
+  border-bottom: 1px solid white;
+  color: antiquewhite;
+  font-weight: 600;
+  font-size: 1em;
+  width: 9.8em;
 }
-
+.inputs:focus {
+  border-bottom: 1.5px solid #f37423;
+}
 .button {
+  margin-left: 2em;
   cursor: pointer;
+  background-color: white;
+  color: black;
+  margin: 0;
+
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: 3em;
+  height: 2em;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  font-weight: 600;
 }
