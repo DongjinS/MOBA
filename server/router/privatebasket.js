@@ -62,9 +62,9 @@ basketRouter.post('/', async (req, res) => {
 });
 
 // delete helper
-async function deleteProduct(token, products, del_product) {
+async function deleteProduct(token, products, shop_url) {
   const new_products = products?.filter(
-    (product) => product.shop_url !== del_product.shop_url
+    (product) => product.shop_url !== shop_url
   );
   await User.updateOne(
     { token: token },
@@ -89,7 +89,7 @@ basketRouter.delete('/', async (req, res) => {
   });
 
   if (cur_user.products.length !== 0 && req.body) {
-    await deleteProduct(cur_user.token, cur_user.products, req.body.product);
+    await deleteProduct(cur_user.token, cur_user.products, req.body.shop_url);
     console.log('success to delete');
     res.send('delete the selected products');
   } else {
