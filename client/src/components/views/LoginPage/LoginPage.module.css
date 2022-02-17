@@ -10,7 +10,7 @@
 }
 .loginBox {
   width: 30em;
-  height: 40em;
+  height: 36em;
   background-color: black;
   display: flex;
   align-items: center;
@@ -19,12 +19,38 @@
   margin-top: 4em;
   border: 2px solid white;
 }
+.kakao {
+  margin-top: 1em;
+  background-color: rgb(254, 229, 0);
+  color: #1a1a1c;
+  margin: 0;
+  margin-bottom: 0.3em;
+  padding: 0.5rem 1rem;
+
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: 15em;
+  height: 2.5em;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.kakao:hover {
+  color: #1a1a1c;
+}
+.kakao_desc {
+  margin-left: 0.5em;
+}
 .buttons {
   margin-top: 1em;
   background-color: #f37423;
   color: white;
   margin: 0;
-  margin-bottom: 0.3em;
+  margin-bottom: 0.6em;
   padding: 0.5rem 1rem;
 
   font-weight: 500;
