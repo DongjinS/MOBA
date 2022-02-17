@@ -14,7 +14,19 @@ const CreateRoom = (props) => {
   const [products, setProducts] = useState([]);
 
   const openModal = () => {
-    setModalOpen(true);
+    const token = getCookie('x_auth');
+    console.log(token);
+
+    axios
+      .get(`/privatebasket/${token}`)
+      .then((Response) => {
+        console.log(Response);
+        setProducts(Response.data);
+      })
+      .catch((Error) => {
+        console.log(Error);
+      })
+      .then(setModalOpen(true));
   };
   const closeModal = () => {
     setModalOpen(false);
@@ -29,25 +41,6 @@ const CreateRoom = (props) => {
   if (getCookie('room')) {
     document.location.href = '/invited';
   }
-
-  /* create room 페이지 들어오면 토큰을 서버에 전달, 
-  서버에서 내 장바구니 물건 정보 받아옴 */
-  useEffect(() => {
-    const token = getCookie('x_auth');
-    console.log(token);
-
-    axios
-      .get(`/privatebasket/${token}`)
-      .then((Response) => {
-        console.log(Response);
-        setProducts(Response.data);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
-  }, []);
-
-  console.log('Create Room : ', products);
 
   function create() {
     const id = uuid();
@@ -78,6 +71,28 @@ const CreateRoom = (props) => {
     });
   };
 
+  const deleteAPIWishlistItem = (item) => {
+    const token = getCookie('x_auth');
+    console.log(token);
+
+    axios
+      .delete(`/privatebasket`, { data: { token, product: item } })
+      .then(function (response) {
+        console.log(response);
+        setProducts(
+          products?.filter((product) => product.shop_url !== item.shop_url)
+        );
+      })
+      .catch(function (error) {
+        console.log(error.response);
+      });
+  };
+
+  const deleteItem = (product) => {
+    console.log('create room delete : ', product);
+    deleteAPIWishlistItem(product);
+  };
+
   return (
     <>
       <Header />
@@ -104,6 +119,7 @@ const CreateRoom = (props) => {
           close={closeModal}
           header="나의 장바구니"
           products={products}
+          deleteItem={deleteItem}
         />
         <div className={styles.btnWrapper}>
           <button

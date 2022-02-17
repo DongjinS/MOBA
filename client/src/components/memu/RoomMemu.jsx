@@ -67,6 +67,15 @@ const RoomMemu = (props) => {
         products: checkedInputs,
       })
       .then((Response) => {
+        toast('내 장바구니에 저장되었습니다😊', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.log('private basket save success');
         console.log(Response.data);
       })
@@ -160,6 +169,17 @@ const RoomMemu = (props) => {
           <button className={styles.buttons} onClick={handleMylistClick}>
             <i class="fa-solid fa-cart-plus fa-xl"></i>
           </button>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
 
           {/* 투표 결과 확인 */}
           <button className={styles.buttons} onClick={handleVotes}>
