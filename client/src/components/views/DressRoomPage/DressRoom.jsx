@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fabric } from "fabric";
 import { v1 as uuid } from "uuid";
+import { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
 
 import styles from "./DressRoom.module.css";
 
@@ -79,6 +80,43 @@ const DressRoom = props => {
     setCanvas(initCanvas());
   }, []);
 
+  useEffect(() => {
+    if (canvas) {
+      canvas.on("object:modified", function (options) {
+        if (options.target) {
+          const modifiedObj = {
+            obj: options.target,
+            id: options.target.id,
+          };
+          emitModify(modifiedObj);
+        }
+      });
+
+      canvas.on("object:moving", function (options) {
+        if (options.target) {
+          const modifiedObj = {
+            obj: options.target,
+            id: options.target.id,
+          };
+          emitModify(modifiedObj);
+        }
+      });
+
+      canvas.on('mouse:move', function(options) {
+        const mouseobj = {
+          clientX: options.e.clientX, 
+          clientY: options.e.clientY
+        }
+        emitMouse(mouseobj);
+      });
+
+      modifyObj(canvas);
+      addObj(canvas);
+      modifyMouse(canvas);
+    }
+  }, [canvas]);
+
+
   const addShape = e => {
     let type = e.target.name;
     let object;
@@ -102,13 +140,17 @@ const DressRoom = props => {
     object.set({ id: uuid() });
     canvas.add(object);
     console.log(object);
-
+    emitAdd({ obj: object, id: object.id });
     canvas.renderAll();
   };
 
   const addImg = (e, url, canvi) => {
     e.preventDefault();
-    new fabric.Image.fromURL(url, img => {
+    new fabric.Image.fromURL(url, (img) => {
+      console.log(img);
+      console.log("sender", img._element.currentSrc);
+      img.set({ id: uuid() });
+      emitAdd({ obj: img, id: img.id , url: img._element.currentSrc});
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();

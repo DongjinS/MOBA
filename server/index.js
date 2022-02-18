@@ -86,6 +86,21 @@ io.on("connection", (socket) => {
   socket.on("ice-candidate", (incoming) => {
     io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
+
+  console.log("hello this is server");
+  socket.on("object-added", (data) => {
+    socket.broadcast.emit("new-add", data);
+  });
+  
+  socket.on("object-modified", (data) => {
+    socket.broadcast.emit("new-modification", data);
+  });
+
+  socket.on("mousemove", (data) => {
+    console.log("receive mouse", data)
+    socket.broadcast.emit("new-mouse", data);
+  });
+
 });
 ///////////////////////////////////
 
