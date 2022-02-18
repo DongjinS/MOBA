@@ -86,12 +86,18 @@ const CreateRoom = props => {
     deleteAPIWishlistItem(product);
   };
 
+  const HandleDressRoomClick = () => {
+    navigate("/dressroom");
+  };
+
   return (
     <>
       <Header />
       <div className={styles.container}>
         <div className={styles.btnWrapper} id={styles.firstWrapper}>
-          <button className={styles.buttons}>친구관리</button>
+          <button className={styles.buttons} onClick={HandleDressRoomClick}>
+            코디하기
+          </button>
         </div>
         <div className={styles.btnWrapper}>
           <button className={styles.buttons} onClick={openModal}>

@@ -11,9 +11,10 @@ import Room from "../src/components/views/RoomPage/Room";
 import InvitedPage from "../src/components/views/InvitedPage/InvitedPage";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import DressRoom from "./components/views/DressRoomPage/DressRoom";
 
 function App() {
-  document.body.style.backgroundColor = "black";
+  document.body.style.backgroundColor = "white";
   return (
     <Router>
       <div>
@@ -25,6 +26,7 @@ function App() {
           <Route path="/chooseshop" element={<ChooseShop />} />
           <Route path="/room/:roomID" element={<Room />} />
           <Route path="/invited" element={<InvitedPage />} />
+          <Route path="/dressroom" element={<DressRoom />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>
