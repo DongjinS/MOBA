@@ -87,7 +87,9 @@ const CreateRoom = props => {
   };
 
   const HandleDressRoomClick = () => {
-    navigate("/dressroom");
+    const id = uuid();
+
+    navigate(`/dressroom/${id}`);
   };
 
   return (

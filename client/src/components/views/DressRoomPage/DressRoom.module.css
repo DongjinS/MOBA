@@ -48,13 +48,16 @@
 }
 
 .video1 {
-  background-color: bisque;
+  /* background-color: bisque; */
   height: 43vh;
   width: 35vh;
 }
 
 .video2 {
-  background-color: cadetblue;
+  /* background-color: cadetblue; */
   height: 43vh;
   width: 35vh;
+}
+
+.video__control {
 }

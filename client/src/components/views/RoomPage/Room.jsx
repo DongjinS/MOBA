@@ -36,23 +36,17 @@ const Room = props => {
       .then(stream => {
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-
         socketRef.current = io.connect("/");
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
-
         socketRef.current.on("other user", userID => {
           callUser(userID);
           otherUser.current = userID;
         });
-
         socketRef.current.on("user joined", userID => {
           otherUser.current = userID;
         });
-
         socketRef.current.on("offer", handleRecieveCall);
-
         socketRef.current.on("answer", handleAnswer);
-
         socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
       });
   }, []); // 맨 처음 한번만

@@ -1,13 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
 import { v1 as uuid } from "uuid";
-import { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
-
+import io from "socket.io-client";
+import { useHistory, useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import socket, { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
 import styles from "./DressRoom.module.css";
 
 const DressRoom = props => {
   const [canvas, setCanvas] = useState("");
   const [imgURL, setImgURL] = useState("");
+
+  const userVideo = useRef();
+  const partnerVideo = useRef();
+  const peerRef = useRef();
+  const socketRef = useRef();
+  const otherUser = useRef();
+  // 얘는 DOM을 지정하는 것 같지 않고 변수설정하는 것 같이 쓰는 모양(useRef는 변수관리 역할도 한다고 함)
+  const userStream = useRef();
+  const senders = useRef([]);
+  const roomID = useParams().roomID;
 
   const items = [
     {
@@ -78,6 +91,25 @@ const DressRoom = props => {
 
   useEffect(() => {
     setCanvas(initCanvas());
+
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
+      .then(stream => {
+        userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
+        userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        socketRef.current = io.connect("/");
+        socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
+        socketRef.current.on("other user", userID => {
+          callUser(userID);
+          otherUser.current = userID;
+        });
+        socketRef.current.on("user joined", userID => {
+          otherUser.current = userID;
+        });
+        socketRef.current.on("offer", handleRecieveCall);
+        socketRef.current.on("answer", handleAnswer);
+        socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
+      });
   }, []);
 
   useEffect(() => {
@@ -102,20 +134,19 @@ const DressRoom = props => {
         }
       });
 
-      canvas.on('mouse:move', function(options) {
-        const mouseobj = {
-          clientX: options.e.clientX, 
-          clientY: options.e.clientY
-        }
-        emitMouse(mouseobj);
-      });
+      // canvas.on("mouse:move", function (options) {
+      //   const mouseobj = {
+      //     clientX: options.e.clientX,
+      //     clientY: options.e.clientY,
+      //   };
+      //   emitMouse(mouseobj);
+      // });
 
       modifyObj(canvas);
       addObj(canvas);
-      modifyMouse(canvas);
+      // modifyMouse(canvas);
     }
   }, [canvas]);
-
 
   const addShape = e => {
     let type = e.target.name;
@@ -146,11 +177,11 @@ const DressRoom = props => {
 
   const addImg = (e, url, canvi) => {
     e.preventDefault();
-    new fabric.Image.fromURL(url, (img) => {
+    new fabric.Image.fromURL(url, img => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
-      emitAdd({ obj: img, id: img.id , url: img._element.currentSrc});
+      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc });
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();
@@ -166,6 +197,135 @@ const DressRoom = props => {
     );
     // canvas.discardActiveObject().renderAll();
   };
+
+  function copyLink() {
+    let currentUrl = window.document.location.href; //복사 잘됨
+    navigator.clipboard.writeText(currentUrl);
+    toast.success("초대링크 복사 완료!", {
+      position: "bottom-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+
+  // ---------- webTRC video call ----------
+  function callUser(userID) {
+    peerRef.current = createPeer(userID);
+    //senders에 넣어준다 - 중요!
+    userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+  }
+
+  function createPeer(userID) {
+    const peer = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: "stun:stun.stunprotocol.org",
+        },
+        {
+          urls: "turn:numb.viagenie.ca",
+          credential: "muazkh",
+          username: "webrtc@live.com",
+        },
+      ],
+    });
+
+    peer.onicecandidate = handleICECandidateEvent;
+    peer.ontrack = handleTrackEvent;
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
+
+    return peer;
+  }
+
+  function handleNegotiationNeededEvent(userID) {
+    peerRef.current
+      .createOffer()
+      .then(offer => {
+        return peerRef.current.setLocalDescription(offer);
+      })
+      .then(() => {
+        const payload = {
+          target: userID,
+          caller: socketRef.current.id,
+          sdp: peerRef.current.localDescription,
+        };
+        socketRef.current.emit("offer", payload);
+      })
+      .catch(e => console.log(e));
+  }
+
+  function handleRecieveCall(incoming) {
+    peerRef.current = createPeer();
+    const desc = new RTCSessionDescription(incoming.sdp);
+    peerRef.current
+      .setRemoteDescription(desc)
+      .then(() => {
+        userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+      })
+      .then(() => {
+        return peerRef.current.createAnswer();
+      })
+      .then(answer => {
+        return peerRef.current.setLocalDescription(answer);
+      })
+      .then(() => {
+        const payload = {
+          target: incoming.caller,
+          caller: socketRef.current.id,
+          sdp: peerRef.current.localDescription,
+        };
+        socketRef.current.emit("answer", payload);
+      });
+  }
+
+  function handleAnswer(message) {
+    const desc = new RTCSessionDescription(message.sdp);
+    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+  }
+
+  function handleICECandidateEvent(e) {
+    if (e.candidate) {
+      const payload = {
+        target: otherUser.current,
+        candidate: e.candidate,
+      };
+      socketRef.current.emit("ice-candidate", payload);
+    }
+  }
+
+  function handleNewICECandidateMsg(incoming) {
+    const candidate = new RTCIceCandidate(incoming);
+
+    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
+  }
+
+  function handleTrackEvent(e) {
+    partnerVideo.current.srcObject = e.streams[0];
+  }
+
+  function shareScreen() {
+    window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
+
+    navigator.mediaDevices
+      .getDisplayMedia({ cursor: true })
+      .then(stream => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+
+        const screenTrack = stream.getTracks()[0];
+        //face를 screen으로 바꿔줌
+        senders.current.find(sender => sender.track.kind === "video").replaceTrack(screenTrack);
+        //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
+        screenTrack.onended = function () {
+          senders.current.find(sender => sender.track.kind === "video").replaceTrack(userStream.current.getTracks()[1]);
+        };
+      })
+      .catch(() => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+      });
+  }
 
   return (
     <>
@@ -195,6 +355,20 @@ const DressRoom = props => {
           <button type="button" name="delete" onClick={deleteShape}>
             삭제하기
           </button>
+          <button className={styles.copyBtn} onClick={copyLink}>
+            초대링크 복사
+          </button>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </div>
         <div>
           <form onSubmit={e => addImg(e, imgURL, canvas)}>
@@ -230,8 +404,12 @@ const DressRoom = props => {
           </div>
 
           <div className={styles.body}>
-            <div className={styles.video1}>video 1</div>
-            <div className={styles.video2}>video 2</div>
+            <video autoPlay ref={userVideo} className={(styles.video1, styles.video__control)}>
+              video 1
+            </video>
+            <video autoPlay ref={partnerVideo} className={styles.video2}>
+              video 2
+            </video>
           </div>
         </div>
       </div>
