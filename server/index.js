@@ -8,12 +8,12 @@ const socket = require("socket.io");
 const config = require("./config/key");
 const User = require("./models/User");
 const { auth } = require("./middleware/auth");
-const roomRouter = require('./router/room');
-const userRouter = require('./router/user');
-const oauthRouter = require('./router/oauth')
+const roomRouter = require("./router/room");
+const userRouter = require("./router/user");
+const oauthRouter = require("./router/oauth");
 
-const basketRouter = require('./router/privatebasket');
-const voteRouter = require('./router/vote');
+const basketRouter = require("./router/privatebasket");
+const voteRouter = require("./router/vote");
 
 const app = express();
 
@@ -22,8 +22,6 @@ const app = express();
 // const logger = winston.createLogger();
 // const qs = require('qs');
 // const fetch = require('node-fetch');
-
-
 
 mongoose
   .connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -35,29 +33,30 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 ///// 로그인 / 회원가입 관련 /////
-app.use('/api/users', userRouter);
+app.use("/api/users", userRouter);
 
 ///// 공유 위시리스트 관련 /////
-app.use('/room', roomRouter);
+app.use("/room", roomRouter);
 //////////////////////////////
 ///// 개인 장바구니 라우팅 /////
-app.use('/privatebasket', basketRouter);
+app.use("/privatebasket", basketRouter);
 //////////////////////////////
 ///// 투표 라우팅 /////
-app.use('/vote', voteRouter);
+app.use("/vote", voteRouter);
 //////////////////////////////
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use('/oauth', oauthRouter);
+app.use("/oauth", oauthRouter);
 
 ///// 영상 통화 및 화면 공유 /////
 const server = http.createServer(app);
 const io = socket(server);
 const rooms = {};
 io.on("connection", (socket) => {
+  console.log("hello this is server IO connection", socket.id);
   socket.on("join room", (roomID) => {
     if (rooms[roomID]) {
       // 이미 있는 방이면
@@ -87,24 +86,29 @@ io.on("connection", (socket) => {
     io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
 
-  console.log("hello this is server");
   socket.on("object-added", (data) => {
     socket.broadcast.emit("new-add", data);
   });
-  
+
   socket.on("object-modified", (data) => {
     socket.broadcast.emit("new-modification", data);
   });
 
   socket.on("mousemove", (data) => {
-    console.log("receive mouse", data)
-    socket.broadcast.emit("new-mouse", data);
+    // console.log("receive mouse", data);
+    // socket.broadcast.emit("new-mouse", data);
+
+    data.id = socket.id;
+    socket.broadcast.emit("moving", data);
   });
 
+  socket.on("disconnect", () => {
+    console.log("disconnect", socket.id);
+    delete rooms[socket.id];
+    console.log(rooms);
+    socket.broadcast.emit("clientdisconnect", socket.id);
+  });
 });
 ///////////////////////////////////
-
-
-
 
 server.listen(8000);
