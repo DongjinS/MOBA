@@ -7,7 +7,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import socket, { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
+import {
+  emitMouse,
+  emitModify,
+  emitAdd,
+  modifyObj,
+  addObj,
+  modifyMouse,
+  getPointer,
+  socketConnect,
+  deleteMouse,
+} from "./socket";
+
 import styles from "./DressRoom.module.css";
 
 import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
@@ -17,12 +28,10 @@ import ClothesLoading from "../../loading/ClothesLoading";
 
 const DressRoom = props => {
   const [canvas, setCanvas] = useState("");
-  const [imgURL, setImgURL] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
   const canvasRef = useRef();
-
   const userVideo = useRef();
   const partnerVideo = useRef();
   const peerRef = useRef();
@@ -32,6 +41,14 @@ const DressRoom = props => {
   const userStream = useRef();
   const senders = useRef([]);
   const roomID = useParams().roomID;
+  let socket;
+  let flag = true;
+  if (flag){
+    flag = false;
+    console.log("try connect")
+    socket = socketConnect();
+    socketRef.current = socket;
+  }
 
   function getCookie(name) {
     const cookies = new Cookies();
@@ -54,19 +71,21 @@ const DressRoom = props => {
     // 개인 장바구니 상품을 가져온 후 로딩 종료
 
     setCanvas(initCanvas(canvasWidth, canvasHeight));
+    getPointer();
 
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
-      .then(stream => {
+      .then((stream) => {
+        console.log("rtc socket");
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        socketRef.current = io.connect("/");
+        // socketRef.current = io.connect("/");
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
-        socketRef.current.on("other user", userID => {
+        socketRef.current.on("other user", (userID) => {
           callUser(userID);
           otherUser.current = userID;
         });
-        socketRef.current.on("user joined", userID => {
+        socketRef.current.on("user joined", (userID) => {
           otherUser.current = userID;
         });
         socketRef.current.on("offer", handleRecieveCall);
@@ -88,8 +107,13 @@ const DressRoom = props => {
         setIsLoading(false);
       });
   }, []);
-
+  
   useEffect(() => {
+    // if (flag){
+    //   flag = false;
+    //   console.log("try connect")
+    //   socket = socketConnect();
+    // }
     if (canvas) {
       canvas.on("object:modified", function (options) {
         if (options.target) {
@@ -97,7 +121,7 @@ const DressRoom = props => {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj);
+          emitModify(modifiedObj, socket);
         }
       });
 
@@ -107,25 +131,26 @@ const DressRoom = props => {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj);
+          emitModify(modifiedObj, socket);
         }
       });
 
-      // canvas.on("mouse:move", function (options) {
-      //   const mouseobj = {
-      //     clientX: options.e.clientX,
-      //     clientY: options.e.clientY,
-      //   };
-      //   emitMouse(mouseobj);
-      // });
+      canvas.on("mouse:move", function (options) {
+        const mouseobj = {
+          clientX: options.e.clientX,
+          clientY: options.e.clientY,
+        };
+        emitMouse(mouseobj, socket);
+      });
 
-      modifyObj(canvas);
-      addObj(canvas);
-      // modifyMouse(canvas);
+      console.log("canvas socket:", socket);
+      modifyObj(canvas, socket);
+      addObj(canvas, socket);
+      modifyMouse(canvas, socket);
     }
   }, [canvas]);
 
-  const addShape = e => {
+  const addShape = (e) => {
     let type = e.target.name;
     let object;
 
@@ -148,27 +173,29 @@ const DressRoom = props => {
     object.set({ id: uuid() });
     canvas.add(object);
     console.log(object);
-    emitAdd({ obj: object, id: object.id });
+    emitAdd({ obj: object, id: object.id }, socket);
     canvas.renderAll();
   };
 
   const addImg = (e, url, canvi) => {
     e.preventDefault();
-    new fabric.Image.fromURL(url, img => {
+    new fabric.Image.fromURL(url, (img) => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
-      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc });
+      emitAdd(
+        { obj: img, id: img.id, url: img._element.currentSrc },
+        socket
+      );
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();
-      setImgURL("");
     });
   };
 
   const deleteShape = () => {
     console.log(
-      canvas.getActiveObjects().forEach(obj => {
+      canvas.getActiveObjects().forEach((obj) => {
         canvas.remove(obj);
       })
     );
@@ -193,7 +220,13 @@ const DressRoom = props => {
   function callUser(userID) {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+    userStream.current
+      .getTracks()
+      .forEach((track) =>
+        senders.current.push(
+          peerRef.current.addTrack(track, userStream.current)
+        )
+      );
   }
 
   function createPeer(userID) {
@@ -220,7 +253,7 @@ const DressRoom = props => {
   function handleNegotiationNeededEvent(userID) {
     peerRef.current
       .createOffer()
-      .then(offer => {
+      .then((offer) => {
         return peerRef.current.setLocalDescription(offer);
       })
       .then(() => {
@@ -231,7 +264,7 @@ const DressRoom = props => {
         };
         socketRef.current.emit("offer", payload);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }
 
   function handleRecieveCall(incoming) {
@@ -240,12 +273,18 @@ const DressRoom = props => {
     peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+        userStream.current
+          .getTracks()
+          .forEach((track) =>
+            senders.current.push(
+              peerRef.current.addTrack(track, userStream.current)
+            )
+          );
       })
       .then(() => {
         return peerRef.current.createAnswer();
       })
-      .then(answer => {
+      .then((answer) => {
         return peerRef.current.setLocalDescription(answer);
       })
       .then(() => {
@@ -260,7 +299,7 @@ const DressRoom = props => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
   }
 
   function handleICECandidateEvent(e) {
@@ -276,33 +315,16 @@ const DressRoom = props => {
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
 
-    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
+    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
   }
 
   function handleTrackEvent(e) {
     partnerVideo.current.srcObject = e.streams[0];
   }
 
-  function shareScreen() {
-    window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
-
-    navigator.mediaDevices
-      .getDisplayMedia({ cursor: true })
-      .then(stream => {
-        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
-
-        const screenTrack = stream.getTracks()[0];
-        //face를 screen으로 바꿔줌
-        senders.current.find(sender => sender.track.kind === "video").replaceTrack(screenTrack);
-        //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
-        screenTrack.onended = function () {
-          senders.current.find(sender => sender.track.kind === "video").replaceTrack(userStream.current.getTracks()[1]);
-        };
-      })
-      .catch(() => {
-        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
-      });
-  }
+  // socketRef.current.on("clientdisconnect", function (id) {
+  //   deleteMouse(id);
+  // });
 
   return (
     <>
@@ -374,6 +396,7 @@ const DressRoom = props => {
             </div>
           </div>
           <div ref={canvasRef} className={styles.main}>
+            <div id="pointers"></div>
             <canvas className={styles.canvas} id="canvas" />
           </div>
           <div className={styles.sidebarB}>

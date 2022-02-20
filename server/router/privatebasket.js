@@ -88,11 +88,11 @@ basketRouter.delete('/', async (req, res) => {
     token: req.body.token,
   });
 
-  if (cur_user.products.length !== 0 && req.body) {
+  try {
     await deleteProduct(cur_user.token, cur_user.products, req.body.shop_url);
     console.log('success to delete');
     res.send('delete the selected products');
-  } else {
+  } catch (error) {
     console.log('fail to delete');
     res.send('no product to delete in privated basket');
   }
@@ -104,11 +104,14 @@ basketRouter.get('/:id', async (req, res) => {
   const cur_user = await User.findOne({
     token: req.id,
   });
-
+try {
   console.log(cur_user);
   console.log(cur_user.products);
 
   res.send(cur_user.products);
+} catch (error) {
+  res.send([]);
+}
 });
 
 module.exports = basketRouter;
