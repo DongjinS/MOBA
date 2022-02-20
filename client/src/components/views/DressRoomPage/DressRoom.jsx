@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { fabric } from "fabric";
 import { v1 as uuid } from "uuid";
-import { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
+import {
+  emitMouse,
+  emitModify,
+  emitAdd,
+  modifyObj,
+  addObj,
+  modifyMouse,
+  getPointer,
+  socketConnect,
+  deleteMouse,
+} from "./socket";
 
 import styles from "./DressRoom.module.css";
 
-const DressRoom = props => {
+const DressRoom = (props) => {
   const [canvas, setCanvas] = useState("");
   const [imgURL, setImgURL] = useState("");
+
+  let socket = socketConnect();
 
   const items = [
     {
@@ -78,6 +90,7 @@ const DressRoom = props => {
 
   useEffect(() => {
     setCanvas(initCanvas());
+    getPointer();
   }, []);
 
   useEffect(() => {
@@ -88,7 +101,7 @@ const DressRoom = props => {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj);
+          emitModify(modifiedObj, socket);
         }
       });
 
@@ -98,26 +111,25 @@ const DressRoom = props => {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj);
+          emitModify(modifiedObj, socket);
         }
       });
 
-      canvas.on('mouse:move', function(options) {
+      canvas.on("mouse:move", function (options) {
         const mouseobj = {
-          clientX: options.e.clientX, 
-          clientY: options.e.clientY
-        }
-        emitMouse(mouseobj);
+          clientX: options.e.clientX,
+          clientY: options.e.clientY,
+        };
+        emitMouse(mouseobj, socket);
       });
 
-      modifyObj(canvas);
-      addObj(canvas);
-      // modifyMouse(canvas);
+      modifyObj(canvas, socket);
+      addObj(canvas, socket);
+      modifyMouse(canvas, socket);
     }
   }, [canvas]);
 
-
-  const addShape = e => {
+  const addShape = (e) => {
     let type = e.target.name;
     let object;
 
@@ -140,7 +152,7 @@ const DressRoom = props => {
     object.set({ id: uuid() });
     canvas.add(object);
     console.log(object);
-    emitAdd({ obj: object, id: object.id });
+    emitAdd({ obj: object, id: object.id }, socket);
     canvas.renderAll();
   };
 
@@ -150,7 +162,7 @@ const DressRoom = props => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
-      emitAdd({ obj: img, id: img.id , url: img._element.currentSrc});
+      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socket);
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();
@@ -160,12 +172,16 @@ const DressRoom = props => {
 
   const deleteShape = () => {
     console.log(
-      canvas.getActiveObjects().forEach(obj => {
+      canvas.getActiveObjects().forEach((obj) => {
         canvas.remove(obj);
       })
     );
     // canvas.discardActiveObject().renderAll();
   };
+
+  socket.on("clientdisconnect", function (id) {
+    deleteMouse(id);
+  });
 
   return (
     <>
@@ -197,9 +213,13 @@ const DressRoom = props => {
           </button>
         </div>
         <div>
-          <form onSubmit={e => addImg(e, imgURL, canvas)}>
+          <form onSubmit={(e) => addImg(e, imgURL, canvas)}>
             <div>
-              <input type="text" value={imgURL} onChange={e => setImgURL(e.target.value)} />
+              <input
+                type="text"
+                value={imgURL}
+                onChange={(e) => setImgURL(e.target.value)}
+              />
               <button type="submit">Add Image</button>
             </div>
           </form>
@@ -213,12 +233,20 @@ const DressRoom = props => {
               <div className={styles.containerProduct}>
                 <div className={styles.producctInfo}>
                   <div className={styles.containerImg}>
-                    <img className={styles.productImg} src={item.img} alt="상품 이미지" />
+                    <img
+                      className={styles.productImg}
+                      src={item.img}
+                      alt="상품 이미지"
+                    />
                   </div>
                   <div className={styles.productTitle}>{item.product_name}</div>
                 </div>
                 <div>
-                  <button className={styles.productAddbtn} type="button" onClick={e => addImg(e, item.img, canvas)}>
+                  <button
+                    className={styles.productAddbtn}
+                    type="button"
+                    onClick={(e) => addImg(e, item.img, canvas)}
+                  >
                     추가
                   </button>
                 </div>
@@ -226,7 +254,6 @@ const DressRoom = props => {
             ))}
           </div>
           <div>
-            <script src="/socket.js"></script>
             <div id="pointers"></div>
             <canvas className={styles.canvas} id="canvas" />
           </div>
