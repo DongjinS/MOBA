@@ -8,9 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import socket, { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
 import styles from "./DressRoom.module.css";
 
-import { FaVideo, FaVideoSlash, FaVolumnMute } from "react-icons/fa";
-import { IoCall } from "react-icons/io";
-import { GoUnMute } from "react-icons/go";
+import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
+import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
+import { GoUnmute, GoMute } from "react-icons/go";
 
 const DressRoom = props => {
   const [canvas, setCanvas] = useState("");
@@ -18,17 +18,17 @@ const DressRoom = props => {
 
   const canvasRef = useRef();
 
-  const [canvasDimensions, setCanvasDimensions] = useState({
-    width: canvasRef.current.offsetWidth,
-    height: canvasRef.current.offsetHeight,
-  });
+  // const [canvasDimensions, setCanvasDimensions] = useState({
+  //   width: canvasRef.current.offsetWidth,
+  //   height: canvasRef.current.offsetHeight,
+  // });
 
-  const handleResize = () => {
-    setCanvasDimensions({
-      width: canvasRef.current.offsetWidth,
-      height: canvasRef.current.offsetHeight,
-    });
-  };
+  // const handleResize = () => {
+  //   setCanvasDimensions({
+  //     width: canvasRef.current.offsetWidth,
+  //     height: canvasRef.current.offsetHeight,
+  //   });
+  // };
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -113,12 +113,12 @@ const DressRoom = props => {
   // }, [canvas]);
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    // const canvasWidth = canvasRef.current.offsetWidth;
-    // const canvasHeight = canvasRef.current.offsetHeight;
+    // window.addEventListener("resize", handleResize, false);
+    const canvasWidth = canvasRef.current.offsetWidth;
+    const canvasHeight = canvasRef.current.offsetHeight;
 
-    // setCanvas(initCanvas(canvasWidth, canvasHeight));
-    setCanvas(initCanvas(canvasDimensions.width, canvasDimensions.height));
+    setCanvas(initCanvas(canvasWidth, canvasHeight));
+    // setCanvas(initCanvas(canvasDimensions.width, canvasDimensions.height));
 
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
@@ -424,12 +424,18 @@ const DressRoom = props => {
       <div className={styles.sidebarB}>
         <div className={styles.video_container}>
           <div className={styles.user1}>
-            <video autoPlay ref={userVideo} className={(styles.video1, styles.video__control)}>
+            <video autoPlay ref={userVideo} className={styles.video1}>
               video 1
             </video>
             <div className={styles.control_box1}>
-              <button className={styles.buttons}>
-                <i className="fa-solid fa-hand-holding-heart fa-xl"></i>
+              <button className={styles.cameraBtn}>
+                <BsCameraVideoFill size="24" />
+              </button>
+              <button className={styles.micBtn}>
+                <BsFillMicFill />
+              </button>
+              <button className={styles.muteBtn}>
+                <GoUnmute />
               </button>
             </div>
           </div>

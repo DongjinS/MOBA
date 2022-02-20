@@ -122,16 +122,41 @@
 .user1 {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
-.control_box1 {
+
+.user1:hover > .control_box1 {
+  visibility: visible;
+  z-index: 10;
+  position: absolute;
+  /* bottom: 10px; */
   display: flex;
   height: 30px;
   background-color: bisque;
-  justify-content: space-between;
+  left: 50%;
+  transform: translateX(-50%);
+  /* margin: auto; */
+  bottom: 10px;
+  /* transition: all ease 2s 0s; */
+  animation: fadeIn 0.3s ease-in-out;
+}
+.control_box1 {
+  visibility: visibility;
 }
 
 .video1 {
 }
 
 .video2 {
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 3;
+    transform: translate(-50%);
+  }
 }
