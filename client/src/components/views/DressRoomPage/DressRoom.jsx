@@ -428,13 +428,13 @@ const DressRoom = props => {
               video 1
             </video>
             <div className={styles.control_box1}>
-              <button className={styles.cameraBtn}>
-                <BsCameraVideoFill size="24" />
+              <button className={(styles.cameraBtn, styles.controlBtn)}>
+                <BsCameraVideoFill className={styles.icon} />
               </button>
-              <button className={styles.micBtn}>
+              <button className={(styles.micBtn, styles.controlBtn)}>
                 <BsFillMicFill />
               </button>
-              <button className={styles.muteBtn}>
+              <button className={(styles.muteBtn, styles.controlBtn)}>
                 <GoUnmute />
               </button>
             </div>

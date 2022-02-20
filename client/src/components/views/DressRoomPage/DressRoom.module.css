@@ -131,7 +131,7 @@
   position: absolute;
   /* bottom: 10px; */
   display: flex;
-  height: 30px;
+  height: 50px;
   background-color: bisque;
   left: 50%;
   transform: translateX(-50%);
@@ -141,7 +141,12 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 .control_box1 {
-  visibility: visibility;
+  visibility: hidden;
+}
+
+.controlBtn {
+  font-size: 20px;
+  background-color: white;
 }
 
 .video1 {
