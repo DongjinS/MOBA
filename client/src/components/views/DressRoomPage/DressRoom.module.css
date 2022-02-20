@@ -1,22 +1,85 @@
+.container {
+  display: grid;
+  grid-template-columns: 400px auto 400px;
+  grid-template-rows: 70px 30px auto;
+  height: 100vh;
+  grid-template-areas:
+    "header  header  header"
+    "toolbar toolbar toolbar"
+    "   a     main     b   ";
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
 .header {
+  grid-area: header;
   display: flex;
   justify-content: space-between;
-  padding: 15px 10px 15px 10px;
-  font-size: 20px;
+  align-items: center;
+  /* padding: 15px 10px 15px 10px;
+  font-size: 20px; */
   background-color: #2c2c2c;
   color: #d2dae3;
 }
 
-.toolbar {
+.logo {
   display: flex;
+}
+
+.toolbar {
+  grid-area: toolbar;
+}
+
+.sidebarA {
+  grid-area: a;
+  background-color: blanchedalmond;
+  overflow: auto;
+}
+
+.sidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.sidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.sidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.sidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.bodyContainer {
+  display: flex;
+  /* height: 100vh; */
+  width: 100%;
+}
+
+.wishlist {
+  padding-left: 10px;
 }
 
 .containerProduct {
   height: 100px;
-  width: 480px;
+  width: 100%;
   display: flex;
   border: 1px solid black;
-  margin: 3px;
+  margin-top: 5px;
+  /* margin: 3px; */
   justify-content: space-between;
 }
 
@@ -27,37 +90,48 @@
 
 .productImg {
   height: 100%;
-  width: auto;
+  width: 100px;
+  border: 1px solod black;
   border-radius: 10%;
 }
 
 .productAddbtn {
   height: 100%;
+  width: 50px;
 }
 
-.bodyContainer {
+.main {
+  grid-area: main;
+  background-color: cadetblue;
+}
+
+.canvas {
+  width: inherit;
+  height: inherit;
+}
+
+.sidebarB {
+  grid-area: b;
+}
+
+.video_container {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
 }
 
-.wishlist {
-  /* height: 300px;
-    width: 50vh;
-    height: 50vh;
-    overflow: scroll;*/
+.user1 {
+  display: flex;
+  flex-direction: column;
+}
+.control_box1 {
+  display: flex;
+  height: 30px;
+  background-color: bisque;
+  justify-content: space-between;
 }
 
 .video1 {
-  /* background-color: bisque; */
-  height: 43vh;
-  width: 35vh;
 }
 
 .video2 {
-  /* background-color: cadetblue; */
-  height: 43vh;
-  width: 35vh;
-}
-
-.video__control {
 }

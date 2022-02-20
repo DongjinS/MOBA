@@ -8,9 +8,27 @@ import "react-toastify/dist/ReactToastify.css";
 import socket, { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse } from "./socket";
 import styles from "./DressRoom.module.css";
 
+import { FaVideo, FaVideoSlash, FaVolumnMute } from "react-icons/fa";
+import { IoCall } from "react-icons/io";
+import { GoUnMute } from "react-icons/go";
+
 const DressRoom = props => {
   const [canvas, setCanvas] = useState("");
   const [imgURL, setImgURL] = useState("");
+
+  const canvasRef = useRef();
+
+  const [canvasDimensions, setCanvasDimensions] = useState({
+    width: canvasRef.current.offsetWidth,
+    height: canvasRef.current.offsetHeight,
+  });
+
+  const handleResize = () => {
+    setCanvasDimensions({
+      width: canvasRef.current.offsetWidth,
+      height: canvasRef.current.offsetHeight,
+    });
+  };
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -80,17 +98,27 @@ const DressRoom = props => {
     },
   ];
 
-  const initCanvas = () =>
+  const initCanvas = (width, height) =>
     new fabric.Canvas("canvas", {
-      width: 750,
-      height: 700,
-      // height: window.screen.availWidth,
-      // width: window.screen.availWidth / 2,
+      width: width,
+      height: height,
       backgroundColor: "pink",
     });
 
+  // useEffect(() => {
+  //   // const canvasWidth = canvasRef.current.offsetWidth;
+  //   // const canvasWidth = canvasRef.current.offsetWidth;
+  //   // console.log("width : ", canvasWidth);
+  //   fabric.Canvas.resizeTo(100, 100);
+  // }, [canvas]);
+
   useEffect(() => {
-    setCanvas(initCanvas());
+    window.addEventListener("resize", handleResize, false);
+    // const canvasWidth = canvasRef.current.offsetWidth;
+    // const canvasHeight = canvasRef.current.offsetHeight;
+
+    // setCanvas(initCanvas(canvasWidth, canvasHeight));
+    setCanvas(initCanvas(canvasDimensions.width, canvasDimensions.height));
 
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
@@ -328,63 +356,52 @@ const DressRoom = props => {
   }
 
   return (
-    <>
+    <div className={styles.container}>
       <header className={styles.header}>
-        <div className={styles.toolbar}>
+        <div className={styles.logo}>
           <div>모바 LOGO 자리</div>
           <div> , ToolBox 자리 (그림 그림기, 사물 등)</div>
         </div>
         <div>내 닉네임 / 방번호가 들어갈 자리</div>
         <div>공유하기 혹은 추출하기가 들어갈 자리</div>
       </header>
+      <div className={styles.toolbar}>
+        <button type="button" name="rectangle" onClick={addShape}>
+          Add a Rectangle
+        </button>
 
-      <div>
-        <div>
-          <button type="button" name="rectangle" onClick={addShape}>
-            Add a Rectangle
-          </button>
+        <button type="button" name="triangle" onClick={addShape}>
+          Add a Triangle
+        </button>
 
-          <button type="button" name="triangle" onClick={addShape}>
-            Add a Triangle
-          </button>
+        <button type="button" name="circle" onClick={addShape}>
+          Add a Circle
+        </button>
 
-          <button type="button" name="circle" onClick={addShape}>
-            Add a Circle
-          </button>
-
-          <button type="button" name="delete" onClick={deleteShape}>
-            삭제하기
-          </button>
-          <button className={styles.copyBtn} onClick={copyLink}>
-            초대링크 복사
-          </button>
-          <ToastContainer
-            position="bottom-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </div>
-        <div>
-          <form onSubmit={e => addImg(e, imgURL, canvas)}>
-            <div>
-              <input type="text" value={imgURL} onChange={e => setImgURL(e.target.value)} />
-              <button type="submit">Add Image</button>
-            </div>
-          </form>
-        </div>
-
-        {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
-
+        <button type="button" name="delete" onClick={deleteShape}>
+          삭제하기
+        </button>
+        <button className={styles.copyBtn} onClick={copyLink}>
+          초대링크 복사
+        </button>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </div>
+      {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
+      <div className={styles.sidebarA}>
         <div className={styles.bodyContainer}>
           <div className={styles.wishlist}>
             {items.map((item, index) => (
-              <div className={styles.containerProduct}>
+              <div key={index} className={styles.containerProduct}>
                 <div className={styles.producctInfo}>
                   <div className={styles.containerImg}>
                     <img className={styles.productImg} src={item.img} alt="상품 이미지" />
@@ -399,21 +416,29 @@ const DressRoom = props => {
               </div>
             ))}
           </div>
-          <div>
-            <canvas className={styles.canvas} id="canvas" />
-          </div>
-
-          <div className={styles.body}>
+        </div>
+      </div>
+      <div ref={canvasRef} className={styles.main}>
+        <canvas className={styles.canvas} id="canvas" />
+      </div>
+      <div className={styles.sidebarB}>
+        <div className={styles.video_container}>
+          <div className={styles.user1}>
             <video autoPlay ref={userVideo} className={(styles.video1, styles.video__control)}>
               video 1
             </video>
-            <video autoPlay ref={partnerVideo} className={styles.video2}>
-              video 2
-            </video>
+            <div className={styles.control_box1}>
+              <button className={styles.buttons}>
+                <i className="fa-solid fa-hand-holding-heart fa-xl"></i>
+              </button>
+            </div>
           </div>
+          <video autoPlay ref={partnerVideo} className={styles.video2}>
+            video 2
+          </video>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
