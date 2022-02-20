@@ -58,6 +58,7 @@ const server = http.createServer(app);
 const io = socket(server);
 const rooms = {};
 io.on("connection", (socket) => {
+  console.log("hello this is server IO connection");
   socket.on("join room", (roomID) => {
     if (rooms[roomID]) {
       // 이미 있는 방이면
@@ -87,7 +88,6 @@ io.on("connection", (socket) => {
     io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
 
-  console.log("hello this is server");
   socket.on("object-added", (data) => {
     socket.broadcast.emit("new-add", data);
   });
@@ -98,7 +98,15 @@ io.on("connection", (socket) => {
 
   socket.on("mousemove", (data) => {
     console.log("receive mouse", data)
-    socket.broadcast.emit("new-mouse", data);
+    // socket.broadcast.emit("new-mouse", data);
+    
+    data.id = socket.id;
+    socket.broadcast.emit("moving", data);
+  });
+
+
+  socket.on("disconnect", () => {
+    console.log("disconnect")
   });
 
 });

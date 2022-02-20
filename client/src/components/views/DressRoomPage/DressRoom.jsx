@@ -112,7 +112,7 @@ const DressRoom = props => {
 
       modifyObj(canvas);
       addObj(canvas);
-      modifyMouse(canvas);
+      // modifyMouse(canvas);
     }
   }, [canvas]);
 
@@ -226,6 +226,8 @@ const DressRoom = props => {
             ))}
           </div>
           <div>
+            <script src="/socket.js"></script>
+            <div id="pointers"></div>
             <canvas className={styles.canvas} id="canvas" />
           </div>
 

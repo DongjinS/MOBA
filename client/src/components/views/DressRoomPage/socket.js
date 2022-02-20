@@ -68,4 +68,65 @@ export const modifyMouse = (canvas) => {
   });
 };
 
+let prev;
+let canvas;
+let pointerContainer;
+let pointer;
+let clients = {};
+let pointers = {};
+
+function now() {
+  return new Date().getTime();
+}
+
+window.onload = function () {
+  // const url = window.location.origin;
+  prev = {};
+  console.log(document);
+  canvas = document.getElementById("canvas");
+  console.log(canvas);
+  pointerContainer = document.getElementById("pointers");
+
+  pointer = document.createElement("img");
+  pointer.setAttribute("class", "pointer");
+
+  // let drawing = false;
+
+  let lastEmit = now();
+
+};
+
+socket.on("moving", function (data) {
+  console.log("hello");
+  console.log(data);
+  // console.log(clients);
+  if (!clients.hasOwnProperty(data.id)) {
+    pointers[data.id] = pointerContainer.appendChild(pointer.cloneNode());
+  }
+
+
+  pointers[data.id].style.left = data.x + "px";
+  pointers[data.id].style.top = data.y + "px";
+  pointers[data.id].style.position = "absolute";
+  pointers[data.id].style.width = "15px";
+  pointers[data.id].style.height = "22px";
+  pointers[data.id].src = "./images/pointer.png";
+
+  pointers[data.id].style.zIndex = 10;
+  
+  console.log(document);
+
+  console.log(pointers[data.id])
+
+  clients[data.id] = data;
+  clients[data.id].updated = now();
+});
+
+socket.on("clientdisconnect", function (id) {
+  delete clients[id];
+  if (pointers[id]) {
+    pointers[id].parentNode.removeChild(pointers[id]);
+  }
+});
+
 export default socket;
