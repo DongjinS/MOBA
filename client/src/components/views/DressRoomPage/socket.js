@@ -12,12 +12,6 @@ let pointers = {};
 function now() {
   return new Date().getTime();
 }
-
-export const socketConnect = () => {
-  const socket = io.connect("/");
-  return socket;
-};
-
 // emitters
 export const emitAdd = (obj, socket) => {
   socket.emit("object-added", obj);
@@ -25,17 +19,6 @@ export const emitAdd = (obj, socket) => {
 
 export const emitModify = (obj, socket) => {
   socket.emit("object-modified", obj);
-};
-
-export const emitMouse = (obj, socket) => {
-  // if (now() - lastEmit > 5) {
-  // console.log("send", obj.clientX, obj.clientY);
-  socket.emit("mousemove", {
-    x: obj.clientX,
-    y: obj.clientY,
-  });
-  // }
-  lastEmit = now();
 };
 
 // listeners
@@ -81,43 +64,30 @@ export const modifyObj = (canvas, socket) => {
 };
 
 export const modifyMouse = (canvas, data) => {
-  // socket.on("moving", function (data) {
-  // console.log("hello");
-  // console.log(data);
-  // console.log(pointerContainer);
   if (!clients.hasOwnProperty(data.id)) {
     pointers[data.id] = pointerContainer.appendChild(pointer.cloneNode());
   }
 
+  canvas = document.getElementById("canvas");
+  console.log("hi", canvas);
   pointers[data.id].style.left = data.clientX + "px";
   pointers[data.id].style.top = data.clientY + "px";
   pointers[data.id].style.position = "absolute";
-  pointers[data.id].style.width = "15px";
-  pointers[data.id].style.height = "22px";
-  pointers[data.id].src = "https://uploads.codesandbox.io/uploads/user/88acfe5a-77fc-498c-98ee-d1b0b303f6a8/tC4n-pointer.png";
+  pointers[data.id].style.width = "30px";
+  pointers[data.id].style.height = "45px";
+  pointers[data.id].src = "/images/pointer.png";
 
   pointers[data.id].style.zIndex = 20;
-
-  // console.log(document);
-
-  // console.log(pointers[data.id]);
-
   clients[data.id] = data;
   clients[data.id].updated = now();
-  // });
 };
 
 export const getPointer = () => {
-  // const url = window.location.origin;
   prev = {};
-  // console.log(document);
   canvas = document.getElementById("canvas");
-  // console.log("canvas", canvas);
   pointerContainer = document.getElementById("pointers");
-  // console.log(pointerContainer);
   pointer = document.createElement("img");
   pointer.setAttribute("class", "pointer");
-
   lastEmit = now();
 };
 

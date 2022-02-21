@@ -2,12 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
 import { v1 as uuid } from "uuid";
 import io from "socket.io-client";
-import { useHistory, useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse, getPointer, socketConnect, deleteMouse } from "./socket";
+import { emitModify, emitAdd, modifyObj, addObj, modifyMouse, getPointer, deleteMouse } from "./socket";
 
 import styles from "./DressRoom.module.css";
 
@@ -15,7 +15,6 @@ import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
 import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import { GoUnmute, GoMute } from "react-icons/go";
 import ClothesLoading from "../../loading/ClothesLoading";
-import { Helmet } from "react-helmet";
 
 const DressRoom = props => {
   const [canvas, setCanvas] = useState("");
@@ -40,6 +39,8 @@ const DressRoom = props => {
   function handleRecievedMouse(data) {
     data = JSON.parse(data);
     console.log("handle Mouse dc message", data);
+    data.clientX = data.clientX * canvasRef.current.offsetWidth;
+    data.clientY = data.clientY * canvasRef.current.offsetHeight;
     modifyMouse(canvas, data);
   }
 
@@ -56,32 +57,25 @@ const DressRoom = props => {
       backgroundColor: "pink",
     });
 
-  useEffect(() => {
-    // setIsLoading(true);
-    socketRef.current = io.connect("/");
+  useEffect(async () => {
+    console.log("useEffect []");
 
-    const canvasWidth = canvasRef.current.offsetWidth;
-    const canvasHeight = canvasRef.current.offsetHeight;
-
-    // 개인 장바구니 상품을 가져온 후 로딩 종료
-
-    setCanvas(initCanvas(canvasWidth, canvasHeight));
-    getPointer();
-
-    navigator.mediaDevices
+    await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then(stream => {
         console.log("rtc socket");
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        socketRef.current = io.connect("/");
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
 
         socketRef.current.on("other user", async userID => {
           callUser(userID);
-          mouseChannel.current = peerRef.current.createDataChannel("mouse");
+          mouseChannel.current = await peerRef.current.createDataChannel("mouse");
           mouseChannel.current.addEventListener("message", event => {
             handleRecievedMouse(event.data);
           });
+
           otherUser.current = userID;
         });
         socketRef.current.on("user joined", userID => {
@@ -92,6 +86,12 @@ const DressRoom = props => {
         socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
       });
 
+    const canvasWidth = canvasRef.current.offsetWidth;
+    const canvasHeight = canvasRef.current.offsetHeight;
+
+    // 개인 장바구니 상품을 가져온 후 로딩 종료
+    setCanvas(initCanvas(canvasWidth, canvasHeight));
+    getPointer();
     setIsLoading(false);
     axios
       .get(`/privatebasket/${token}`)
@@ -108,8 +108,10 @@ const DressRoom = props => {
   }, []);
 
   useEffect(() => {
+    console.log("useEffect canvas");
+
     if (canvas) {
-      canvas.on("object:modified", function (options) {
+      canvas.on("object:modified", options => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
@@ -119,7 +121,7 @@ const DressRoom = props => {
         }
       });
 
-      canvas.on("object:moving", function (options) {
+      canvas.on("object:moving", options => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
@@ -129,17 +131,24 @@ const DressRoom = props => {
         }
       });
 
-      canvas.on("mouse:move", function (options) {
+      canvas.on("mouse:move", options => {
         const mouseobj = {
-          clientX: options.e.clientX,
-          clientY: options.e.clientY,
+          clientX: options.e.offsetX / canvasRef.current.offsetWidth,
+          clientY: options.e.offsetY / canvasRef.current.offsetHeight,
         };
+
+        /*
+        mouseChannel은 마우스 현재 위치 전송을 위한 webRTC 채널이다. 
+        다른 유저가 룸에 들어왔을때 초기화되므로 룸에 다른 유저가 없을때는
+        send시 error가 발생한다. try catch문을 통해 이를 방지한다. 
+        */
         try {
           console.log("dc mouse send");
           mouseobj.id = socketRef.current.id;
           mouseChannel.current.send(JSON.stringify(mouseobj));
-        } catch (error) {}
-        // emitMouse(mouseobj, socketRef.current);
+        } catch (error) {
+          console.log(error);
+        }
       });
       console.log("canvas socket:", socketRef.current);
       modifyObj(canvas, socketRef.current);
@@ -237,33 +246,6 @@ const DressRoom = props => {
     };
     shareKakao();
   }
-
-  // // ---------- 카카오톡 공유하기 ----------
-  // useEffect(() => {
-  //   window.Kakao.init('c45ed7c54965b8803ada1b6e2f293f4f');
-  // }, []);
-  // const shareKakao = () => {
-  //   let currentUrl = window.document.location.href;
-  //   window.Kakao.Link.sendDefault({
-  //     objectType: 'feed',
-  //     content: {
-  //       title: '모바',
-  //       description: '친구랑 코디하기',
-  //       imageUrl: '#',
-  //       link: {
-  //         mobileWebUrl: currentUrl,
-  //       },
-  //     },
-  //     buttons: [
-  //       {
-  //         title: '웹으로 이동',
-  //         link: {
-  //           mobileWebUrl: currentUrl,
-  //         },
-  //       },
-  //     ],
-  //   });
-  // };
 
   // ---------- webTRC video call ----------
   function callUser(userID) {
@@ -371,10 +353,18 @@ const DressRoom = props => {
 
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
+
+    userStream.current.getVideoTracks().forEach(track => {
+      track.enabled = !track.enabled;
+    });
   };
 
   const HandleMicBtnClick = () => {
     isMicOn ? setIsMicOn(false) : setIsMicOn(true);
+
+    userStream.current.getAudioTracks().forEach(track => {
+      track.enabled = !track.enabled;
+    });
   };
 
   const HandleSoundBtnClick = () => {
@@ -455,8 +445,8 @@ const DressRoom = props => {
             </div>
           </div>
           <div ref={canvasRef} className={styles.main}>
-            <div id="pointers"></div>
-            <canvas className={styles.canvas} id="canvas" />
+            <div id="pointers" className={styles.pointers}></div>
+            <canvas className={styles.canvas} id="canvas"></canvas>
           </div>
           <div className={styles.sidebarB}>
             <div className={styles.video_container}>

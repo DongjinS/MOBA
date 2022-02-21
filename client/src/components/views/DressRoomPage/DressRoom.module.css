@@ -119,6 +119,12 @@
   z-index: 10;
 }
 
+.pointers {
+  width: inherit;
+  height: inherit;
+  position: relative;
+}
+
 .sidebarB {
   grid-area: b;
 }
