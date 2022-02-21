@@ -141,11 +141,11 @@
   /* bottom: 10px; */
   display: flex;
   height: 50px;
-  background-color: bisque;
   left: 50%;
   transform: translateX(-50%);
   /* margin: auto; */
   bottom: 10px;
+  background-color: transparent;
   /* transition: all ease 2s 0s; */
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -155,7 +155,7 @@
 
 .controlBtn {
   font-size: 20px;
-  background-color: white;
+  background-color: transparent;
 }
 
 .video1 {
