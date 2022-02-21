@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { emitModify, emitAdd, modifyObj, addObj, modifyMouse, getPointer, deleteMouse } from "./socket";
+import { emitModify, emitAdd, modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./socket";
 
 import styles from "./DressRoom.module.css";
 
@@ -35,14 +35,31 @@ const DressRoom = props => {
   const senders = useRef([]);
   const roomID = useParams().roomID;
   const mouseChannel = useRef();
+  const itemChannel = useRef();
 
-  function handleRecievedMouse(data) {
+  const handleRecievedMouse = data => {
     data = JSON.parse(data);
     console.log("handle Mouse dc message", data);
     data.clientX = data.clientX * canvasRef.current.offsetWidth;
     data.clientY = data.clientY * canvasRef.current.offsetHeight;
-    modifyMouse(canvas, data);
-  }
+    modifyMouse(data);
+  };
+
+  
+
+  const handleRecievedItem = data => {
+    console.log("handleRecievedItem : ", canvas);
+    data = JSON.parse(data);
+    console.log("handle item dc message", data);
+    switch (data.order) {
+      case "add":
+        addImg(canvasRef.current, data);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   function getCookie(name) {
     const cookies = new Cookies();
@@ -71,9 +88,15 @@ const DressRoom = props => {
 
         socketRef.current.on("other user", async userID => {
           callUser(userID);
+
           mouseChannel.current = await peerRef.current.createDataChannel("mouse");
           mouseChannel.current.addEventListener("message", event => {
             handleRecievedMouse(event.data);
+          });
+
+          itemChannel.current = await peerRef.current.createDataChannel("item");
+          itemChannel.current.addEventListener("message", event => {
+            handleRecievedItem(event.data);
           });
 
           otherUser.current = userID;
@@ -84,6 +107,17 @@ const DressRoom = props => {
         socketRef.current.on("offer", handleRecieveCall);
         socketRef.current.on("answer", handleAnswer);
         socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
+
+        socketRef.current.on("peer-leaving", function (id) {
+          deleteMouse(id);
+          otherUser.current = "";
+
+          partnerVideo.current.srcObject.getVideoTracks().forEach(track => {
+            track.stop();
+          });
+
+          partnerVideo.current.srcObject = null;
+        });
       });
 
     const canvasWidth = canvasRef.current.offsetWidth;
@@ -152,7 +186,7 @@ const DressRoom = props => {
       });
       console.log("canvas socket:", socketRef.current);
       modifyObj(canvas, socketRef.current);
-      addObj(canvas, socketRef.current);
+      // addObj(canvas, socketRef.current);
     }
   }, [canvas]);
 
@@ -183,13 +217,20 @@ const DressRoom = props => {
     canvas.renderAll();
   };
 
-  const addImg = (e, url, canvi) => {
+  const HandleAddImgBtn = (e, url, canvi) => {
     e.preventDefault();
     new fabric.Image.fromURL(url, img => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
-      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socketRef.current);
+
+      // emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socketRef.current);
+      try {
+        itemChannel.current.send(JSON.stringify({ obj: img, order: "add", id: img.id, url: img._element.currentSrc }));
+      } catch (error) {
+        console.log(error);
+      }
+
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();
@@ -292,13 +333,28 @@ const DressRoom = props => {
       .catch(e => console.log(e));
   }
 
-  function handleRecieveCall(incoming) {
+  const handleRecieveCall = incoming => {
     peerRef.current = createPeer();
     peerRef.current.addEventListener("datachannel", event => {
-      mouseChannel.current = event.channel;
-      mouseChannel.current.addEventListener("message", event => {
-        handleRecievedMouse(event.data);
-      });
+      console.log("event : ", event);
+      console.log("event channel: ", event.channel);
+
+      switch (event.channel.label) {
+        case "mouse":
+          mouseChannel.current = event.channel;
+          mouseChannel.current.addEventListener("message", event => {
+            handleRecievedMouse(event.data);
+          });
+          break;
+        case "item":
+          itemChannel.current = event.channel;
+          itemChannel.current.addEventListener("message", event => {
+            handleRecievedItem(event.data);
+          });
+          break;
+        default:
+          break;
+      }
     });
     const desc = new RTCSessionDescription(incoming.sdp);
     peerRef.current
@@ -320,7 +376,7 @@ const DressRoom = props => {
         };
         socketRef.current.emit("answer", payload);
       });
-  }
+  };
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
@@ -346,10 +402,6 @@ const DressRoom = props => {
   function handleTrackEvent(e) {
     partnerVideo.current.srcObject = e.streams[0];
   }
-
-  // socketRef.current.on("clientdisconnect", function (id) {
-  //   deleteMouse(id);
-  // });
 
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
@@ -435,7 +487,7 @@ const DressRoom = props => {
                       <div className={styles.productTitle}>{item.product_name}</div>
                     </div>
                     <div>
-                      <button className={styles.productAddbtn} type="button" onClick={e => addImg(e, item.img, canvas)}>
+                      <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item.img, canvas)}>
                         추가
                       </button>
                     </div>

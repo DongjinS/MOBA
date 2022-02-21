@@ -26,7 +26,7 @@ const app = express();
 mongoose
   .connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(console.log("MongoDB Connected"))
-  .catch((error) => console.log(error));
+  .catch(error => console.log(error));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -54,59 +54,67 @@ app.use("/oauth", oauthRouter);
 ///// 영상 통화 및 화면 공유 /////
 const server = http.createServer(app);
 const io = socket(server);
-const rooms = {};
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   console.log("hello this is server IO connection", socket.id);
-  socket.on("join room", (roomID) => {
-    if (rooms[roomID]) {
-      // 이미 있는 방이면
-      rooms[roomID].push(socket.id); // socket.id를 roomID를 key로 갖는 object에 push
-    } else {
-      // 그게 아니면 rooms에 roomID를 key로 하는 배열 생성
-      rooms[roomID] = [socket.id];
-    }
-    // roomID를 key로 갖는 방에 나 말고 다른 socket.id가 있으면 다른 user임
-    const otherUser = rooms[roomID].find((id) => id !== socket.id);
-    if (otherUser) {
-      // 다른 user가 존재하면
+  socket.on("join room", roomID => {
+    const userCount = io.sockets.adapter.rooms.get(roomID)?.size;
+
+    if (userCount === undefined || userCount === 0) {
+      // If room does not exists, user started a new room
+      socket.join(roomID);
+      // Set user id of the user
+      socket["userID"] = socket.id;
+    } else if (userCount === 1) {
+      console.log("rooms", io.sockets.adapter.rooms.get(roomID));
+      io.in(socket.id).socketsJoin(roomID);
+      const rooms = io.sockets.adapter.rooms.get(roomID);
+      const otherUser = [...rooms][0];
+
+      // to 입장 시도자
       socket.emit("other user", otherUser);
+      // to 기존 입장자
       socket.to(otherUser).emit("user joined", socket.id);
+    } else {
+      // 두명 이상 출입 금지
     }
   });
 
-  socket.on("offer", (payload) => {
+  socket.on("offer", payload => {
     io.to(payload.target).emit("offer", payload);
   });
 
-  socket.on("answer", (payload) => {
+  socket.on("answer", payload => {
     io.to(payload.target).emit("answer", payload);
   });
 
-  socket.on("ice-candidate", (incoming) => {
+  socket.on("ice-candidate", incoming => {
     io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
 
-  socket.on("object-added", (data) => {
+  socket.on("object-added", data => {
     socket.broadcast.emit("new-add", data);
   });
 
-  socket.on("object-modified", (data) => {
+  socket.on("object-modified", data => {
     socket.broadcast.emit("new-modification", data);
   });
 
-  socket.on("mousemove", (data) => {
-    // console.log("receive mouse", data);
-    // socket.broadcast.emit("new-mouse", data);
+  // socket.on("mousemove", data => {
+  //   data.id = socket.id;
+  //   socket.broadcast.emit("moving", data);
+  // });
 
-    data.id = socket.id;
-    socket.broadcast.emit("moving", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnect", socket.id);
-    delete rooms[socket.id];
-    console.log(rooms);
-    socket.broadcast.emit("clientdisconnect", socket.id);
+  socket.on("disconnecting", () => {
+    console.log("disconnecting", socket.id);
+    console.log(socket.rooms);
+    socket.rooms.forEach(room => {
+      console.log(room);
+      socket.to(room).emit("peer-leaving", socket.id);
+      // Notify other peer that current user is leaving
+      // socket.to(room).emit("peer-leaving");
+      // Leave the room
+      socket.leave(room);
+    });
   });
 });
 ///////////////////////////////////
