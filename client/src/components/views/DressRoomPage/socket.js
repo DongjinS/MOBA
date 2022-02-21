@@ -80,31 +80,31 @@ export const modifyObj = (canvas, socket) => {
   });
 };
 
-export const modifyMouse = (canvas, socket) => {
-  socket.on("moving", function (data) {
-    // console.log("hello");
-    // console.log(data);
-    // console.log(pointerContainer);
-    if (!clients.hasOwnProperty(data.id)) {
-      pointers[data.id] = pointerContainer.appendChild(pointer.cloneNode());
-    }
+export const modifyMouse = (canvas, data) => {
+  // socket.on("moving", function (data) {
+  // console.log("hello");
+  // console.log(data);
+  // console.log(pointerContainer);
+  if (!clients.hasOwnProperty(data.id)) {
+    pointers[data.id] = pointerContainer.appendChild(pointer.cloneNode());
+  }
 
-    pointers[data.id].style.left = data.x + "px";
-    pointers[data.id].style.top = data.y + "px";
-    pointers[data.id].style.position = "absolute";
-    pointers[data.id].style.width = "15px";
-    pointers[data.id].style.height = "22px";
-    pointers[data.id].src = "https://uploads.codesandbox.io/uploads/user/88acfe5a-77fc-498c-98ee-d1b0b303f6a8/tC4n-pointer.png";
+  pointers[data.id].style.left = data.clientX + "px";
+  pointers[data.id].style.top = data.clientY + "px";
+  pointers[data.id].style.position = "absolute";
+  pointers[data.id].style.width = "15px";
+  pointers[data.id].style.height = "22px";
+  pointers[data.id].src = "https://uploads.codesandbox.io/uploads/user/88acfe5a-77fc-498c-98ee-d1b0b303f6a8/tC4n-pointer.png";
 
-    pointers[data.id].style.zIndex = 20;
+  pointers[data.id].style.zIndex = 20;
 
-    // console.log(document);
+  // console.log(document);
 
-    // console.log(pointers[data.id]);
+  // console.log(pointers[data.id]);
 
-    clients[data.id] = data;
-    clients[data.id].updated = now();
-  });
+  clients[data.id] = data;
+  clients[data.id].updated = now();
+  // });
 };
 
 export const getPointer = () => {

@@ -35,8 +35,13 @@ const DressRoom = props => {
   const userStream = useRef();
   const senders = useRef([]);
   const roomID = useParams().roomID;
-  let socket;
-  let flag = true;
+  const mouseChannel = useRef();
+
+  function handleRecievedMouse(data) {
+    data = JSON.parse(data);
+    console.log("handle Mouse dc message", data);
+    modifyMouse(canvas, data);
+  }
 
   function getCookie(name) {
     const cookies = new Cookies();
@@ -70,8 +75,13 @@ const DressRoom = props => {
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
-        socketRef.current.on("other user", userID => {
+
+        socketRef.current.on("other user", async userID => {
           callUser(userID);
+          mouseChannel.current = peerRef.current.createDataChannel("mouse");
+          mouseChannel.current.addEventListener("message", event => {
+            handleRecievedMouse(event.data);
+          });
           otherUser.current = userID;
         });
         socketRef.current.on("user joined", userID => {
@@ -124,13 +134,16 @@ const DressRoom = props => {
           clientX: options.e.clientX,
           clientY: options.e.clientY,
         };
-        emitMouse(mouseobj, socketRef.current);
+        try {
+          console.log("dc mouse send");
+          mouseobj.id = socketRef.current.id;
+          mouseChannel.current.send(JSON.stringify(mouseobj));
+        } catch (error) {}
+        // emitMouse(mouseobj, socketRef.current);
       });
-
       console.log("canvas socket:", socketRef.current);
       modifyObj(canvas, socketRef.current);
       addObj(canvas, socketRef.current);
-      modifyMouse(canvas, socketRef.current);
     }
   }, [canvas]);
 
@@ -299,6 +312,12 @@ const DressRoom = props => {
 
   function handleRecieveCall(incoming) {
     peerRef.current = createPeer();
+    peerRef.current.addEventListener("datachannel", event => {
+      mouseChannel.current = event.channel;
+      mouseChannel.current.addEventListener("message", event => {
+        handleRecievedMouse(event.data);
+      });
+    });
     const desc = new RTCSessionDescription(incoming.sdp);
     peerRef.current
       .setRemoteDescription(desc)
