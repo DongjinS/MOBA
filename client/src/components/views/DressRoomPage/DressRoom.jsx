@@ -1,34 +1,24 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { fabric } from 'fabric';
-import { v1 as uuid } from 'uuid';
-import io from 'socket.io-client';
-import { useHistory, useParams, useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
-import {
-  emitMouse,
-  emitModify,
-  emitAdd,
-  modifyObj,
-  addObj,
-  modifyMouse,
-  getPointer,
-  socketConnect,
-  deleteMouse,
-} from './socket';
+import React, { useEffect, useState, useRef } from "react";
+import { fabric } from "fabric";
+import { v1 as uuid } from "uuid";
+import io from "socket.io-client";
+import { useHistory, useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { emitMouse, emitModify, emitAdd, modifyObj, addObj, modifyMouse, getPointer, socketConnect, deleteMouse } from "./socket";
 
-import styles from './DressRoom.module.css';
+import styles from "./DressRoom.module.css";
 
-import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
-import { BsFillMicFill, BsFillMicMuteFill } from 'react-icons/bs';
-import { GoUnmute, GoMute } from 'react-icons/go';
-import ClothesLoading from '../../loading/ClothesLoading';
-import { Helmet } from 'react-helmet';
+import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
+import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
+import { GoUnmute, GoMute } from "react-icons/go";
+import ClothesLoading from "../../loading/ClothesLoading";
+import { Helmet } from "react-helmet";
 
-const DressRoom = (props) => {
-  const [canvas, setCanvas] = useState('');
+const DressRoom = props => {
+  const [canvas, setCanvas] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
@@ -47,28 +37,24 @@ const DressRoom = (props) => {
   const roomID = useParams().roomID;
   let socket;
   let flag = true;
-  if (flag) {
-    flag = false;
-    console.log("try connect");
-    socket = socketConnect();
-    socketRef.current = socket;
-  }
 
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
   }
-  const token = getCookie('x_auth');
+  const token = getCookie("x_auth");
 
   const initCanvas = (width, height) =>
-    new fabric.Canvas('canvas', {
+    new fabric.Canvas("canvas", {
       width: width,
       height: height,
-      backgroundColor: 'pink',
+      backgroundColor: "pink",
     });
 
   useEffect(() => {
     // setIsLoading(true);
+    socketRef.current = io.connect("/");
+
     const canvasWidth = canvasRef.current.offsetWidth;
     const canvasHeight = canvasRef.current.offsetHeight;
 
@@ -83,7 +69,6 @@ const DressRoom = (props) => {
         console.log("rtc socket");
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        // socketRef.current = io.connect("/");
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
         socketRef.current.on("other user", userID => {
           callUser(userID);
@@ -92,19 +77,19 @@ const DressRoom = (props) => {
         socketRef.current.on("user joined", userID => {
           otherUser.current = userID;
         });
-        socketRef.current.on('offer', handleRecieveCall);
-        socketRef.current.on('answer', handleAnswer);
-        socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
+        socketRef.current.on("offer", handleRecieveCall);
+        socketRef.current.on("answer", handleAnswer);
+        socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
       });
 
     setIsLoading(false);
     axios
       .get(`/privatebasket/${token}`)
-      .then((Response) => {
+      .then(Response => {
         console.log(Response);
         setProducts(Response.data);
       })
-      .catch((Error) => {
+      .catch(Error => {
         console.log(Error);
       })
       .then(() => {
@@ -113,44 +98,39 @@ const DressRoom = (props) => {
   }, []);
 
   useEffect(() => {
-    // if (flag){
-    //   flag = false;
-    //   console.log("try connect")
-    //   socket = socketConnect();
-    // }
     if (canvas) {
-      canvas.on('object:modified', function (options) {
+      canvas.on("object:modified", function (options) {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj, socket);
+          emitModify(modifiedObj, socketRef.current);
         }
       });
 
-      canvas.on('object:moving', function (options) {
+      canvas.on("object:moving", function (options) {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
           };
-          emitModify(modifiedObj, socket);
+          emitModify(modifiedObj, socketRef.current);
         }
       });
 
-      canvas.on('mouse:move', function (options) {
+      canvas.on("mouse:move", function (options) {
         const mouseobj = {
           clientX: options.e.clientX,
           clientY: options.e.clientY,
         };
-        emitMouse(mouseobj, socket);
+        emitMouse(mouseobj, socketRef.current);
       });
 
-      console.log('canvas socket:', socket);
-      modifyObj(canvas, socket);
-      addObj(canvas, socket);
-      modifyMouse(canvas, socket);
+      console.log("canvas socket:", socketRef.current);
+      modifyObj(canvas, socketRef.current);
+      addObj(canvas, socketRef.current);
+      modifyMouse(canvas, socketRef.current);
     }
   }, [canvas]);
 
@@ -158,17 +138,17 @@ const DressRoom = (props) => {
     let type = e.target.name;
     let object;
 
-    if (type === 'rectangle') {
+    if (type === "rectangle") {
       object = new fabric.Rect({
         height: 75,
         width: 150,
       });
-    } else if (type === 'triangle') {
+    } else if (type === "triangle") {
       object = new fabric.Triangle({
         width: 100,
         height: 100,
       });
-    } else if (type === 'circle') {
+    } else if (type === "circle") {
       object = new fabric.Circle({
         radius: 50,
       });
@@ -177,7 +157,7 @@ const DressRoom = (props) => {
     object.set({ id: uuid() });
     canvas.add(object);
     console.log(object);
-    emitAdd({ obj: object, id: object.id }, socket);
+    emitAdd({ obj: object, id: object.id }, socketRef.current);
     canvas.renderAll();
   };
 
@@ -185,9 +165,9 @@ const DressRoom = (props) => {
     e.preventDefault();
     new fabric.Image.fromURL(url, img => {
       console.log(img);
-      console.log('sender', img._element.currentSrc);
+      console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
-      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socket);
+      emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socketRef.current);
       img.scale(0.75);
       canvi.add(img);
       canvi.renderAll();
@@ -205,14 +185,14 @@ const DressRoom = (props) => {
 
   // ---------- 카카오톡 공유하기 ----------
   useEffect(() => {
-    window.Kakao.init('c45ed7c54965b8803ada1b6e2f293f4f');
+    window.Kakao.init("c45ed7c54965b8803ada1b6e2f293f4f");
   }, []);
 
   function copyLink() {
     let currentUrl = window.document.location.href; //복사 잘됨
     navigator.clipboard.writeText(currentUrl);
-    toast.success('초대링크 복사 완료!', {
-      position: 'bottom-center',
+    toast.success("초대링크 복사 완료!", {
+      position: "bottom-center",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -223,18 +203,18 @@ const DressRoom = (props) => {
 
     const shareKakao = () => {
       window.Kakao.Link.sendDefault({
-        objectType: 'feed',
+        objectType: "feed",
         content: {
-          title: '모바',
-          description: '친구랑 코디하기',
-          imageUrl: '#',
+          title: "모바",
+          description: "친구랑 코디하기",
+          imageUrl: "#",
           link: {
             webUrl: window.location.href,
           },
         },
         buttons: [
           {
-            title: '웹으로 이동',
+            title: "웹으로 이동",
             link: {
               webUrl: window.location.href,
             },
@@ -283,12 +263,12 @@ const DressRoom = (props) => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun.stunprotocol.org',
+          urls: "stun:stun.stunprotocol.org",
         },
         {
-          urls: 'turn:numb.viagenie.ca',
-          credential: 'muazkh',
-          username: 'webrtc@live.com',
+          urls: "turn:numb.viagenie.ca",
+          credential: "muazkh",
+          username: "webrtc@live.com",
         },
       ],
     });
@@ -312,7 +292,7 @@ const DressRoom = (props) => {
           caller: socketRef.current.id,
           sdp: peerRef.current.localDescription,
         };
-        socketRef.current.emit('offer', payload);
+        socketRef.current.emit("offer", payload);
       })
       .catch(e => console.log(e));
   }
@@ -337,7 +317,7 @@ const DressRoom = (props) => {
           caller: socketRef.current.id,
           sdp: peerRef.current.localDescription,
         };
-        socketRef.current.emit('answer', payload);
+        socketRef.current.emit("answer", payload);
       });
   }
 
@@ -352,7 +332,7 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      socketRef.current.emit('ice-candidate', payload);
+      socketRef.current.emit("ice-candidate", payload);
     }
   }
 
@@ -441,22 +421,12 @@ const DressRoom = (props) => {
                   <div key={index} className={styles.containerProduct}>
                     <div className={styles.producctInfo}>
                       <div className={styles.containerImg}>
-                        <img
-                          className={styles.productImg}
-                          src={item.img}
-                          alt="상품 이미지"
-                        />
+                        <img className={styles.productImg} src={item.img} alt="상품 이미지" />
                       </div>
-                      <div className={styles.productTitle}>
-                        {item.product_name}
-                      </div>
+                      <div className={styles.productTitle}>{item.product_name}</div>
                     </div>
                     <div>
-                      <button
-                        className={styles.productAddbtn}
-                        type="button"
-                        onClick={(e) => addImg(e, item.img, canvas)}
-                      >
+                      <button className={styles.productAddbtn} type="button" onClick={e => addImg(e, item.img, canvas)}>
                         추가
                       </button>
                     </div>
