@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { emitModify, emitAdd, modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./socket";
+import { emitAdd, modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./socket";
 
 import styles from "./DressRoom.module.css";
 
@@ -45,20 +45,45 @@ const DressRoom = props => {
     modifyMouse(data);
   };
 
-  
-
-  const handleRecievedItem = data => {
-    console.log("handleRecievedItem : ", canvas);
-    data = JSON.parse(data);
-    console.log("handle item dc message", data);
+  const needCanvas = (canvas, data) => {
     switch (data.order) {
       case "add":
-        addImg(canvasRef.current, data);
+        addImg(canvas, data);
         break;
-
+      case "modify":
+        modifyObj(canvas, data);
+        break;
+      case "delete":
+        /*
+         * 문제 : img object가 생성되면 uuid를 통해 각 object의 id 값을 지정한다.
+         *   HandleDeleteBtn에서 활성 상태인 obj 자체를 webRTC를 통해 전달하여
+         *   obj 내의 id를 통해 삭제하고자 했으나 id가 사라졌다.
+         * 해결방법 : delete할 data에 id를 key와 value로 직접 넣어주었다.
+         * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
+         */
+        canvas.getObjects().forEach(object => {
+          console.log("data : ", data);
+          if (object.id === data.id) {
+            console.log("obj : ", object);
+            canvas.remove(object);
+          }
+        });
+        break;
       default:
         break;
     }
+  };
+
+  const handleRecievedItem = data => {
+    data = JSON.parse(data);
+    console.log("handle item dc message", data);
+
+    setCanvas(canvas => {
+      console.log("hello");
+      console.log(canvas);
+      needCanvas(canvas, data);
+      return canvas;
+    });
   };
 
   function getCookie(name) {
@@ -150,8 +175,9 @@ const DressRoom = props => {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
+            order: "modify",
           };
-          emitModify(modifiedObj, socketRef.current);
+          itemChannel.current.send(JSON.stringify(modifiedObj));
         }
       });
 
@@ -160,8 +186,9 @@ const DressRoom = props => {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
+            order: "modify",
           };
-          emitModify(modifiedObj, socketRef.current);
+          itemChannel.current.send(JSON.stringify(modifiedObj));
         }
       });
 
@@ -185,8 +212,6 @@ const DressRoom = props => {
         }
       });
       console.log("canvas socket:", socketRef.current);
-      modifyObj(canvas, socketRef.current);
-      // addObj(canvas, socketRef.current);
     }
   }, [canvas]);
 
@@ -237,12 +262,12 @@ const DressRoom = props => {
     });
   };
 
-  const deleteShape = () => {
-    console.log(
-      canvas.getActiveObjects().forEach(obj => {
-        canvas.remove(obj);
-      })
-    );
+  const HandleDeleteBtn = () => {
+    canvas.getActiveObjects().forEach(obj => {
+      console.log("HandleDeleteBtn : ", obj);
+      itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: "delete" }));
+      canvas.remove(obj);
+    });
     // canvas.discardActiveObject().renderAll();
   };
 
@@ -452,7 +477,7 @@ const DressRoom = props => {
               Add a Circle
             </button>
 
-            <button type="button" name="delete" onClick={deleteShape}>
+            <button type="button" name="delete" onClick={HandleDeleteBtn}>
               삭제하기
             </button>
             <button className={styles.copyBtn} onClick={copyLink}>

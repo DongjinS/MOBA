@@ -1,17 +1,11 @@
-import io from "socket.io-client";
 import { fabric } from "fabric";
 
-let prev;
 let canvas;
 let pointerContainer;
 let pointer;
-let lastEmit;
 let clients = {};
 let pointers = {};
 
-function now() {
-  return new Date().getTime();
-}
 // emitters
 export const emitAdd = (obj, socket) => {
   console.log(obj.obj, obj.id, obj.url);
@@ -48,16 +42,14 @@ export const addImg = (canvas, data) => {
   }
 };
 
-export const modifyObj = (canvas, socket) => {
-  socket.on("new-modification", data => {
-    const { obj, id } = data;
-    canvas.getObjects().forEach(object => {
-      if (object.id === id) {
-        object.set(obj);
-        object.setCoords();
-        canvas.renderAll();
-      }
-    });
+export const modifyObj = (canvas, data) => {
+  const { obj, id } = data;
+  canvas.getObjects().forEach(object => {
+    if (object.id === id) {
+      object.set(obj);
+      object.setCoords();
+      canvas.renderAll();
+    }
   });
 };
 
@@ -77,16 +69,13 @@ export const modifyMouse = data => {
 
   pointers[data.id].style.zIndex = 20;
   clients[data.id] = data;
-  clients[data.id].updated = now();
 };
 
 export const getPointer = () => {
-  prev = {};
   canvas = document.getElementById("canvas");
   pointerContainer = document.getElementById("pointers");
   pointer = document.createElement("img");
   pointer.setAttribute("class", "pointer");
-  lastEmit = now();
 };
 
 export const deleteMouse = async id => {
