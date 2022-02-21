@@ -104,14 +104,23 @@ basketRouter.get('/:id', async (req, res) => {
   const cur_user = await User.findOne({
     token: req.id,
   });
-try {
-  console.log(cur_user);
-  console.log(cur_user.products);
+  try {
+    console.log(cur_user);
+    console.log(cur_user.products);
 
-  res.send(cur_user.products);
-} catch (error) {
-  res.send([]);
-}
+    res.send(cur_user.products);
+  } catch (error) {
+    res.send([]);
+  }
+});
+
+// 내 장바구니 담기
+basketRouter.post('/basket', async (req, res) => {
+  const basket_user = await User.findOne({
+    token: req.body.token,
+  });
+  console.log(basket_user.products);
+  res.send(basket_user.products);
 });
 
 module.exports = basketRouter;
