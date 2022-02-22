@@ -271,7 +271,11 @@ const DressRoom = props => {
   const HandleDeleteBtn = () => {
     canvas.getActiveObjects().forEach(obj => {
       console.log("HandleDeleteBtn : ", obj);
-      itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: "delete" }));
+      try {
+        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: "delete" }));
+      } catch (error) {
+        // 상대 없을 때 send 시 에러
+      }
       canvas.remove(obj);
     });
     // canvas.discardActiveObject().renderAll();
