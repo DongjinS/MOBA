@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { emitAdd, modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./socket";
+import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./ReceiveHandler";
 
 import styles from "./DressRoom.module.css";
 
@@ -238,7 +238,6 @@ const DressRoom = props => {
     object.set({ id: uuid() });
     canvas.add(object);
     console.log(object);
-    emitAdd({ obj: object, id: object.id }, socketRef.current);
     canvas.renderAll();
   };
 
@@ -249,7 +248,6 @@ const DressRoom = props => {
       console.log("sender", img._element.currentSrc);
       img.set({ id: uuid() });
 
-      // emitAdd({ obj: img, id: img.id, url: img._element.currentSrc }, socketRef.current);
       try {
         itemChannel.current.send(JSON.stringify({ obj: img, order: "add", id: img.id, url: img._element.currentSrc }));
       } catch (error) {

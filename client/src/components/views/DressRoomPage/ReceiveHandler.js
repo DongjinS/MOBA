@@ -6,16 +6,6 @@ let pointer;
 let clients = {};
 let pointers = {};
 
-// emitters
-export const emitAdd = (obj, socket) => {
-  console.log(obj.obj, obj.id, obj.url);
-  socket.emit("object-added", obj);
-};
-
-export const emitModify = (obj, socket) => {
-  socket.emit("object-modified", obj);
-};
-
 // listeners
 export const addImg = (canvas, data) => {
   const { obj, id, url } = data;
