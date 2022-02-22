@@ -9,11 +9,10 @@
 .container {
   display: grid;
   grid-template-columns: 400px auto 400px;
-  grid-template-rows: 70px 30px auto;
+  grid-template-rows: 70px auto;
   height: 100vh;
   grid-template-areas:
     "header  header  header"
-    "toolbar toolbar toolbar"
     "   a     main     b   ";
   row-gap: 10px;
   column-gap: 10px;
@@ -35,12 +34,26 @@
 }
 
 .toolbar {
-  grid-area: toolbar;
+  position: absolute;
+  z-index: 20;
+  margin-top: 10px;
+  width: 300px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border: 2px solid #456125;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  background-color: #666666;
+
+  /* border-radius: 10px 10px 10px 10px; */
 }
 
 .sidebarA {
   grid-area: a;
-  background-color: blanchedalmond;
+  background-color: #e5e5e5;
   overflow: auto;
 }
 
@@ -110,13 +123,22 @@
 
 .main {
   grid-area: main;
-  background-color: cadetblue;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbarBtn {
+  border-radius: 10px;
+  background-color: black;
+  color: white;
 }
 
 .canvas {
   width: inherit;
   height: inherit;
   z-index: 10;
+  border: 3px solid black;
 }
 
 .pointers {
@@ -140,23 +162,12 @@
   position: relative;
 }
 
-.user1:hover > .control_box1 {
-  visibility: visible;
-  z-index: 10;
-  position: absolute;
-  /* bottom: 10px; */
-  display: flex;
-  height: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  /* margin: auto; */
-  bottom: 10px;
-  background-color: transparent;
-  /* transition: all ease 2s 0s; */
-  animation: fadeIn 0.3s ease-in-out;
-}
 .control_box1 {
-  visibility: hidden;
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 
 .controlBtn {
@@ -170,13 +181,6 @@
 .video2 {
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  to {
-    opacity: 3;
-    transform: translate(-50%);
-  }
+.copyBtn {
+  color: black;
 }

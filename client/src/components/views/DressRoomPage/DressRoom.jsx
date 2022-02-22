@@ -12,8 +12,14 @@ import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./Recei
 import styles from "./DressRoom.module.css";
 
 import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
-import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
+import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from "react-icons/bs";
 import { GoUnmute, GoMute } from "react-icons/go";
+
+import { IoTrashOutline } from "react-icons/io";
+import { MdAddShoppingCart } from "react-icons/md";
+import { BsCartPlus } from "react-icons/bs";
+import { FaTrash, FaTrashAlt } from "react-icons/fa";
+
 import ClothesLoading from "../../loading/ClothesLoading";
 
 const DressRoom = props => {
@@ -95,7 +101,7 @@ const DressRoom = props => {
     new fabric.Canvas("canvas", {
       width: width,
       height: height,
-      backgroundColor: "pink",
+      backgroundColor: "white",
     });
 
   useEffect(async () => {
@@ -221,7 +227,7 @@ const DressRoom = props => {
           // 상대 없을 때 send 시 에러
         }
       });
-      canvas.on('mouse:wheel', function(opt) {
+      canvas.on("mouse:wheel", function (opt) {
         var delta = opt.e.deltaY;
         var zoom = canvas.getZoom();
         zoom *= 0.999 ** delta;
@@ -231,6 +237,46 @@ const DressRoom = props => {
         opt.e.preventDefault();
         opt.e.stopPropagation();
       });
+
+      canvas.selectionColor = "rgba(0,255,0,0.3)";
+      canvas.selectionBorderColor = "red";
+      canvas.selectionLineWidth = 20;
+
+      // function animate(e, dir) {
+      //   if (e.target) {
+      //     console.log(e);
+      //     fabric.util.animate({
+      //       startValue: e.target.get("angle"),
+      //       endValue: e.target.get("angle") + (dir ? 1 : -1),
+      //       duration: 100,
+      //       onChange: function (value) {
+      //         e.target.set("angle", 0);
+      //         canvas.renderAll();
+      //       },
+      //       onComplete: function () {
+      //         e.target.setCoords();
+      //       },
+      //     });
+      //     fabric.util.animate({
+      //       startValue: e.target.get("scaleX"),
+      //       endValue: e.target.get("scaleX") + (dir ? 0.2 : -0.2),
+      //       duration: 100,
+      //       onChange: function (value) {
+      //         e.target.scale(value);
+      //         canvas.renderAll();
+      //       },
+      //       onComplete: function () {
+      //         e.target.setCoords();
+      //       },
+      //     });
+      //   }
+      // }
+      // canvas.on("mouse:down", function (e) {
+      //   animate(e, 1);
+      // });
+      // canvas.on("mouse:up", function (e) {
+      //   animate(e, 0);
+      // });
 
       console.log("canvas socket:", socketRef.current);
     }
@@ -269,7 +315,8 @@ const DressRoom = props => {
     new fabric.Image.fromURL(url, img => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
-      img.set({ id: uuid(), product_info: item });
+      img.set({ id: uuid(), product_info: item, borderColor: "black", borderScaleFactor: 9, cornerColor: "orange", cornerSize: 12, transparentCorners: false });
+
       console.log("new_img", img);
       const sendObj = {
         obj: img,
@@ -518,12 +565,12 @@ const DressRoom = props => {
     });
   };
 
-  window.addEventListener('resize', () => {
-    setCanvas((canvas) => {
+  window.addEventListener("resize", () => {
+    setCanvas(canvas => {
       console.log("resize!!");
-      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight)
-      canvas.setWidth(  canvasRef.current.offsetWidth );
-      canvas.setHeight( canvasRef.current.offsetHeight );
+      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
+      canvas.setWidth(canvasRef.current.offsetWidth);
+      canvas.setHeight(canvasRef.current.offsetHeight);
       return canvas;
     });
   });
@@ -543,46 +590,12 @@ const DressRoom = props => {
               <div> , ToolBox 자리 (그림 그림기, 사물 등)</div>
             </div>
             <div>내 닉네임 / 방번호가 들어갈 자리</div>
-            <div>공유하기 혹은 추출하기가 들어갈 자리</div>
-          </header>
-          <div className={styles.toolbar}>
-            <button type="button" name="rectangle" onClick={addShape}>
-              Add a Rectangle
-            </button>
-
-            <button type="button" name="triangle" onClick={addShape}>
-              Add a Triangle
-            </button>
-
-            <button type="button" name="circle" onClick={addShape}>
-              Add a Circle
-            </button>
-
-            <button type="button" name="delete" onClick={HandleDeleteBtn}>
-              삭제하기
-            </button>
             <button className={styles.copyBtn} onClick={copyLink}>
               초대링크 복사
             </button>
-            <button className={styles.AddToMyCartBtn} onClick={HandleAddtoMyCartBtn}>
-              내 장바구니에 넣기
-            </button>
-            {/* <button className={styles.copyBtn} onClick={shareKakao}>
-              카카오톡 공유하기
-            </button> */}
+            {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
+          </header>
 
-            <ToastContainer
-              position="bottom-center"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
           {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
           <div className={styles.sidebarA}>
             <div className={styles.bodyContainer}>
@@ -606,6 +619,34 @@ const DressRoom = props => {
             </div>
           </div>
           <div ref={canvasRef} className={styles.main}>
+            <div className={styles.toolbar}>
+              <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteBtn}>
+                <BsTrash size="25" />
+              </button>
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                <MdAddShoppingCart size="25" />
+              </button>
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                <FaTrash size="25" />
+              </button>
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                <FaTrashAlt size="25" />
+              </button>
+              {/* <button className={styles.copyBtn} onClick={shareKakao}>
+                카카오톡 공유하기
+              </button> */}
+            </div>
+            <ToastContainer
+              position="bottom-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
             <div id="pointers" className={styles.pointers}></div>
             <canvas className={styles.canvas} id="canvas"></canvas>
           </div>
