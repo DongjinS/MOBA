@@ -177,7 +177,11 @@ const DressRoom = props => {
             id: options.target.id,
             order: "modify",
           };
-          itemChannel.current.send(JSON.stringify(modifiedObj));
+          try {
+            itemChannel.current.send(JSON.stringify(modifiedObj));
+          } catch (error) {
+            // 상대 없을 때 send 시 에러
+          }
         }
       });
 
@@ -188,7 +192,11 @@ const DressRoom = props => {
             id: options.target.id,
             order: "modify",
           };
-          itemChannel.current.send(JSON.stringify(modifiedObj));
+          try {
+            itemChannel.current.send(JSON.stringify(modifiedObj));
+          } catch (error) {
+            // 상대 없을 때 send 시 에러
+          }
         }
       });
 
