@@ -486,6 +486,27 @@ const DressRoom = props => {
     isSoundOn ? setIsSoundOn(false) : setIsSoundOn(true);
   };
 
+  const HandleAddtoMyCartBtn = () => {
+    console.log("HandleAddToMyCartBtn ");
+
+    canvas.getActiveObjects().forEach(obj => {
+      console.log("add to my cart : ", obj);
+
+      axios
+        .post(`/privatebasket`, {
+          token: token,
+          products: [obj.product_info],
+        })
+        .then(Response => {
+          // Response가 정상일때 products에 상품을 추가한다.
+          console.log(Response);
+          if (Response.status === 200) {
+            setProducts([...products, obj.product_info]);
+          }
+        });
+    });
+  };
+
   return (
     <>
       {isLoading ? (
@@ -496,7 +517,8 @@ const DressRoom = props => {
         <div className={styles.container}>
           <header className={styles.header}>
             <div className={styles.logo}>
-              <div>모바 LOGO 자리</div>
+              {/* <div>모바 LOGO 자리</div> */}
+              <img src="/images/logo_clothes.png" alt="모바 로고"></img>
               <div> , ToolBox 자리 (그림 그림기, 사물 등)</div>
             </div>
             <div>내 닉네임 / 방번호가 들어갈 자리</div>
@@ -520,6 +542,9 @@ const DressRoom = props => {
             </button>
             <button className={styles.copyBtn} onClick={copyLink}>
               초대링크 복사
+            </button>
+            <button className={styles.AddToMyCartBtn} onClick={HandleAddtoMyCartBtn}>
+              내 장바구니에 넣기
             </button>
             {/* <button className={styles.copyBtn} onClick={shareKakao}>
               카카오톡 공유하기
