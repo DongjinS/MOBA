@@ -91,19 +91,6 @@ io.on("connection", socket => {
     io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
 
-  socket.on("object-added", data => {
-    socket.broadcast.emit("new-add", data);
-  });
-
-  socket.on("object-modified", data => {
-    socket.broadcast.emit("new-modification", data);
-  });
-
-  // socket.on("mousemove", data => {
-  //   data.id = socket.id;
-  //   socket.broadcast.emit("moving", data);
-  // });
-
   socket.on("disconnecting", () => {
     console.log("disconnecting", socket.id);
     console.log(socket.rooms);
@@ -111,12 +98,10 @@ io.on("connection", socket => {
       console.log(room);
       socket.to(room).emit("peer-leaving", socket.id);
       // Notify other peer that current user is leaving
-      // socket.to(room).emit("peer-leaving");
       // Leave the room
       socket.leave(room);
     });
   });
 });
-///////////////////////////////////
 
 server.listen(8000);

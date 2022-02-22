@@ -100,13 +100,13 @@ basketRouter.delete('/', async (req, res) => {
 
 basketRouter.get('/:id', async (req, res) => {
   console.log('IN private basket, try to get the products');
-  console.log(req.id);
+  // console.log(req.id);
   const cur_user = await User.findOne({
     token: req.id,
   });
   try {
-    console.log(cur_user);
-    console.log(cur_user.products);
+    // console.log(cur_user);
+    // console.log(cur_user.products);
 
     res.send(cur_user.products);
   } catch (error) {
