@@ -24,7 +24,7 @@ export const addImg = (canvas, data) => {
   } else if (obj.type === "image") {
     new fabric.Image.fromURL(url, img => {
       console.log("received data", data);
-      img.set({ id: id , product_info: product_info });
+      img.set({ id: id , product_info: product_info, borderColor: "orange", borderScaleFactor: 9, cornerColor: "black", cornerSize: 12, transparentCorners: false });
       console.log("received img: ", img);
       img.scale(0.75);
       img.set(obj);
