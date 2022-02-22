@@ -1,8 +1,8 @@
 const express = require('express');
 const basketRouter = express.Router();
 const User = require('../models/User');
-const axios = require('axios')
-const cheerio = require('cheerio')
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 // TODO : 함께 쇼핑 종료시 유저의 위시리스트에 공유위시리스트 품목 넣기 + 공유 위시리스트 삭제
 
@@ -17,20 +17,20 @@ basketRouter.param('id', async (req, res, next, value) => {
 // data: 유저 정보(토큰) , products 정보
 basketRouter.post('/', async (req, res) => {
   console.log('post these products on to private basket');
-  console.log(req.body);
+  // console.log(req.body);
 
   // 토큰으로 유저 찾고 - 잘못된 유저 찾은
   const cur_user = await User.findOne({
     token: req.body.token,
   });
 
-  console.log(cur_user);
+  // console.log(cur_user);
   // 유저의 기존 장바구니의 url 모아서
   const prev_products_url = cur_user?.products?.map(
     (product) => product.shop_url
   );
 
-  console.log(prev_products_url);
+  // console.log(prev_products_url);
   // 새로 장바구니에 넣으려는게 이미 있는지 확인하고
   const add_products = req.body.products?.filter((product) => {
     if (prev_products_url.includes(product.shop_url)) {
@@ -38,11 +38,11 @@ basketRouter.post('/', async (req, res) => {
       return product;
     }
   });
-  console.log('add_products', add_products);
+  // console.log('add_products', add_products);
 
   // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
   if (add_products?.length === 0 || add_products?.includes(undefined)) {
-    console.log('duplicated products');
+    // console.log('duplicated products');
     res.send('duplicated products');
     return;
   }
@@ -83,8 +83,8 @@ async function deleteProduct(token, products, shop_url) {
 // data: 누구의 장바구니에서 삭제할지 - 유저 정보(토큰), 무엇을 삭제할지 - 상품 정보
 // res: success or fail
 basketRouter.delete('/', async (req, res) => {
-  console.log('IN private basket, try to delete the selected products');
-  console.log(req.body);
+  // console.log('IN private basket, try to delete the selected products');
+  // console.log(req.body);
 
   const cur_user = await User.findOne({
     token: req.body.token,
@@ -125,12 +125,10 @@ basketRouter.post('/basket', async (req, res) => {
   res.send(basket_user.products);
 });
 
-
 basketRouter.post('/basketParsing', async (req, res) => {
-  url = req.body.shopUrl
-  const parsing_result = await parse_product(url)
-  res
-    .send(parsing_result);
+  url = req.body.shopUrl;
+  const parsing_result = await parse_product(url);
+  res.send(parsing_result);
 });
 
 // w-concept
@@ -228,18 +226,18 @@ function brandi(html, url) {
     shop_url: shop_url,
     img: img_url,
   };
-  console.log(new_product);
+  // console.log(new_product);
 
   return new_product;
 }
 
 async function parse_product(url) {
   let new_product;
-  console.log(url);
+  // console.log(url);
   const split_url = url.split('/');
   const cur_shop = split_url[2];
   // 서비스 가능한 사이트만 req 요청 보내기
-  console.log(`is cur_shop? ${cur_shop}`)
+  // console.log(`is cur_shop? ${cur_shop}`)
   if (
     ['www.wconcept.co.kr', 'store.musinsa.com', 'www.brandi.co.kr'].includes(
       cur_shop
@@ -271,6 +269,5 @@ async function parse_product(url) {
   // console.log(`new_product : ${JSON.stringify(new_product)}`)
   return new_product;
 }
-
 
 module.exports = basketRouter;

@@ -26,6 +26,8 @@ import { BsFillMicFill, BsFillMicMuteFill } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 import ClothesLoading from '../../loading/ClothesLoading';
 import { Helmet } from 'react-helmet';
+// import RemoveBg from '../RemoveBgPage/RemoveBg';
+// import { compareSync } from 'bcrypt';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -49,7 +51,7 @@ const DressRoom = (props) => {
   let flag = true;
   if (flag) {
     flag = false;
-    console.log("try connect");
+    console.log('try connect');
     socket = socketConnect();
     socketRef.current = socket;
   }
@@ -79,17 +81,17 @@ const DressRoom = (props) => {
 
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
-      .then(stream => {
-        console.log("rtc socket");
+      .then((stream) => {
+        console.log('rtc socket');
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
         // socketRef.current = io.connect("/");
-        socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
-        socketRef.current.on("other user", userID => {
+        socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
+        socketRef.current.on('other user', (userID) => {
           callUser(userID);
           otherUser.current = userID;
         });
-        socketRef.current.on("user joined", userID => {
+        socketRef.current.on('user joined', (userID) => {
           otherUser.current = userID;
         });
         socketRef.current.on('offer', handleRecieveCall);
@@ -154,7 +156,7 @@ const DressRoom = (props) => {
     }
   }, [canvas]);
 
-  const addShape = e => {
+  const addShape = (e) => {
     let type = e.target.name;
     let object;
 
@@ -183,7 +185,19 @@ const DressRoom = (props) => {
 
   const addImg = (e, url, canvi) => {
     e.preventDefault();
-    new fabric.Image.fromURL(url, img => {
+
+    // axios
+    //   .post('/urlToFile', {
+    //     url,
+    //   })
+    //   .then((Response) => {
+    //     console.log(Response.data);
+    //   })
+    //   .then((RemoveBg(Response.data)) => {
+    //     console.log
+    //   });
+
+    new fabric.Image.fromURL(url, (img) => {
       console.log(img);
       console.log('sender', img._element.currentSrc);
       img.set({ id: uuid() });
@@ -196,7 +210,7 @@ const DressRoom = (props) => {
 
   const deleteShape = () => {
     console.log(
-      canvas.getActiveObjects().forEach(obj => {
+      canvas.getActiveObjects().forEach((obj) => {
         canvas.remove(obj);
       })
     );
@@ -276,7 +290,13 @@ const DressRoom = (props) => {
   function callUser(userID) {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+    userStream.current
+      .getTracks()
+      .forEach((track) =>
+        senders.current.push(
+          peerRef.current.addTrack(track, userStream.current)
+        )
+      );
   }
 
   function createPeer(userID) {
@@ -303,7 +323,7 @@ const DressRoom = (props) => {
   function handleNegotiationNeededEvent(userID) {
     peerRef.current
       .createOffer()
-      .then(offer => {
+      .then((offer) => {
         return peerRef.current.setLocalDescription(offer);
       })
       .then(() => {
@@ -314,7 +334,7 @@ const DressRoom = (props) => {
         };
         socketRef.current.emit('offer', payload);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }
 
   function handleRecieveCall(incoming) {
@@ -323,12 +343,18 @@ const DressRoom = (props) => {
     peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+        userStream.current
+          .getTracks()
+          .forEach((track) =>
+            senders.current.push(
+              peerRef.current.addTrack(track, userStream.current)
+            )
+          );
       })
       .then(() => {
         return peerRef.current.createAnswer();
       })
-      .then(answer => {
+      .then((answer) => {
         return peerRef.current.setLocalDescription(answer);
       })
       .then(() => {
@@ -343,7 +369,7 @@ const DressRoom = (props) => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
   }
 
   function handleICECandidateEvent(e) {
@@ -359,7 +385,7 @@ const DressRoom = (props) => {
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
 
-    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
+    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
   }
 
   function handleTrackEvent(e) {
@@ -476,13 +502,26 @@ const DressRoom = (props) => {
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
-                    {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
+                  <button
+                    className={(styles.cameraBtn, styles.controlBtn)}
+                    onClick={HandleCameraBtnClick}
+                  >
+                    {isCameraOn ? (
+                      <BsCameraVideoFill />
+                    ) : (
+                      <BsCameraVideoOffFill />
+                    )}
                   </button>
-                  <button className={(styles.micBtn, styles.controlBtn)} onClick={HandleMicBtnClick}>
+                  <button
+                    className={(styles.micBtn, styles.controlBtn)}
+                    onClick={HandleMicBtnClick}
+                  >
                     {isMicOn ? <BsFillMicFill /> : <BsFillMicMuteFill />}
                   </button>
-                  <button className={(styles.muteBtn, styles.controlBtn)} onClick={HandleSoundBtnClick}>
+                  <button
+                    className={(styles.muteBtn, styles.controlBtn)}
+                    onClick={HandleSoundBtnClick}
+                  >
                     {isSoundOn ? <GoUnmute /> : <GoMute />}
                   </button>
                 </div>
