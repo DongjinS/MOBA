@@ -45,7 +45,6 @@ const DressRoom = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    console.log("handle Mouse dc message", data);
     data.clientX = data.clientX * canvasRef.current.offsetWidth;
     data.clientY = data.clientY * canvasRef.current.offsetHeight;
     modifyMouse(data);
@@ -224,7 +223,7 @@ const DressRoom = (props) => {
           mouseobj.id = socketRef.current.id;
           mouseChannel.current.send(JSON.stringify(mouseobj));
         } catch (error) {
-          console.log(error);
+          // 상대 없을 때 send 시 에러
         }
       });
       console.log("canvas socket:", socketRef.current);
@@ -264,9 +263,15 @@ const DressRoom = (props) => {
     new fabric.Image.fromURL(url, (img) => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
-      img.set({ id: uuid() , product_info: item});
+      img.set({ id: uuid(), product_info: item });
       console.log("new_img", img);
-      const sendObj = { obj: img, order: "add", id: img.id, url: url, product_info: item};
+      const sendObj = {
+        obj: img,
+        order: "add",
+        id: img.id,
+        url: url,
+        product_info: item,
+      };
 
       try {
         itemChannel.current.send(JSON.stringify(sendObj));
@@ -406,6 +411,22 @@ const DressRoom = (props) => {
           itemChannel.current.addEventListener("message", (event) => {
             handleRecievedItem(event.data);
           });
+          setCanvas((canvas) => {
+            const objects = canvas.getObjects();
+            if (objects.length > 0) {
+              objects.forEach((obj) => {
+                const sendObj = {
+                  obj: obj,
+                  order: "add",
+                  id: obj.id,
+                  url: obj.product_info.img,
+                  product_info: obj.product_info,
+                };
+                itemChannel.current.send(JSON.stringify(sendObj));
+              });
+            }
+            return canvas;
+          });
           break;
         default:
           break;
@@ -541,7 +562,7 @@ const DressRoom = (props) => {
               <div className={styles.wishlist}>
                 {products.map((item, index) => (
                   <div key={index} className={styles.containerProduct}>
-                    <div className={styles.producctInfo}>
+                    <div className={styles.productInfo}>
                       <div className={styles.containerImg}>
                         <img
                           className={styles.productImg}

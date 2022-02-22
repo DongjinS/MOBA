@@ -53,7 +53,6 @@ export const modifyMouse = data => {
   }
 
   canvas = document.getElementById("canvas");
-  console.log("hi", canvas);
   pointers[data.id].style.left = data.clientX + "px";
   pointers[data.id].style.top = data.clientY + "px";
   pointers[data.id].style.position = "absolute";
