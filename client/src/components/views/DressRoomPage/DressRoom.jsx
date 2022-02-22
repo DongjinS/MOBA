@@ -278,7 +278,7 @@ const DressRoom = props => {
       }
       canvas.remove(obj);
     });
-    // canvas.discardActiveObject().renderAll();
+    canvas.discardActiveObject().renderAll();
   };
 
   // ---------- 카카오톡 공유하기 ----------
