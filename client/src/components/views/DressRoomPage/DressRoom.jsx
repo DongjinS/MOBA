@@ -606,12 +606,17 @@ const DressRoom = props => {
                       <div className={styles.containerImg}>
                         <img className={styles.productImg} src={item.img} alt="상품 이미지" />
                       </div>
-                      <div className={styles.productTitle}>{item.product_name}</div>
-                    </div>
-                    <div>
-                      <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
-                        추가
-                      </button>
+                      <div style={{ display: "flex", width: "100%", flexDirection: "column", justifyContent: "space-between" }}>
+                        <div className={styles.productTitle}>{item.product_name}</div>
+                        <div style={{ display: "flex", justifyContent: "right" }}>
+                          <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
+                            추가
+                          </button>
+                          <button className={styles.productDelbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
+                            삭제
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

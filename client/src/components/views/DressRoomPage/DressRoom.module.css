@@ -107,6 +107,7 @@
 .productInfo {
   display: flex;
   margin: 3px;
+  width: 100%;
 }
 
 .productImg {
@@ -119,6 +120,13 @@
 .productAddbtn {
   height: 100%;
   width: 50px;
+  border-radius: 15px 0px 0px 15px;
+}
+
+.productDelbtn {
+  height: 100%;
+  width: 50px;
+  border-radius: 0px 15px 15px 0px;
 }
 
 .main {
