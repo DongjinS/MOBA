@@ -238,10 +238,6 @@ const DressRoom = props => {
         opt.e.stopPropagation();
       });
 
-      canvas.selectionColor = "rgba(0,255,0,0.3)";
-      canvas.selectionBorderColor = "red";
-      canvas.selectionLineWidth = 20;
-
       // function animate(e, dir) {
       //   if (e.target) {
       //     console.log(e);
