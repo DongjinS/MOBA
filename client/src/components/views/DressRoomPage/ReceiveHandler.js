@@ -8,7 +8,7 @@ let pointers = {};
 
 // listeners
 export const addImg = (canvas, data) => {
-  const { obj, id, url } = data;
+  const { obj, id, url, product_info } = data;
   let object;
 
   console.log(obj.type);
@@ -23,9 +23,13 @@ export const addImg = (canvas, data) => {
     canvas.renderAll();
   } else if (obj.type === "image") {
     new fabric.Image.fromURL(url, img => {
-      console.log("receive", img._element.currentSrc);
-      img.set({ id: id });
+      console.log("received data", data);
+      img.set({ id: id , product_info: product_info });
+      console.log("received img: ", img);
       img.scale(0.75);
+      img.set(obj);
+      console.log("received img after set(obj): ", img);
+      img.setCoords();
       canvas.add(img);
       canvas.renderAll();
     });

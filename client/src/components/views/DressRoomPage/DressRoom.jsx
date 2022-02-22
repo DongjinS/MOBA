@@ -7,7 +7,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./ReceiveHandler";
+import {
+  modifyObj,
+  modifyMouse,
+  getPointer,
+  deleteMouse,
+  addImg,
+} from "./ReceiveHandler";
 
 import styles from "./DressRoom.module.css";
 
@@ -16,7 +22,7 @@ import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import { GoUnmute, GoMute } from "react-icons/go";
 import ClothesLoading from "../../loading/ClothesLoading";
 
-const DressRoom = props => {
+const DressRoom = (props) => {
   const [canvas, setCanvas] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -37,7 +43,7 @@ const DressRoom = props => {
   const mouseChannel = useRef();
   const itemChannel = useRef();
 
-  const handleRecievedMouse = data => {
+  const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
     console.log("handle Mouse dc message", data);
     data.clientX = data.clientX * canvasRef.current.offsetWidth;
@@ -61,7 +67,7 @@ const DressRoom = props => {
          * 해결방법 : delete할 data에 id를 key와 value로 직접 넣어주었다.
          * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
          */
-        canvas.getObjects().forEach(object => {
+        canvas.getObjects().forEach((object) => {
           console.log("data : ", data);
           if (object.id === data.id) {
             console.log("obj : ", object);
@@ -74,11 +80,11 @@ const DressRoom = props => {
     }
   };
 
-  const handleRecievedItem = data => {
+  const handleRecievedItem = (data) => {
     data = JSON.parse(data);
     console.log("handle item dc message", data);
 
-    setCanvas(canvas => {
+    setCanvas((canvas) => {
       console.log("hello");
       console.log(canvas);
       needCanvas(canvas, data);
@@ -104,29 +110,31 @@ const DressRoom = props => {
 
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
-      .then(stream => {
+      .then((stream) => {
         console.log("rtc socket");
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
         socketRef.current = io.connect("/");
         socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
 
-        socketRef.current.on("other user", async userID => {
+        socketRef.current.on("other user", async (userID) => {
           callUser(userID);
 
-          mouseChannel.current = await peerRef.current.createDataChannel("mouse");
-          mouseChannel.current.addEventListener("message", event => {
+          mouseChannel.current = await peerRef.current.createDataChannel(
+            "mouse"
+          );
+          mouseChannel.current.addEventListener("message", (event) => {
             handleRecievedMouse(event.data);
           });
 
           itemChannel.current = await peerRef.current.createDataChannel("item");
-          itemChannel.current.addEventListener("message", event => {
+          itemChannel.current.addEventListener("message", (event) => {
             handleRecievedItem(event.data);
           });
 
           otherUser.current = userID;
         });
-        socketRef.current.on("user joined", userID => {
+        socketRef.current.on("user joined", (userID) => {
           otherUser.current = userID;
         });
         socketRef.current.on("offer", handleRecieveCall);
@@ -137,7 +145,7 @@ const DressRoom = props => {
           deleteMouse(id);
           otherUser.current = "";
 
-          partnerVideo.current.srcObject.getVideoTracks().forEach(track => {
+          partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
             track.stop();
           });
 
@@ -154,11 +162,11 @@ const DressRoom = props => {
     setIsLoading(false);
     axios
       .get(`/privatebasket/${token}`)
-      .then(Response => {
+      .then((Response) => {
         console.log(Response);
         setProducts(Response.data);
       })
-      .catch(Error => {
+      .catch((Error) => {
         console.log(Error);
       })
       .then(() => {
@@ -170,7 +178,7 @@ const DressRoom = props => {
     console.log("useEffect canvas");
 
     if (canvas) {
-      canvas.on("object:modified", options => {
+      canvas.on("object:modified", (options) => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
@@ -185,7 +193,7 @@ const DressRoom = props => {
         }
       });
 
-      canvas.on("object:moving", options => {
+      canvas.on("object:moving", (options) => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
@@ -200,7 +208,7 @@ const DressRoom = props => {
         }
       });
 
-      canvas.on("mouse:move", options => {
+      canvas.on("mouse:move", (options) => {
         const mouseobj = {
           clientX: options.e.offsetX / canvasRef.current.offsetWidth,
           clientY: options.e.offsetY / canvasRef.current.offsetHeight,
@@ -223,7 +231,7 @@ const DressRoom = props => {
     }
   }, [canvas]);
 
-  const addShape = e => {
+  const addShape = (e) => {
     let type = e.target.name;
     let object;
 
@@ -249,15 +257,19 @@ const DressRoom = props => {
     canvas.renderAll();
   };
 
-  const HandleAddImgBtn = (e, url, canvi) => {
+  const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
-    new fabric.Image.fromURL(url, img => {
+    const url = item.img;
+
+    new fabric.Image.fromURL(url, (img) => {
       console.log(img);
       console.log("sender", img._element.currentSrc);
-      img.set({ id: uuid() });
+      img.set({ id: uuid() , product_info: item});
+      console.log("new_img", img);
+      const sendObj = { obj: img, order: "add", id: img.id, url: url, product_info: item};
 
       try {
-        itemChannel.current.send(JSON.stringify({ obj: img, order: "add", id: img.id, url: img._element.currentSrc }));
+        itemChannel.current.send(JSON.stringify(sendObj));
       } catch (error) {
         console.log(error);
       }
@@ -269,10 +281,12 @@ const DressRoom = props => {
   };
 
   const HandleDeleteBtn = () => {
-    canvas.getActiveObjects().forEach(obj => {
+    canvas.getActiveObjects().forEach((obj) => {
       console.log("HandleDeleteBtn : ", obj);
       try {
-        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: "delete" }));
+        itemChannel.current.send(
+          JSON.stringify({ obj: obj, id: obj.id, order: "delete" })
+        );
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
@@ -327,7 +341,13 @@ const DressRoom = props => {
   function callUser(userID) {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+    userStream.current
+      .getTracks()
+      .forEach((track) =>
+        senders.current.push(
+          peerRef.current.addTrack(track, userStream.current)
+        )
+      );
   }
 
   function createPeer(userID) {
@@ -354,7 +374,7 @@ const DressRoom = props => {
   function handleNegotiationNeededEvent(userID) {
     peerRef.current
       .createOffer()
-      .then(offer => {
+      .then((offer) => {
         return peerRef.current.setLocalDescription(offer);
       })
       .then(() => {
@@ -365,25 +385,25 @@ const DressRoom = props => {
         };
         socketRef.current.emit("offer", payload);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }
 
-  const handleRecieveCall = incoming => {
+  const handleRecieveCall = (incoming) => {
     peerRef.current = createPeer();
-    peerRef.current.addEventListener("datachannel", event => {
+    peerRef.current.addEventListener("datachannel", (event) => {
       console.log("event : ", event);
       console.log("event channel: ", event.channel);
 
       switch (event.channel.label) {
         case "mouse":
           mouseChannel.current = event.channel;
-          mouseChannel.current.addEventListener("message", event => {
+          mouseChannel.current.addEventListener("message", (event) => {
             handleRecievedMouse(event.data);
           });
           break;
         case "item":
           itemChannel.current = event.channel;
-          itemChannel.current.addEventListener("message", event => {
+          itemChannel.current.addEventListener("message", (event) => {
             handleRecievedItem(event.data);
           });
           break;
@@ -395,12 +415,18 @@ const DressRoom = props => {
     peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+        userStream.current
+          .getTracks()
+          .forEach((track) =>
+            senders.current.push(
+              peerRef.current.addTrack(track, userStream.current)
+            )
+          );
       })
       .then(() => {
         return peerRef.current.createAnswer();
       })
-      .then(answer => {
+      .then((answer) => {
         return peerRef.current.setLocalDescription(answer);
       })
       .then(() => {
@@ -415,7 +441,7 @@ const DressRoom = props => {
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
   }
 
   function handleICECandidateEvent(e) {
@@ -431,7 +457,7 @@ const DressRoom = props => {
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
 
-    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
+    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
   }
 
   function handleTrackEvent(e) {
@@ -441,7 +467,7 @@ const DressRoom = props => {
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
 
-    userStream.current.getVideoTracks().forEach(track => {
+    userStream.current.getVideoTracks().forEach((track) => {
       track.enabled = !track.enabled;
     });
   };
@@ -449,7 +475,7 @@ const DressRoom = props => {
   const HandleMicBtnClick = () => {
     isMicOn ? setIsMicOn(false) : setIsMicOn(true);
 
-    userStream.current.getAudioTracks().forEach(track => {
+    userStream.current.getAudioTracks().forEach((track) => {
       track.enabled = !track.enabled;
     });
   };
@@ -517,12 +543,22 @@ const DressRoom = props => {
                   <div key={index} className={styles.containerProduct}>
                     <div className={styles.producctInfo}>
                       <div className={styles.containerImg}>
-                        <img className={styles.productImg} src={item.img} alt="상품 이미지" />
+                        <img
+                          className={styles.productImg}
+                          src={item.img}
+                          alt="상품 이미지"
+                        />
                       </div>
-                      <div className={styles.productTitle}>{item.product_name}</div>
+                      <div className={styles.productTitle}>
+                        {item.product_name}
+                      </div>
                     </div>
                     <div>
-                      <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item.img, canvas)}>
+                      <button
+                        className={styles.productAddbtn}
+                        type="button"
+                        onClick={(e) => HandleAddImgBtn(e, item, canvas)}
+                      >
                         추가
                       </button>
                     </div>
@@ -542,13 +578,26 @@ const DressRoom = props => {
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
-                    {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
+                  <button
+                    className={(styles.cameraBtn, styles.controlBtn)}
+                    onClick={HandleCameraBtnClick}
+                  >
+                    {isCameraOn ? (
+                      <BsCameraVideoFill />
+                    ) : (
+                      <BsCameraVideoOffFill />
+                    )}
                   </button>
-                  <button className={(styles.micBtn, styles.controlBtn)} onClick={HandleMicBtnClick}>
+                  <button
+                    className={(styles.micBtn, styles.controlBtn)}
+                    onClick={HandleMicBtnClick}
+                  >
                     {isMicOn ? <BsFillMicFill /> : <BsFillMicMuteFill />}
                   </button>
-                  <button className={(styles.muteBtn, styles.controlBtn)} onClick={HandleSoundBtnClick}>
+                  <button
+                    className={(styles.muteBtn, styles.controlBtn)}
+                    onClick={HandleSoundBtnClick}
+                  >
                     {isSoundOn ? <GoUnmute /> : <GoMute />}
                   </button>
                 </div>
