@@ -46,7 +46,7 @@
   border-radius: 20px;
   display: flex;
   justify-content: space-around;
-  background-color: #666666;
+  background-color: gold;
 
   /* border-radius: 10px 10px 10px 10px; */
 }
@@ -130,7 +130,7 @@
 
 .toolbarBtn {
   border-radius: 10px;
-  background-color: black;
+  background-color: orangered;
   color: white;
 }
 
@@ -166,19 +166,31 @@
   position: absolute;
   bottom: 1%;
   left: 50%;
+  width: 150px;
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
+  justify-content: space-around;
+  display: flex;
 }
 
 .controlBtn {
   font-size: 20px;
-  background-color: transparent;
+  background-color: white;
+  color: grey;
+  opacity: 0.5;
+  border-radius: 20px;
 }
 
 .video1 {
+  border-radius: 15px;
+  border: 7px solid #000;
+  margin-bottom: 5px;
 }
 
 .video2 {
+  border-radius: 15px;
+  border: 7px solid #000;
+  visibility: hidden;
 }
 
 .copyBtn {
