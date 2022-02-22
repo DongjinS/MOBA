@@ -507,6 +507,16 @@ const DressRoom = props => {
     });
   };
 
+  window.addEventListener('resize', () => {
+    setCanvas((canvas) => {
+      console.log("resize!!");
+      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight)
+      canvas.setWidth(  canvasRef.current.offsetWidth );
+      canvas.setHeight( canvasRef.current.offsetHeight );
+      return canvas;
+    });
+  });
+
   return (
     <>
       {isLoading ? (
