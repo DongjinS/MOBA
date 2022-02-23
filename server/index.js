@@ -14,7 +14,6 @@ const oauthRouter = require('./router/oauth');
 
 const basketRouter = require('./router/privatebasket');
 const voteRouter = require('./router/vote');
-const urlToFileRouter = require('./router/urlToFile');
 
 const app = express();
 
@@ -49,8 +48,6 @@ app.use('/privatebasket', basketRouter);
 ///// 투표 라우팅 /////
 app.use('/vote', voteRouter);
 //////////////////////////////
-///// 누끼 라우팅 /////
-app.use('/urlToFile', urlToFileRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

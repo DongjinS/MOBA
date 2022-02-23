@@ -33,7 +33,6 @@ function App() {
           <Route path="/room/:roomID" element={<Room />} />
           <Route path="/invited" element={<InvitedPage />} />
           <Route path="/dressroom/:roomID" element={<DressRoom />} />
-          <Route path="/removeBg" element={<RemoveBg />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>
