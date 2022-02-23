@@ -18,7 +18,7 @@ const http = require('https');
 
 /*------------post 작업--------------------*/
 
-// url : http://www.moba.com/removebg.js
+// url : http://www.moba.com/urlToFile.js
 // method: post
 // data: 유저 정보(토큰) , products 정보
 urlToFileRouter.post('/', async (req, res) => {
