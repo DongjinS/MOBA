@@ -114,12 +114,12 @@ const aws = require("aws-sdk");
 
 
 async function generateUploadURL(req) {
-  dotenv.config("./.env");
+  dotenv.config();
   
   const region = "ap-northeast-2";
   const bucketName = "moba-nukki";
-  const accessKeyId = "AKIARGL43Q4H5JNPHIW4";
-  const secretAccessKey = "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";
+  const accessKeyId = process.env.accessKeyId;
+  const secretAccessKey = process.env.secretAccessKey;
   
   const s3 = new aws.S3({
     region,
