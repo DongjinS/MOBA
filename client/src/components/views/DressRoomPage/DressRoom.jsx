@@ -314,7 +314,13 @@ const DressRoom = (props) => {
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
-    const url = item.img;
+    let url;
+
+    if (item.removedBgImg) {
+      url = item.removedBgImg;
+    } else {
+      url = item.img;
+    }
 
     new fabric.Image.fromURL(url, (img) => {
       console.log(img);

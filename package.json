@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1079.0",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "blob": "^0.1.0",
@@ -20,6 +21,7 @@
     "concurrently": "^7.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
     "fs": "^0.0.1-security",
