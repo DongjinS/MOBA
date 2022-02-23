@@ -17,7 +17,7 @@ basketRouter.param('id', async (req, res, next, value) => {
 // data: 유저 정보(토큰) , products 정보
 basketRouter.post('/', async (req, res) => {
   console.log('post these products on to private basket');
-  // console.log(req.body);
+  console.log(req.body.products, 'products');
 
   // 토큰으로 유저 찾고 - 잘못된 유저 찾은
   const cur_user = await User.findOne({

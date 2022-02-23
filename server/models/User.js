@@ -6,30 +6,30 @@ const saltRounds = 10;
 const userSchema = mongoose.Schema({
   username: {
     type: String,
-    maxlength: 30
+    maxlength: 30,
   },
   password: {
     type: String,
-    minlength: 5
+    minlength: 5,
   },
   name: {
     type: String,
-    maxlength: 10
+    maxlength: 10,
   },
   email: {
     type: String,
     trim: true,
-    unique: 1
+    unique: 1,
   },
   role: {
     type: Number,
-    default: 0
+    default: 0,
   },
   token: {
-    type: String
+    type: String,
   },
   tokenExp: {
-    type: Number
+    type: Number,
   },
   products: [
     {
@@ -39,6 +39,7 @@ const userSchema = mongoose.Schema({
       shop_name: String,
       shop_url: String,
       img: String,
+      removedBgImg: String,
     },
   ],
 });
@@ -63,7 +64,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.methods.comparePassword = function (plainPassword, cb) {
   bcrypt.compare(plainPassword, this.password, function (error, isMatch) {
-    if (error) return cb(error)
+    if (error) return cb(error);
     cb(null, isMatch);
   });
 };
@@ -74,25 +75,25 @@ userSchema.methods.generateToken = function (cb) {
   const token = jwt.sign(user._id.toHexString(), 'secretToken');
   user.token = token;
   user.save(function (error, user) {
-    if (error) return cb(error)
+    if (error) return cb(error);
     cb(null, user);
   });
-}
+};
 
 userSchema.statics.findByToken = function (token, cb) {
   const user = this;
   jwt.verify(token, 'secretToken', function (error, decoded) {
     user.findOne(
       {
-        '_id': decoded,
-        'token': token
+        _id: decoded,
+        token: token,
       },
       function (error, user) {
         if (error) return cb(error);
         cb(null, user);
       }
-    )
-  })
-}
+    );
+  });
+};
 
 module.exports = mongoose.model('User', userSchema);

@@ -29,8 +29,12 @@ mongoose
   .then(console.log('MongoDB Connected'))
   .catch((error) => console.log(error));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false, limit: '5mb' }));
+app.use(
+  bodyParser.json({
+    limit: '5mb',
+  })
+);
 app.use(cookieParser());
 
 ///// 로그인 / 회원가입 관련 /////
