@@ -42,7 +42,8 @@ basketRouter.post('/', async (req, res) => {
 
   // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
   if (add_products?.length === 0 || add_products?.includes(undefined)) {
-    // console.log('duplicated products');
+    console.log('duplicated products');
+    res.statusCode = 404;
     res.send('duplicated products');
     return;
   }
@@ -60,6 +61,7 @@ basketRouter.post('/', async (req, res) => {
   // 잘 들어갔는지 확인 용도 - 추후에 지워야함
   // post_cur_user = await User.findOne({ token: req.body.token });
   // console.log(post_cur_user);
+  res.statusCode = 200;
   res.send('success post new product in private basket');
 });
 
@@ -102,13 +104,13 @@ basketRouter.delete('/', async (req, res) => {
 
 basketRouter.get('/:id', async (req, res) => {
   console.log('IN private basket, try to get the products');
-  console.log(req.id);
+  // console.log(req.id);
   const cur_user = await User.findOne({
     token: req.id,
   });
   try {
-    console.log(cur_user);
-    console.log(cur_user.products);
+    // console.log(cur_user);
+    // console.log(cur_user.products);
 
     res.send(cur_user.products);
   } catch (error) {

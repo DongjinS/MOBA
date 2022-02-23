@@ -17,7 +17,6 @@ import InvitedPage from '../src/components/views/InvitedPage/InvitedPage';
 
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import DressRoom from './components/views/DressRoomPage/DressRoom';
-import RemoveBg from './components/views/RemoveBgPage/RemoveBg';
 
 function App() {
   document.body.style.backgroundColor = 'white';
