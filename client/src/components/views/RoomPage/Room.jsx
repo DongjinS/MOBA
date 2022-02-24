@@ -171,7 +171,7 @@ const Room = props => {
       <section className={styles.frame}>
         <div className={styles.webcam__box}>
           <div className={styles.videoContainer}>
-            <video className={styles.video__control} autoPlay ref={userVideo} />
+            <video className={styles.video__control} autoPlay ref={userVideo} muted="muted" />
             <video controls className={styles.video__control} autoPlay ref={partnerVideo} />
             <RoomMemu onShareScreen={shareScreen} />
           </div>

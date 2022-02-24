@@ -689,7 +689,7 @@ const DressRoom = props => {
           <div className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video autoPlay ref={userVideo} className={styles.video1}>
+                <video autoPlay ref={userVideo} className={styles.video1} muted="muted">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
