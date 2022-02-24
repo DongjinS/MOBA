@@ -113,12 +113,12 @@ const aws = require("aws-sdk");
 
 
 async function generateUploadURL(req) {
-  
+
   const region = "ap-northeast-2";
   const bucketName = "moba-nukki";
   const accessKeyId = config.AWS_ACCESS_KEY_ID;
   const secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
-  
+
   const s3 = new aws.S3({
     region,
     accessKeyId,
