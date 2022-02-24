@@ -1,35 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { fabric } from 'fabric';
-import { v1 as uuid } from 'uuid';
-import io from 'socket.io-client';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
-import {
-  modifyObj,
-  modifyMouse,
-  getPointer,
-  deleteMouse,
-  addImg,
-} from './ReceiveHandler';
+import React, { useEffect, useState, useRef } from "react";
+import { fabric } from "fabric";
+import { v1 as uuid } from "uuid";
+import io from "socket.io-client";
+import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from "./ReceiveHandler";
 
-import styles from './DressRoom.module.css';
+import styles from "./DressRoom.module.css";
 
-import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
-import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
-import { GoUnmute, GoMute } from 'react-icons/go';
+import { BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
+import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from "react-icons/bs";
+import { GoUnmute, GoMute } from "react-icons/go";
 
-import { MdAddShoppingCart } from 'react-icons/md';
-import { IoTrashOutline } from 'react-icons/io';
-import { BsCartPlus } from 'react-icons/bs';
-import { FaTrash, FaTrashAlt } from 'react-icons/fa';
+import { MdAddShoppingCart } from "react-icons/md";
+import { IoTrashOutline } from "react-icons/io";
+import { BsCartPlus } from "react-icons/bs";
+import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
-import ClothesLoading from '../../loading/ClothesLoading';
+import ClothesLoading from "../../loading/ClothesLoading";
 
-const DressRoom = (props) => {
-  const [canvas, setCanvas] = useState('');
+const DressRoom = props => {
+  const [canvas, setCanvas] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
@@ -49,7 +43,7 @@ const DressRoom = (props) => {
   const mouseChannel = useRef();
   const itemChannel = useRef();
 
-  const handleRecievedMouse = (data) => {
+  const handleRecievedMouse = data => {
     data = JSON.parse(data);
     data.clientX = data.clientX * canvasRef.current.offsetWidth;
     data.clientY = data.clientY * canvasRef.current.offsetHeight;
@@ -58,13 +52,13 @@ const DressRoom = (props) => {
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
-      case 'add':
+      case "add":
         addImg(canvas, data);
         break;
-      case 'modify':
+      case "modify":
         modifyObj(canvas, data);
         break;
-      case 'delete':
+      case "delete":
         /*
          * 문제 : img object가 생성되면 uuid를 통해 각 object의 id 값을 지정한다.
          *   HandleDeleteBtn에서 활성 상태인 obj 자체를 webRTC를 통해 전달하여
@@ -72,10 +66,10 @@ const DressRoom = (props) => {
          * 해결방법 : delete할 data에 id를 key와 value로 직접 넣어주었다.
          * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
          */
-        canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
+        canvas.getObjects().forEach(object => {
+          console.log("data : ", data);
           if (object.id === data.id) {
-            console.log('obj : ', object);
+            console.log("obj : ", object);
             canvas.remove(object);
           }
         });
@@ -85,12 +79,12 @@ const DressRoom = (props) => {
     }
   };
 
-  const handleRecievedItem = (data) => {
+  const handleRecievedItem = data => {
     data = JSON.parse(data);
-    console.log('handle item dc message', data);
+    console.log("handle item dc message", data);
 
-    setCanvas((canvas) => {
-      console.log('hello');
+    setCanvas(canvas => {
+      console.log("hello");
       console.log(canvas);
       needCanvas(canvas, data);
       return canvas;
@@ -101,57 +95,55 @@ const DressRoom = (props) => {
     const cookies = new Cookies();
     return cookies.get(name);
   }
-  const token = getCookie('x_auth');
+  const token = getCookie("x_auth");
 
   const initCanvas = (width, height) =>
-    new fabric.Canvas('canvas', {
+    new fabric.Canvas("canvas", {
       width: width,
       height: height,
-      backgroundColor: 'white',
+      backgroundColor: "white",
     });
 
   useEffect(async () => {
-    console.log('useEffect []');
+    console.log("useEffect []");
 
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
-      .then((stream) => {
-        console.log('rtc socket');
+      .then(stream => {
+        console.log("rtc socket");
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        socketRef.current = io.connect('/');
-        socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
+        socketRef.current = io.connect("/");
+        socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
 
-        socketRef.current.on('other user', async (userID) => {
+        socketRef.current.on("other user", async userID => {
           callUser(userID);
 
-          mouseChannel.current = await peerRef.current.createDataChannel(
-            'mouse'
-          );
-          mouseChannel.current.addEventListener('message', (event) => {
+          mouseChannel.current = await peerRef.current.createDataChannel("mouse");
+          mouseChannel.current.addEventListener("message", event => {
             handleRecievedMouse(event.data);
           });
 
-          itemChannel.current = await peerRef.current.createDataChannel('item');
-          itemChannel.current.addEventListener('message', (event) => {
+          itemChannel.current = await peerRef.current.createDataChannel("item");
+          itemChannel.current.addEventListener("message", event => {
             handleRecievedItem(event.data);
           });
 
           otherUser.current = userID;
         });
-        socketRef.current.on('user joined', (userID) => {
+        socketRef.current.on("user joined", userID => {
           otherUser.current = userID;
         });
-        socketRef.current.on('offer', handleRecieveCall);
-        socketRef.current.on('answer', handleAnswer);
-        socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
+        socketRef.current.on("offer", handleRecieveCall);
+        socketRef.current.on("answer", handleAnswer);
+        socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
 
-        socketRef.current.on('peer-leaving', function (id) {
+        socketRef.current.on("peer-leaving", function (id) {
           deleteMouse(id);
-          otherUser.current = '';
+          otherUser.current = "";
 
           try {
-            partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
+            partnerVideo.current.srcObject.getVideoTracks().forEach(track => {
               track.stop();
             });
             partnerVideo.current.srcObject = null;
@@ -170,11 +162,11 @@ const DressRoom = (props) => {
     setIsLoading(false);
     axios
       .get(`/privatebasket/${token}`)
-      .then((Response) => {
+      .then(Response => {
         console.log(Response);
         setProducts(Response.data);
       })
-      .catch((Error) => {
+      .catch(Error => {
         console.log(Error);
       })
       .then(() => {
@@ -183,15 +175,15 @@ const DressRoom = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect canvas');
+    console.log("useEffect canvas");
 
     if (canvas) {
-      canvas.on('object:modified', (options) => {
+      canvas.on("object:modified", options => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
-            order: 'modify',
+            order: "modify",
           };
           try {
             itemChannel.current.send(JSON.stringify(modifiedObj));
@@ -201,12 +193,12 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on('object:moving', (options) => {
+      canvas.on("object:moving", options => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
-            order: 'modify',
+            order: "modify",
           };
           try {
             itemChannel.current.send(JSON.stringify(modifiedObj));
@@ -216,7 +208,7 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on('mouse:move', (options) => {
+      canvas.on("mouse:move", options => {
         const mouseobj = {
           clientX: options.e.offsetX / canvasRef.current.offsetWidth,
           clientY: options.e.offsetY / canvasRef.current.offsetHeight,
@@ -228,14 +220,14 @@ const DressRoom = (props) => {
         send시 error가 발생한다. try catch문을 통해 이를 방지한다. 
         */
         try {
-          console.log('dc mouse send');
+          console.log("dc mouse send");
           mouseobj.id = socketRef.current.id;
           mouseChannel.current.send(JSON.stringify(mouseobj));
         } catch (error) {
           // 상대 없을 때 send 시 에러
         }
       });
-      canvas.on('mouse:wheel', function (opt) {
+      canvas.on("mouse:wheel", function (opt) {
         var delta = opt.e.deltaY;
         var zoom = canvas.getZoom();
         zoom *= 0.999 ** delta;
@@ -282,25 +274,25 @@ const DressRoom = (props) => {
       //   animate(e, 0);
       // });
 
-      console.log('canvas socket:', socketRef.current);
+      console.log("canvas socket:", socketRef.current);
     }
   }, [canvas]);
 
-  const addShape = (e) => {
+  const addShape = e => {
     let type = e.target.name;
     let object;
 
-    if (type === 'rectangle') {
+    if (type === "rectangle") {
       object = new fabric.Rect({
         height: 75,
         width: 150,
       });
-    } else if (type === 'triangle') {
+    } else if (type === "triangle") {
       object = new fabric.Triangle({
         width: 100,
         height: 100,
       });
-    } else if (type === 'circle') {
+    } else if (type === "circle") {
       object = new fabric.Circle({
         radius: 50,
       });
@@ -322,23 +314,23 @@ const DressRoom = (props) => {
       url = item.img;
     }
 
-    new fabric.Image.fromURL(url, (img) => {
+    new fabric.Image.fromURL(url, img => {
       console.log(img);
-      console.log('sender', img._element.currentSrc);
+      console.log("sender", img._element.currentSrc);
       img.set({
         id: uuid(),
         product_info: item,
-        borderColor: 'black',
+        borderColor: "black",
         borderScaleFactor: 9,
-        cornerColor: 'orange',
+        cornerColor: "orange",
         cornerSize: 12,
         transparentCorners: false,
       });
 
-      console.log('new_img', img);
+      console.log("new_img", img);
       const sendObj = {
         obj: img,
-        order: 'add',
+        order: "add",
         id: img.id,
         url: url,
         product_info: item,
@@ -356,13 +348,11 @@ const DressRoom = (props) => {
     });
   };
 
-  const HandleDeleteBtn = () => {
-    canvas.getActiveObjects().forEach((obj) => {
-      console.log('HandleDeleteBtn : ', obj);
+  const HandleDeleteCanvasBtn = () => {
+    canvas.getActiveObjects().forEach(obj => {
+      console.log("HandleDeleteBtn : ", obj);
       try {
-        itemChannel.current.send(
-          JSON.stringify({ obj: obj, id: obj.id, order: 'delete' })
-        );
+        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: "delete" }));
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
@@ -373,14 +363,14 @@ const DressRoom = (props) => {
 
   // ---------- 카카오톡 공유하기 ----------
   useEffect(() => {
-    window.Kakao.init('c45ed7c54965b8803ada1b6e2f293f4f');
+    window.Kakao.init("c45ed7c54965b8803ada1b6e2f293f4f");
   }, []);
 
   function copyLink() {
     let currentUrl = window.document.location.href; //복사 잘됨
     navigator.clipboard.writeText(currentUrl);
-    toast.success('초대링크 복사 완료!', {
-      position: 'bottom-center',
+    toast.success("초대링크 복사 완료!", {
+      position: "bottom-center",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -391,18 +381,18 @@ const DressRoom = (props) => {
 
     const shareKakao = () => {
       window.Kakao.Link.sendDefault({
-        objectType: 'feed',
+        objectType: "feed",
         content: {
-          title: '모바',
-          description: '친구랑 코디하기',
-          imageUrl: '#',
+          title: "모바",
+          description: "친구랑 코디하기",
+          imageUrl: "#",
           link: {
             webUrl: window.location.href,
           },
         },
         buttons: [
           {
-            title: '웹으로 이동',
+            title: "웹으로 이동",
             link: {
               webUrl: window.location.href,
             },
@@ -414,28 +404,22 @@ const DressRoom = (props) => {
   }
 
   // ---------- webTRC video call ----------
-  const callUser = (userID) => {
+  const callUser = userID => {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current
-      .getTracks()
-      .forEach((track) =>
-        senders.current.push(
-          peerRef.current.addTrack(track, userStream.current)
-        )
-      );
+    userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
   };
 
-  const createPeer = (userID) => {
+  const createPeer = userID => {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: 'stun:stun.stunprotocol.org',
+          urls: "stun:stun.stunprotocol.org",
         },
         {
-          urls: 'turn:numb.viagenie.ca',
-          credential: 'muazkh',
-          username: 'webrtc@live.com',
+          urls: "turn:numb.viagenie.ca",
+          credential: "muazkh",
+          username: "webrtc@live.com",
         },
       ],
     });
@@ -447,10 +431,10 @@ const DressRoom = (props) => {
     return peer;
   };
 
-  const handleNegotiationNeededEvent = async (userID) => {
+  const handleNegotiationNeededEvent = async userID => {
     await peerRef.current
       .createOffer()
-      .then((offer) => {
+      .then(offer => {
         return peerRef.current.setLocalDescription(offer);
       })
       .then(() => {
@@ -459,36 +443,36 @@ const DressRoom = (props) => {
           caller: socketRef.current.id,
           sdp: peerRef.current.localDescription,
         };
-        socketRef.current.emit('offer', payload);
+        socketRef.current.emit("offer", payload);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   };
 
-  const handleRecieveCall = async (incoming) => {
+  const handleRecieveCall = async incoming => {
     peerRef.current = createPeer();
-    peerRef.current.addEventListener('datachannel', (event) => {
-      console.log('event : ', event);
-      console.log('event channel: ', event.channel);
+    peerRef.current.addEventListener("datachannel", event => {
+      console.log("event : ", event);
+      console.log("event channel: ", event.channel);
 
       switch (event.channel.label) {
-        case 'mouse':
+        case "mouse":
           mouseChannel.current = event.channel;
-          mouseChannel.current.addEventListener('message', (event) => {
+          mouseChannel.current.addEventListener("message", event => {
             handleRecievedMouse(event.data);
           });
           break;
-        case 'item':
+        case "item":
           itemChannel.current = event.channel;
-          itemChannel.current.addEventListener('message', (event) => {
+          itemChannel.current.addEventListener("message", event => {
             handleRecievedItem(event.data);
           });
-          setCanvas((canvas) => {
+          setCanvas(canvas => {
             const objects = canvas.getObjects();
             if (objects.length > 0) {
-              objects.forEach((obj) => {
+              objects.forEach(obj => {
                 const sendObj = {
                   obj: obj,
-                  order: 'add',
+                  order: "add",
                   id: obj.id,
                   url: obj.product_info.img,
                   product_info: obj.product_info,
@@ -507,18 +491,12 @@ const DressRoom = (props) => {
     await peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current
-          .getTracks()
-          .forEach((track) =>
-            senders.current.push(
-              peerRef.current.addTrack(track, userStream.current)
-            )
-          );
+        userStream.current.getTracks().forEach(track => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
       })
       .then(() => {
         return peerRef.current.createAnswer();
       })
-      .then((answer) => {
+      .then(answer => {
         return peerRef.current.setLocalDescription(answer);
       })
       .then(() => {
@@ -527,13 +505,13 @@ const DressRoom = (props) => {
           caller: socketRef.current.id,
           sdp: peerRef.current.localDescription,
         };
-        socketRef.current.emit('answer', payload);
+        socketRef.current.emit("answer", payload);
       });
   };
 
   function handleAnswer(message) {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
+    peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
   }
 
   function handleICECandidateEvent(e) {
@@ -542,14 +520,14 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      socketRef.current.emit('ice-candidate', payload);
+      socketRef.current.emit("ice-candidate", payload);
     }
   }
 
   function handleNewICECandidateMsg(incoming) {
     const candidate = new RTCIceCandidate(incoming);
 
-    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
+    peerRef.current.addIceCandidate(candidate).catch(e => console.log(e));
   }
 
   function handleTrackEvent(e) {
@@ -559,7 +537,7 @@ const DressRoom = (props) => {
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
 
-    userStream.current.getVideoTracks().forEach((track) => {
+    userStream.current.getVideoTracks().forEach(track => {
       track.enabled = !track.enabled;
     });
   };
@@ -567,7 +545,7 @@ const DressRoom = (props) => {
   const HandleMicBtnClick = () => {
     isMicOn ? setIsMicOn(false) : setIsMicOn(true);
 
-    userStream.current.getAudioTracks().forEach((track) => {
+    userStream.current.getAudioTracks().forEach(track => {
       track.enabled = !track.enabled;
     });
   };
@@ -577,17 +555,17 @@ const DressRoom = (props) => {
   };
 
   const HandleAddtoMyCartBtn = () => {
-    console.log('HandleAddToMyCartBtn ');
+    console.log("HandleAddToMyCartBtn ");
 
-    canvas.getActiveObjects().forEach((obj) => {
-      console.log('add to my cart : ', obj);
+    canvas.getActiveObjects().forEach(obj => {
+      console.log("add to my cart : ", obj);
 
       axios
         .post(`/privatebasket`, {
           token: token,
           products: [obj.product_info],
         })
-        .then((Response) => {
+        .then(Response => {
           // Response가 정상일때 products에 상품을 추가한다.
           console.log(Response);
           if (Response.status === 200) {
@@ -597,13 +575,24 @@ const DressRoom = (props) => {
     });
   };
 
-  window.addEventListener('resize', () => {
-    setCanvas((canvas) => {
-      console.log('resize!!');
-      console.log(
-        canvasRef.current.offsetWidth,
-        canvasRef.current.offsetHeight
-      );
+  const HandleDeleteProductBtn = shop_url => {
+    // const token = getCookie("x_auth");
+
+    axios
+      .delete(`/privatebasket`, { data: { token, shop_url } })
+      .then(function (response) {
+        console.log(response);
+        setProducts(products?.filter(product => product.shop_url !== shop_url));
+      })
+      .catch(function (error) {
+        console.log(error.response);
+      });
+  };
+
+  window.addEventListener("resize", () => {
+    setCanvas(canvas => {
+      console.log("resize!!");
+      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
       canvas.setWidth(canvasRef.current.offsetWidth);
       canvas.setHeight(canvasRef.current.offsetHeight);
       return canvas;
@@ -639,38 +628,22 @@ const DressRoom = (props) => {
                   <div key={index} className={styles.containerProduct}>
                     <div className={styles.productInfo}>
                       <div className={styles.containerImg}>
-                        <img
-                          className={styles.productImg}
-                          src={item.img}
-                          alt="상품 이미지"
-                        />
+                        <img className={styles.productImg} src={item.img} alt="상품 이미지" />
                       </div>
                       <div
                         style={{
-                          display: 'flex',
-                          width: '100%',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
+                          display: "flex",
+                          width: "100%",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
                         }}
                       >
-                        <div className={styles.productTitle}>
-                          {item.product_name}
-                        </div>
-                        <div
-                          style={{ display: 'flex', justifyContent: 'right' }}
-                        >
-                          <button
-                            className={styles.productAddbtn}
-                            type="button"
-                            onClick={(e) => HandleAddImgBtn(e, item, canvas)}
-                          >
+                        <div className={styles.productTitle}>{item.product_name}</div>
+                        <div style={{ display: "flex", justifyContent: "right" }}>
+                          <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
                             추가
                           </button>
-                          <button
-                            className={styles.productDelbtn}
-                            type="button"
-                            onClick={(e) => HandleAddImgBtn(e, item, canvas)}
-                          >
+                          <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
                             삭제
                           </button>
                         </div>
@@ -683,30 +656,16 @@ const DressRoom = (props) => {
           </div>
           <div ref={canvasRef} className={styles.main}>
             <div className={styles.toolbar}>
-              <button
-                type="button"
-                className={styles.toolbarBtn}
-                name="delete"
-                onClick={HandleDeleteBtn}
-              >
+              <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
                 <BsTrash size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <MdAddShoppingCart size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <FaTrash size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <FaTrashAlt size="25" />
               </button>
               {/* <button className={styles.copyBtn} onClick={shareKakao}>
@@ -734,26 +693,13 @@ const DressRoom = (props) => {
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button
-                    className={(styles.cameraBtn, styles.controlBtn)}
-                    onClick={HandleCameraBtnClick}
-                  >
-                    {isCameraOn ? (
-                      <BsCameraVideoFill />
-                    ) : (
-                      <BsCameraVideoOffFill />
-                    )}
+                  <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
+                    {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
                   </button>
-                  <button
-                    className={(styles.micBtn, styles.controlBtn)}
-                    onClick={HandleMicBtnClick}
-                  >
+                  <button className={(styles.micBtn, styles.controlBtn)} onClick={HandleMicBtnClick}>
                     {isMicOn ? <BsFillMicFill /> : <BsFillMicMuteFill />}
                   </button>
-                  <button
-                    className={(styles.muteBtn, styles.controlBtn)}
-                    onClick={HandleSoundBtnClick}
-                  >
+                  <button className={(styles.muteBtn, styles.controlBtn)} onClick={HandleSoundBtnClick}>
                     {isSoundOn ? <GoUnmute /> : <GoMute />}
                   </button>
                 </div>
