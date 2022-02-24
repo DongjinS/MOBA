@@ -109,17 +109,15 @@ io.on("connection", (socket) => {
 });
 
 /**  ----------- S3 ------------ */
-const dotenv = require("dotenv");
 const aws = require("aws-sdk");
 
 
 async function generateUploadURL(req) {
-  dotenv.config();
   
   const region = "ap-northeast-2";
   const bucketName = "moba-nukki";
-  const accessKeyId = process.env.accessKeyId;
-  const secretAccessKey = process.env.secretAccessKey;
+  const accessKeyId = config.AWS_ACCESS_KEY_ID;
+  const secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
   
   const s3 = new aws.S3({
     region,
