@@ -30,6 +30,8 @@ const DressRoom = props => {
   const [isSoundOn, setIsSoundOn] = useState(true);
   const [products, setProducts] = useState([]);
 
+  const [uniqueShops, setUniqueShops] = useState([]);
+
   const canvasRef = useRef();
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -165,12 +167,24 @@ const DressRoom = props => {
       .then(Response => {
         console.log(Response);
         setProducts(Response.data);
+        console.log("axios get products :", products);
+        console.log("axios get Response :", Response.data);
+
+        let shops = Response.data.reduce((acc, cv) => {
+          acc = acc.concat(cv.shop_name);
+          return acc;
+        }, []);
+        setUniqueShops([...new Set(shops)]);
       })
       .catch(Error => {
         console.log(Error);
       })
       .then(() => {
         setIsLoading(false);
+
+        console.log("products : ", products);
+
+        console.log("uniqueShops : ", uniqueShops);
       });
   }, []);
 
@@ -599,6 +613,38 @@ const DressRoom = props => {
     });
   });
 
+  const handleSelectChange = e => {
+    const value = e.target.value;
+    let sortedProducts = [...products];
+    if (value === "increase-order") {
+      sortedProducts = sortedProducts.sort((a, b) => b.price - a.price);
+    }
+    if (value === "decrease-order") {
+      sortedProducts = sortedProducts.sort((a, b) => a.price - b.price);
+    }
+    console.log("sorted products : ", sortedProducts);
+    setProducts(sortedProducts);
+  };
+
+  const OPTIONS = [
+    { value: "default-order", name: "기본" },
+    { value: "increase-order", name: "가격 높은 순" },
+    { value: "decrease-order", name: "가격 낮은 순" },
+  ];
+
+  const testClick = () => {};
+
+  const [selectedShops, setSelectedShops] = useState([]);
+
+  const handleSelectShopBtn = clickedShop => {
+    console.log("handleSelectShopBtn : ", selectedShops);
+    if (selectedShops.includes(clickedShop)) {
+      setSelectedShops(selectedShops.filter(shop => shop !== clickedShop));
+    } else {
+      setSelectedShops([...selectedShops, clickedShop]);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -622,8 +668,37 @@ const DressRoom = props => {
 
           {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
           <div className={styles.sidebarA}>
+            <div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {uniqueShops.map((shop, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelectShopBtn(shop)}
+                    // className={`${selectedShops.includes(shop) ? styles.active : ""}`}
+                    // className={`${selectedShops.includes(shop) ? styles.active : ""}`}
+                    // className={selectedShops.includes(shop) ? styles.active : styles.selectedShops}
+                    // className={(styles.selectShop, styles.activeShop)}
+                    className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}
+                  >
+                    {shop}
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>총 상품 수 {products.length} 개</div>
+                <select onChange={handleSelectChange}>
+                  {OPTIONS.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div className={styles.bodyContainer}>
               <div className={styles.wishlist}>
+                {/* {selectedShops.length > 0 ? products.filter(product => selectedShops.includes(product.shop_name)).map :  } */}
                 {products.map((item, index) => (
                   <div key={index} className={styles.containerProduct}>
                     <div className={styles.productInfo}>
@@ -638,14 +713,25 @@ const DressRoom = props => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <div className={styles.productTitle}>{item.product_name}</div>
+                        <div className={styles.productTitle}>
+                          <a href={item.shop_url} className={styles.shopLink} target="_blank">
+                            {item.product_name}
+                          </a>
+                        </div>
+                        {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
                         <div style={{ display: "flex", justifyContent: "right" }}>
-                          <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
-                            추가
-                          </button>
-                          <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
-                            삭제
-                          </button>
+                          <div className={styles.productTitle}>{item.price}원</div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
+                          <div style={{ display: "flex", justifyContent: "right" }}>
+                            <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
+                              추가
+                            </button>
+                            <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
+                              삭제
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
