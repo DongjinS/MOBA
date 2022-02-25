@@ -579,7 +579,7 @@ const DressRoom = props => {
     // const token = getCookie("x_auth");
 
     axios
-      .delete(`/privatebasket`, { data: { token, shop_url } })
+      .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
         setProducts(products?.filter(product => product.shop_url !== shop_url));
