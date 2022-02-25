@@ -84,7 +84,7 @@ async function deleteProduct(token, products, shop_url) {
 // method: delete
 // data: 누구의 장바구니에서 삭제할지 - 유저 정보(토큰), 무엇을 삭제할지 - 상품 정보
 // res: success or fail
-basketRouter.delete('/', async (req, res) => {
+basketRouter.delete('/product', async (req, res) => {
   // console.log('IN private basket, try to delete the selected products');
   // console.log(req.body);
 
@@ -123,7 +123,6 @@ basketRouter.post('/basket', async (req, res) => {
   const basket_user = await User.findOne({
     token: req.body.token,
   });
-  // console.log(basket_user.products);
   res.send(basket_user.products);
 });
 
