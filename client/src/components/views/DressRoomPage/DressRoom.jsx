@@ -635,6 +635,7 @@ const DressRoom = props => {
   const testClick = () => {};
 
   const [selectedShops, setSelectedShops] = useState([]);
+  const [categories, setCategories] = useState(["상의", "하의", "바지", "악세사리", "신발"]);
 
   const handleSelectShopBtn = clickedShop => {
     console.log("handleSelectShopBtn : ", selectedShops);
@@ -671,16 +672,19 @@ const DressRoom = props => {
             <div>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 {uniqueShops.map((shop, index) => (
+                  <div key={index} onClick={() => handleSelectShopBtn(shop)} className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}>
+                    {shop}
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {categories.map((category, index) => (
                   <div
                     key={index}
-                    onClick={() => handleSelectShopBtn(shop)}
-                    // className={`${selectedShops.includes(shop) ? styles.active : ""}`}
-                    // className={`${selectedShops.includes(shop) ? styles.active : ""}`}
-                    // className={selectedShops.includes(shop) ? styles.active : styles.selectedShops}
-                    // className={(styles.selectShop, styles.activeShop)}
-                    className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}
+                    onClick={() => handleSelectShopBtn(category)}
+                    className={category.includes(category) ? styles.activeShop : styles.selectShop}
                   >
-                    {shop}
+                    {category}
                   </div>
                 ))}
               </div>
@@ -698,45 +702,86 @@ const DressRoom = props => {
 
             <div className={styles.bodyContainer}>
               <div className={styles.wishlist}>
-                {/* {selectedShops.length > 0 ? products.filter(product => selectedShops.includes(product.shop_name)).map :  } */}
-                {products.map((item, index) => (
-                  <div key={index} className={styles.containerProduct}>
-                    <div className={styles.productInfo}>
-                      <div className={styles.containerImg}>
-                        <img className={styles.productImg} src={item.img} alt="상품 이미지" />
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          width: "100%",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div className={styles.productTitle}>
-                          <a href={item.shop_url} className={styles.shopLink} target="_blank">
-                            {item.product_name}
-                          </a>
+                {/* 중복되는 products 정보를 컴포넌트화 해야함 !!! */}
+                {selectedShops.length > 0
+                  ? products
+                      .filter(product => selectedShops.includes(product.shop_name))
+                      .map((item, index) => (
+                        <div key={index} className={styles.containerProduct}>
+                          <div className={styles.productInfo}>
+                            <div className={styles.containerImg}>
+                              <img className={styles.productImg} src={item.img} alt="상품 이미지" />
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                width: "100%",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div className={styles.productTitle}>
+                                <a href={item.shop_url} className={styles.shopLink} target="_blank">
+                                  {item.product_name}
+                                </a>
+                              </div>
+                              {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
+                              <div style={{ display: "flex", justifyContent: "right" }}>
+                                <div className={styles.productTitle}>{item.price}원</div>
+                              </div>
+                              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
+                                <div style={{ display: "flex", justifyContent: "right" }}>
+                                  <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
+                                    추가
+                                  </button>
+                                  <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
+                                    삭제
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
-                        <div style={{ display: "flex", justifyContent: "right" }}>
-                          <div className={styles.productTitle}>{item.price}원</div>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
-                          <div style={{ display: "flex", justifyContent: "right" }}>
-                            <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
-                              추가
-                            </button>
-                            <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
-                              삭제
-                            </button>
+                      ))
+                  : products.map((item, index) => (
+                      <div key={index} className={styles.containerProduct}>
+                        <div className={styles.productInfo}>
+                          <div className={styles.containerImg}>
+                            <img className={styles.productImg} src={item.img} alt="상품 이미지" />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              width: "100%",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div className={styles.productTitle}>
+                              <a href={item.shop_url} className={styles.shopLink} target="_blank">
+                                {item.product_name}
+                              </a>
+                            </div>
+                            {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
+                            <div style={{ display: "flex", justifyContent: "right" }}>
+                              <div className={styles.productTitle}>{item.price}원</div>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                              {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
+                              <div style={{ display: "flex", justifyContent: "right" }}>
+                                <button className={styles.productAddbtn} type="button" onClick={e => HandleAddImgBtn(e, item, canvas)}>
+                                  추가
+                                </button>
+                                <button className={styles.productDelbtn} type="button" onClick={e => HandleDeleteProductBtn(item.shop_url)}>
+                                  삭제
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    ))}
               </div>
             </div>
           </div>

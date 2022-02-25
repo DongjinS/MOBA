@@ -92,6 +92,12 @@
   background-color: grey;
   color: white;
   border-radius: 30px;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .activeShop {
@@ -103,6 +109,12 @@
   background-color: orange;
   border-radius: 30px;
   border: 1px solid black;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .bodyContainer {
