@@ -14,6 +14,7 @@ const oauthRouter = require("./router/oauth");
 
 const basketRouter = require("./router/privatebasket");
 const voteRouter = require("./router/vote");
+const voteResultRouter = require("./router/voteResult");
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/privatebasket", basketRouter);
 ///// 투표 라우팅 /////
 app.use("/vote", voteRouter);
 //////////////////////////////
+app.use("/voteResult", voteResultRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

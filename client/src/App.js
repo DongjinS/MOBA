@@ -18,6 +18,7 @@ import InvitedPage from '../src/components/views/InvitedPage/InvitedPage';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import DressRoom from './components/views/DressRoomPage/DressRoom';
 import Vote from './components/views/VotePage/Vote';
+import VoteResult from './components/views/VoteResultPage/VoteResult';
 import { useEffect } from 'react'
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/invited" element={<InvitedPage />} />
           <Route path="/dressroom/:roomID" element={<DressRoom />} />
           <Route path="/vote/:roomID" element={<Vote />} />
+          <Route path="/voteresult" element={<VoteResult />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>

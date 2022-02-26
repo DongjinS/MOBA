@@ -61,16 +61,6 @@ voteRouter.get("/:id", ((req, res) => {
     .send({ products: req.cur_user.products, room_message: req.cur_user.room_message })
 }))
 
-voteRouter.delete("/", async (req, res) => {
-  if (req.body) {
-    await voteList.findByIdAndDelete(req.body._id)
-    res.send("success to del vote")
-    return;
-  } else {
-    res.send("fail to del vote")
-  }
-});
-
 // 함께 쇼핑(외부) : 개인 투표리스트 보기(영상통화, 화상통화)
 // url : [www.moba.com/](http://www.moba.com/)myPage/vote
 // method : get
@@ -118,30 +108,17 @@ voteRouter.put("/:id", async (req, res) => {
     },
   }
   );
-
-
-  // await voteList.findOneAndUpdate(
-  //   { room_info: req.params.id },
-  //   { $set: { "products.$[elem].likes": { likes: 100 } } },
-  //   { arrayFilters: [{ "elem.shop_url": req.body.url }] }
-  // );
-  console.log(req.body.url, "urlurlurl");
-  console.log(req.params.id, "ididididididi");
-  console.log(voteList);
-
-  // { $inc: { "likes": 1 } }
-  // voteList.findOneAndUpdate({ room_info: req.params.id && room_info.products.filter(shop_url === req.body.url) }, {1})
-  // for (product of req.cur_user.products) {
-  //   if (product.shop_url === req.body.url) {
-  //     product.likes += 1
-  //     console.log(product.likes)
-  //   }
-  // }
-
-  // console.log(req.cur_user.products.shop_url)
-  // console.log(product.likes)
   res.send("check it yourself");
 });
 
+voteRouter.delete("/", async (req, res) => {
+  if (req.body) {
+    await voteList.findByIdAndDelete(req.body._id)
+    res.send("success to del vote")
+    return;
+  } else {
+    res.send("fail to del vote")
+  }
+});
 
 module.exports = voteRouter;
