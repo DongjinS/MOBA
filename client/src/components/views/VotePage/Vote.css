@@ -39,13 +39,14 @@
   border-radius: 10px;
   background-color: white;
   margin: 0.5em;
-  /* transition: all 235ms ease-in-out; */
+  transition: all 235ms ease-in-out;
 }
-/* .voteContainer:hover {
-  transform: scale(1.1);
-} */
-.cliked {
-  border: 2px solid black;
+.voteContainer:hover {
+  transform: scale(1.06);
+  cursor: pointer;
+}
+.clicked {
+  border: 3px solid #000000;
 }
 .voteContainer img {
   width: 20em;
