@@ -21,20 +21,23 @@
 }
 .modal > section {
   width: 200%;
-  max-width: 1300px;
+  max-width: 1000px;
   margin: 0 auto;
   border-radius: 0.3rem;
   background-color: #fff;
   /* 팝업이 열릴때 스르륵 열리는 효과 */
   animation: modal-show 0.3s;
   /* overflow: hidden; */
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  border-radius: 20px;
 }
 .modal > section > header {
   position: relative;
   padding: 16px 64px 16px 16px;
-  background-color: #f1f1f1;
+  background-color: #e3e3e3;
   font-weight: 700;
+  border-radius: 10px 10px 0px 0px;
+  /* width: 100%; */
 }
 .modal > section > header button {
   position: absolute;
@@ -44,24 +47,29 @@
   font-size: 21px;
   font-weight: 700;
   text-align: center;
-  color: #999;
+  color: black;
   background-color: transparent;
 }
 .modal > section > main {
-  padding: 16px;
+  padding: 10px;
   border-bottom: 1px solid #dee2e6;
   border-top: 1px solid #dee2e6;
 }
 .modal > section > footer {
+  position: relative;
   padding: 12px 16px;
-  text-align: right;
+  text-align: center;
+  background-color: #e3e3e3;
+  border-radius: 0px 0px 10px 10px;
 }
 .modal > section > footer button {
   padding: 6px 12px;
-  color: #fff;
-  background-color: #6c757d;
+  /* color: #fff; */
+  color: #000;
+  background-color: orange;
   border-radius: 5px;
   font-size: 13px;
+  border: 1px solid black;
 }
 .modal.openModal {
   display: flex;
@@ -90,16 +98,105 @@
 
 /**/
 .main {
-  display: flex;
+  /* display: flex;
+  flex-direction: column;
+  flex-wrap: wrap; */
+  height: 60vh;
   /* flex-wrap: wrap; */
+  overflow-y: scroll;
 }
 
 .section__ {
-  overflow-y: scroll;
-  width: 300px;
+  /* overflow-y: scroll; */
+  /* width: 300px; */
 }
 
-/* .container {
-  width: 80%;
-  height: 80%;
-} */
+.productCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.product {
+  margin: 0px 30px 0px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* grid-template-rows: 1fr 3fr; */
+}
+.shopLabel {
+  position: absolute;
+  background-color: black;
+  color: white;
+  font-size: 3px;
+  top: 2px;
+  left: 40px;
+  padding: 1px 5px 1px 5px;
+  border-radius: 5px;
+}
+.shopTag {
+  /* position: absolute; */
+  background-color: black;
+  color: white;
+  padding: 1px 5px 1px 5px;
+  border-radius: 5px;
+}
+.productCheckbox {
+  zoom: 1.5;
+}
+.productImg {
+  margin-left: 20px;
+  height: 102px;
+  width: 90px;
+  border-radius: 5px;
+}
+
+.shopLink {
+  margin-left: 10px;
+}
+.shopLink:link {
+  color: red;
+  text-decoration: none;
+}
+.shopLink:visited {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:hover {
+  color: black;
+  text-decoration: none;
+}
+.productFont {
+  font-size: 16px;
+}
+
+.container {
+  border-radius: 20px;
+}
+
+.voteInput {
+  width: 50%;
+  text-align: center;
+}
+
+.voteBtn {
+  margin-left: 10px;
+}
+
+/* SCROLL */
+::-webkit-scrollbar {
+  width: 10px;
+}
+/* 스크롤바의 width */
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+/* 스크롤바의 전체 배경색 */
+::-webkit-scrollbar-thumb {
+  /* background: linear-gradient(to bottom, #1697bf, #62b7ac); */
+  background: linear-gradient(to bottom, #cddc39, #ff9800);
+}
+/* 스크롤바 색 */
+::-webkit-scrollbar-button {
+  display: none;
+}
+/* 위 아래 버튼 (버튼 없애기를 함) */
