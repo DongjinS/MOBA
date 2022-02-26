@@ -29,6 +29,7 @@ voteRouter.post("/", async (req, res) => {
     room_info: req.body.room_info,
     creater: cur_user.username,
     products: candidates,
+    room_message: req.body.room_message
   });
 
   res.send("success create vote");
@@ -43,6 +44,7 @@ voteRouter.param("id", async (req, res, next, value) => {
       [cur_user] = await voteList.insertMany({
         room_info: value,
         products: [],
+        room_message: ""
       })
     }
     req.cur_user = cur_user;
@@ -56,7 +58,7 @@ voteRouter.param("id", async (req, res, next, value) => {
 voteRouter.get("/:id", ((req, res) => {
   // console.log(req.params.id)
   res
-    .send(req.cur_user.products)
+    .send({ products: req.cur_user.products, room_message: req.cur_user.room_message })
 }))
 
 voteRouter.delete("/", async (req, res) => {

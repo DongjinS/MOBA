@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory, useParams, useNavigate } from 'react-router-dom';
+import { parse } from 'qs';
+import styles from './Vote.module.css';
 
+let roomMessage;
 const Vote = () => {
   const [products, setProducts] = useState([]);
 
@@ -9,8 +12,8 @@ const Vote = () => {
 
   useEffect(() => {
     axios.get(`/vote/${roomID}`).then((Response) => {
-      console.log('successssssss');
-      setProducts(Response.data);
+      roomMessage = Response.data.room_message;
+      setProducts(Response.data.products);
     });
   }, []);
 
@@ -19,20 +22,14 @@ const Vote = () => {
       .put(`/vote/${roomID}`, {
         url: url,
       })
-      .then(() => window.document.reload());
+      .then(() => window.location.reload());
   }
-
-  // const handleOnClick = (e) => {
-  //   e += 1;
-
-  //   axios.put(`/vote/${roomID}`, {
-  //     data: {},
-  //   });
-  // };
 
   return (
     <>
-      <div className="myBasket">
+      <h1>{roomMessage}</h1>
+
+      <div className={styles.myBasket}>
         {products?.map((items, index) => (
           <div key={index} className="container">
             <img src={items.img} alt="img" />

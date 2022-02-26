@@ -8,7 +8,6 @@ import { v1 as uuid } from 'uuid';
 const Modal = (props) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
   const { open, close, header, products } = props;
-  console.log('__Modal : ', products);
 
   const [checkedInputs, setCheckedInputs] = useState([]);
 
@@ -18,7 +17,6 @@ const Modal = (props) => {
     } else {
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
-    console.log('checkbox :', id);
   };
 
   useEffect(() => {
@@ -39,7 +37,7 @@ const Modal = (props) => {
         objectType: 'feed',
         content: {
           title: '모바',
-          description: '골라줘!',
+          description: inputs.text,
           imageUrl: '#',
           link: {
             webUrl: `http://localhost:3000/vote/${id}`,
@@ -57,23 +55,24 @@ const Modal = (props) => {
     };
 
     const sendCheckedProduct = () => {
-      axios
-        .post('/vote', {
-          token: token,
-          products: checkedInputs,
-          room_info: id,
-        })
-        .then((Response) => {
-          // Response가 정상일때 products에 상품을 추가한다.
-          console.log(Response);
-          console.log('token입니다. : ', token);
-          console.log('products입니다. : ', [checkedInputs]);
-          console.log('room_info입니다. : ', id);
-        });
+      axios.post('/vote', {
+        token: token,
+        products: checkedInputs,
+        room_info: id,
+        room_message: inputs.text,
+      });
     };
 
     sendCheckedProduct();
     shareKakao();
+  };
+  const [inputs, setInputs] = useState({
+    text: '',
+  });
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
   };
 
   return (
@@ -106,14 +105,19 @@ const Modal = (props) => {
             </main>
 
             <footer>
-              <button className="vote" onClick={vote}>
-                {' '}
-                vote{' '}
-              </button>
-              <button className="close" onClick={close}>
-                {' '}
-                close{' '}
-              </button>
+              <form onSubmit={vote}>
+                <input
+                  name="text"
+                  type="text"
+                  onChange={onChange}
+                  placeholder="투표 요청시 친구들에게 전달할 내용을 입력해주세요."
+                  value={inputs.text}
+                ></input>
+                <button className="vote" type="submit">
+                  {' '}
+                  vote{' '}
+                </button>
+              </form>
             </footer>
           </section>
         ) : null}
