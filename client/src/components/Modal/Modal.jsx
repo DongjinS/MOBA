@@ -19,9 +19,9 @@ const Modal = (props) => {
     }
   };
 
-  useEffect(() => {
-    window.Kakao.init('c45ed7c54965b8803ada1b6e2f293f4f');
-  }, []);
+  // useEffect(() => {
+  //   window.Kakao.init('c45ed7c54965b8803ada1b6e2f293f4f');
+  // }, []);
 
   const vote = () => {
     function getCookie(name) {
