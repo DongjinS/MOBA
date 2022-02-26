@@ -11,6 +11,7 @@ const voteListSchema = mongoose.Schema({
       shop_name: String,
       shop_url: String,
       img: String,
+      removedBgImg: String,
       likes: Number,
     },
   ],
