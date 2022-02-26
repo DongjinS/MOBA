@@ -1,3 +1,99 @@
-.voteResultContainer {
+.resultPage {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: black;
+}
+.votes__container {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 60%;
+  border-radius: 10px;
+  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
+  padding: 1em;
+  margin-top: 5em;
+}
+.vote__container {
+  display: flex;
+  border-radius: 10px;
+  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
+  width: 95%;
+  height: 25em;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.2em;
+  flex-direction: column;
+  padding: 1em;
+  background-color: black;
+  border: 2px solid white;
+}
+.vote__title {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+.voteNum {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
+  border-radius: 10px;
+  background-color: #fa9231;
+  padding: 0.5em 1em 0.5em 1em;
+  color: white;
+}
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 0.5em 1em 0.5em 1em;
+}
+.message span {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: white;
+}
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
+  border-radius: 10px;
+  background-color: rgb(255, 144, 52);
+  padding: 0.5em 1em 0.5em 1em;
+  cursor: pointer;
+  color: white;
+}
+.cards {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.card {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 13em;
+  height: 18em;
+  flex-direction: column;
+  border-radius: 10px;
+  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
+  border-radius: 10px;
+}
+.card img {
+  width: 11em;
+  height: 15em;
 }

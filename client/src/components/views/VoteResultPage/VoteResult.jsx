@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import Header from '../../header/Header';
 import styles from './VoteResult.module.css';
 
 const VoteResult = () => {
@@ -29,24 +30,43 @@ const VoteResult = () => {
         }
       });
   }, []);
-
+  const handleDelete = function () {
+    // 삭제 함수 구현
+    console.log('찍히냐?');
+  };
   return (
-    <>
-      <h1> 결과 페이지입니다.</h1>;
-      <div>
-        {voteResultList?.map((items, index) => (
-          <div>
-            <div>{items.room_message}</div>
-            {items.products?.map((result, index) => (
-              <div>
-                <img src={result.img} alt="img" />
-                <h1>투표 결과 : {result.likes}</h1>
+    <div className={styles.resultPage}>
+      <Header />
+      <div className={styles.votes__container}>
+        {voteResultList.reverse().map((items, index) => (
+          <div className={styles.vote__container} key={index}>
+            <div className={styles.vote__title}>
+              <div className={styles.voteNum}>
+                <span>vote {index + 1}</span>
               </div>
-            ))}
+              <div className={styles.message}>
+                <span>{items.room_message}</span>
+              </div>
+              <div onClick={handleDelete} className={styles.close}>
+                삭제
+              </div>
+            </div>
+            <div className={styles.cards}>
+              {items.products
+                .sort(function (a, b) {
+                  return b.likes - a.likes;
+                })
+                .map((result, index) => (
+                  <div className={styles.card} key={index}>
+                    <img src={result.img} alt="img" />
+                    <h3>투표 결과 : {result.likes}</h3>
+                  </div>
+                ))}
+            </div>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -39,11 +39,8 @@
   border-radius: 10px;
   background-color: white;
   margin: 0.5em;
-  /* transition: all 235ms ease-in-out; */
 }
-/* .voteContainer:hover {
-  transform: scale(1.1);
-} */
+
 .cliked {
   border: 2px solid black;
 }
