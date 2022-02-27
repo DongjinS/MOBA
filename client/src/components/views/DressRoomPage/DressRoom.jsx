@@ -82,6 +82,13 @@ const DressRoom = (props) => {
           }
         });
         break;
+      case 'drawing':
+        let path = new fabric.Path(data.path.path);
+        console.log(path)
+        path.set(data.path);
+        path.setCoords();
+        canvas.add(path);
+        break;
       default:
         break;
     }
@@ -92,8 +99,6 @@ const DressRoom = (props) => {
     console.log('handle item dc message', data);
 
     setCanvas((canvas) => {
-      console.log('hello');
-      console.log(canvas);
       needCanvas(canvas, data);
       return canvas;
     });
@@ -110,6 +115,7 @@ const DressRoom = (props) => {
       width: width,
       height: height,
       backgroundColor: 'white',
+      isDrawingMode: true,
     });
 
   useEffect(async () => {
@@ -200,6 +206,19 @@ const DressRoom = (props) => {
     console.log('useEffect canvas');
 
     if (canvas) {
+      canvas.on('before:path:created', (options) => {console.log("before path created",options)});
+      canvas.on('path:created', (options) => {
+        console.log("path created",options);
+        const data = {
+          order: "drawing",
+          path: options.path
+        }
+        try {
+          itemChannel.current.send(JSON.stringify(data));
+        } catch (error) {
+          // 상대 없을 때 send 시 에러
+        }
+      });
       canvas.on('object:modified', (options) => {
         if (options.target) {
           const modifiedObj = {
@@ -299,32 +318,6 @@ const DressRoom = (props) => {
       console.log('canvas socket:', socketRef.current);
     }
   }, [canvas]);
-
-  const addShape = (e) => {
-    let type = e.target.name;
-    let object;
-
-    if (type === 'rectangle') {
-      object = new fabric.Rect({
-        height: 75,
-        width: 150,
-      });
-    } else if (type === 'triangle') {
-      object = new fabric.Triangle({
-        width: 100,
-        height: 100,
-      });
-    } else if (type === 'circle') {
-      object = new fabric.Circle({
-        radius: 50,
-      });
-    }
-
-    object.set({ id: uuid() });
-    canvas.add(object);
-    console.log(object);
-    canvas.renderAll();
-  };
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
@@ -500,14 +493,22 @@ const DressRoom = (props) => {
             const objects = canvas.getObjects();
             if (objects.length > 0) {
               objects.forEach((obj) => {
-                const sendObj = {
-                  obj: obj,
-                  order: 'add',
-                  id: obj.id,
-                  url: obj.product_info.img,
-                  product_info: obj.product_info,
-                };
-                itemChannel.current.send(JSON.stringify(sendObj));
+                if (obj.id){
+                  const sendObj = {
+                    obj: obj,
+                    order: 'add',
+                    id: obj.id,
+                    url: obj.product_info.img,
+                    product_info: obj.product_info,
+                  };
+                  itemChannel.current.send(JSON.stringify(sendObj));
+                } else {
+                  const data = {
+                    order: "drawing",
+                    path: obj
+                  }
+                  itemChannel.current.send(JSON.stringify(data));
+                }
               });
             }
             return canvas;
@@ -629,14 +630,13 @@ const DressRoom = (props) => {
 
   window.addEventListener('resize', () => {
     setCanvas((canvas) => {
-      console.log('resize!!');
-      console.log(
-        canvasRef.current.offsetWidth,
-        canvasRef.current.offsetHeight
-      );
-      canvas.setWidth(canvasRef.current.offsetWidth);
-      canvas.setHeight(canvasRef.current.offsetHeight);
-      return canvas;
+      try {
+        canvas.setWidth(canvasRef.current.offsetWidth);
+        canvas.setHeight(canvasRef.current.offsetHeight);
+        return canvas;
+      } catch (error) {
+        return canvas;
+      }
     });
   });
 

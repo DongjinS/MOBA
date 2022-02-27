@@ -9,19 +9,9 @@ let pointers = {};
 // listeners
 export const addImg = (canvas, data) => {
   const { obj, id, url, product_info } = data;
-  let object;
-
   console.log(obj.type);
 
-  if (obj.type === "rect") {
-    object = new fabric.Rect({
-      height: obj.height,
-      width: obj.width,
-    });
-    object.set({ id: id });
-    canvas.add(object);
-    canvas.renderAll();
-  } else if (obj.type === "image") {
+  if (obj.type === "image") {
     new fabric.Image.fromURL(url, img => {
       console.log("received data", data);
       img.set({ id: id , product_info: product_info, borderColor: "orange", borderScaleFactor: 9, cornerColor: "black", cornerSize: 12, transparentCorners: false });

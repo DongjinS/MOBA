@@ -243,12 +243,20 @@
   border: 7px solid #000;
   margin-bottom: 5px;
   height: 100%;
+  /* 좌우 반전 해제 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
 }
 
 .video2 {
   border-radius: 15px;
   border: 7px solid #000;
   height: 100%;
+  /* 좌우 반전 해제 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
 }
 
 .copyBtn {
