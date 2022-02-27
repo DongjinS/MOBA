@@ -7,13 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import {
-  modifyObj,
-  modifyMouse,
-  getPointer,
-  deleteMouse,
-  addImg,
-} from './ReceiveHandler';
+import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
 
 import styles from './DressRoom.module.css';
 
@@ -127,9 +121,7 @@ const DressRoom = (props) => {
         socketRef.current.on('other user', async (userID) => {
           callUser(userID);
 
-          mouseChannel.current = await peerRef.current.createDataChannel(
-            'mouse'
-          );
+          mouseChannel.current = await peerRef.current.createDataChannel('mouse');
           mouseChannel.current.addEventListener('message', (event) => {
             handleRecievedMouse(event.data);
           });
@@ -374,9 +366,7 @@ const DressRoom = (props) => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        itemChannel.current.send(
-          JSON.stringify({ obj: obj, id: obj.id, order: 'delete' })
-        );
+        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
@@ -431,13 +421,7 @@ const DressRoom = (props) => {
   const callUser = (userID) => {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current
-      .getTracks()
-      .forEach((track) =>
-        senders.current.push(
-          peerRef.current.addTrack(track, userStream.current)
-        )
-      );
+    userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
   };
 
   const createPeer = (userID) => {
@@ -521,13 +505,7 @@ const DressRoom = (props) => {
     await peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current
-          .getTracks()
-          .forEach((track) =>
-            senders.current.push(
-              peerRef.current.addTrack(track, userStream.current)
-            )
-          );
+        userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
       })
       .then(() => {
         return peerRef.current.createAnswer();
@@ -618,9 +596,7 @@ const DressRoom = (props) => {
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
-        setProducts(
-          products?.filter((product) => product.shop_url !== shop_url)
-        );
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
         console.log(error.response);
@@ -630,10 +606,7 @@ const DressRoom = (props) => {
   window.addEventListener('resize', () => {
     setCanvas((canvas) => {
       console.log('resize!!');
-      console.log(
-        canvasRef.current.offsetWidth,
-        canvasRef.current.offsetHeight
-      );
+      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
       canvas.setWidth(canvasRef.current.offsetWidth);
       canvas.setHeight(canvasRef.current.offsetHeight);
       return canvas;
@@ -662,13 +635,7 @@ const DressRoom = (props) => {
   const testClick = () => {};
 
   const [selectedShops, setSelectedShops] = useState([]);
-  const [categories, setCategories] = useState([
-    '상의',
-    '하의',
-    '바지',
-    '악세사리',
-    '신발',
-  ]);
+  const [categories, setCategories] = useState(['상의', '하의', '바지', '악세사리', '신발']);
 
   const handleSelectShopBtn = (clickedShop) => {
     console.log('handleSelectShopBtn : ', selectedShops);
@@ -678,6 +645,10 @@ const DressRoom = (props) => {
       setSelectedShops([...selectedShops, clickedShop]);
     }
   };
+
+  /* ----- sidebar ----- */
+
+  /* ------------------ */
 
   return (
     <>
@@ -705,20 +676,12 @@ const DressRoom = (props) => {
             <div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {uniqueShops.map((shop, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectShopBtn(shop)}
-                    className={
-                      selectedShops.includes(shop)
-                        ? styles.activeShop
-                        : styles.selectShop
-                    }
-                  >
+                  <div key={index} onClick={() => handleSelectShopBtn(shop)} className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}>
                     {shop}
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {categories.map((category, index) => (
                   <div
                     key={index}
@@ -732,7 +695,7 @@ const DressRoom = (props) => {
                     {category}
                   </div>
                 ))}
-              </div>
+              </div> */}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div>총 상품 수 {products.length} 개</div>
                 <select onChange={handleSelectChange}>
@@ -750,18 +713,12 @@ const DressRoom = (props) => {
                 {/* 중복되는 products 정보를 컴포넌트화 해야함 !!! */}
                 {selectedShops.length > 0
                   ? products
-                      .filter((product) =>
-                        selectedShops.includes(product.shop_name)
-                      )
+                      .filter((product) => selectedShops.includes(product.shop_name))
                       .map((item, index) => (
                         <div key={index} className={styles.containerProduct}>
                           <div className={styles.productInfo}>
                             <div className={styles.containerImg}>
-                              <img
-                                className={styles.productImg}
-                                src={item.img}
-                                alt="상품 이미지"
-                              />
+                              <img className={styles.productImg} src={item.img} alt="상품 이미지" />
                             </div>
                             <div
                               style={{
@@ -772,11 +729,7 @@ const DressRoom = (props) => {
                               }}
                             >
                               <div className={styles.productTitle}>
-                                <a
-                                  href={item.shop_url}
-                                  className={styles.shopLink}
-                                  target="_blank"
-                                >
+                                <a href={item.shop_url} className={styles.shopLink} target="_blank">
                                   {item.product_name}
                                 </a>
                               </div>
@@ -787,9 +740,7 @@ const DressRoom = (props) => {
                                   justifyContent: 'right',
                                 }}
                               >
-                                <div className={styles.productTitle}>
-                                  {item.price}원
-                                </div>
+                                <div className={styles.productTitle}>{item.price}원</div>
                               </div>
                               <div
                                 style={{
@@ -804,22 +755,10 @@ const DressRoom = (props) => {
                                     justifyContent: 'right',
                                   }}
                                 >
-                                  <button
-                                    className={styles.productAddbtn}
-                                    type="button"
-                                    onClick={(e) =>
-                                      HandleAddImgBtn(e, item, canvas)
-                                    }
-                                  >
+                                  <button className={styles.productAddbtn} type="button" onClick={(e) => HandleAddImgBtn(e, item, canvas)}>
                                     추가
                                   </button>
-                                  <button
-                                    className={styles.productDelbtn}
-                                    type="button"
-                                    onClick={(e) =>
-                                      HandleDeleteProductBtn(item.shop_url)
-                                    }
-                                  >
+                                  <button className={styles.productDelbtn} type="button" onClick={(e) => HandleDeleteProductBtn(item.shop_url)}>
                                     삭제
                                   </button>
                                 </div>
@@ -832,11 +771,7 @@ const DressRoom = (props) => {
                       <div key={index} className={styles.containerProduct}>
                         <div className={styles.productInfo}>
                           <div className={styles.containerImg}>
-                            <img
-                              className={styles.productImg}
-                              src={item.img}
-                              alt="상품 이미지"
-                            />
+                            <img className={styles.productImg} src={item.img} alt="상품 이미지" />
                           </div>
                           <div
                             style={{
@@ -847,11 +782,7 @@ const DressRoom = (props) => {
                             }}
                           >
                             <div className={styles.productTitle}>
-                              <a
-                                href={item.shop_url}
-                                className={styles.shopLink}
-                                target="_blank"
-                              >
+                              <a href={item.shop_url} className={styles.shopLink} target="_blank">
                                 {item.product_name}
                               </a>
                             </div>
@@ -862,9 +793,7 @@ const DressRoom = (props) => {
                                 justifyContent: 'right',
                               }}
                             >
-                              <div className={styles.productTitle}>
-                                {item.price}원
-                              </div>
+                              <div className={styles.productTitle}>{item.price}원</div>
                             </div>
                             <div
                               style={{
@@ -879,22 +808,10 @@ const DressRoom = (props) => {
                                   justifyContent: 'right',
                                 }}
                               >
-                                <button
-                                  className={styles.productAddbtn}
-                                  type="button"
-                                  onClick={(e) =>
-                                    HandleAddImgBtn(e, item, canvas)
-                                  }
-                                >
+                                <button className={styles.productAddbtn} type="button" onClick={(e) => HandleAddImgBtn(e, item, canvas)}>
                                   추가
                                 </button>
-                                <button
-                                  className={styles.productDelbtn}
-                                  type="button"
-                                  onClick={(e) =>
-                                    HandleDeleteProductBtn(item.shop_url)
-                                  }
-                                >
+                                <button className={styles.productDelbtn} type="button" onClick={(e) => HandleDeleteProductBtn(item.shop_url)}>
                                   삭제
                                 </button>
                               </div>
@@ -908,30 +825,16 @@ const DressRoom = (props) => {
           </div>
           <div ref={canvasRef} className={styles.main}>
             <div className={styles.toolbar}>
-              <button
-                type="button"
-                className={styles.toolbarBtn}
-                name="delete"
-                onClick={HandleDeleteCanvasBtn}
-              >
+              <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
                 <BsTrash size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <MdAddShoppingCart size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <FaTrash size="25" />
               </button>
-              <button
-                className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
-              >
+              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                 <FaTrashAlt size="25" />
               </button>
               {/* <button className={styles.copyBtn} onClick={shareKakao}>
@@ -955,35 +858,17 @@ const DressRoom = (props) => {
           <div className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video
-                  autoPlay
-                  ref={userVideo}
-                  className={styles.video1}
-                  muted="muted"
-                >
+                <video autoPlay ref={userVideo} className={styles.video1} muted="muted">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button
-                    className={(styles.cameraBtn, styles.controlBtn)}
-                    onClick={HandleCameraBtnClick}
-                  >
-                    {isCameraOn ? (
-                      <BsCameraVideoFill />
-                    ) : (
-                      <BsCameraVideoOffFill />
-                    )}
+                  <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
+                    {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
                   </button>
-                  <button
-                    className={(styles.micBtn, styles.controlBtn)}
-                    onClick={HandleMicBtnClick}
-                  >
+                  <button className={(styles.micBtn, styles.controlBtn)} onClick={HandleMicBtnClick}>
                     {isMicOn ? <BsFillMicFill /> : <BsFillMicMuteFill />}
                   </button>
-                  <button
-                    className={(styles.muteBtn, styles.controlBtn)}
-                    onClick={HandleSoundBtnClick}
-                  >
+                  <button className={(styles.muteBtn, styles.controlBtn)} onClick={HandleSoundBtnClick}>
                     {isSoundOn ? <GoUnmute /> : <GoMute />}
                   </button>
                 </div>
