@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Header from '../../header/Header';
 import styles from './VoteResult.module.css';
-
+let tmp;
 const VoteResult = () => {
   const [voteResultList, setVoteResultList] = useState([]);
   function getCookie(name) {
@@ -11,6 +11,7 @@ const VoteResult = () => {
     return cookies.get(name);
   }
   const token = getCookie('x_auth');
+
   useEffect(() => {
     axios
       .post(`/voteresult`, {
@@ -67,16 +68,29 @@ const VoteResult = () => {
               </div>
             </div>
             <div className={styles.cards}>
-              {items.products
-                .sort(function (a, b) {
-                  return b.likes - a.likes;
-                })
-                .map((result, index) => (
-                  <div className={styles.card} key={index}>
-                    <img src={result.img} alt="img" />
-                    <h3>투표 결과 : {result.likes}</h3>
-                  </div>
-                ))}
+              {
+                ((tmp = 0),
+                items.products
+                  .sort(function (a, b) {
+                    return b.likes - a.likes;
+                  })
+                  .map(
+                    (result, index) => (
+                      (tmp += result.likes),
+                      (
+                        <>
+                          <div className={styles.card} key={index}>
+                            <img src={result.img} alt="img" />
+                            <h3>투표 결과 : {result.likes}</h3>
+                          </div>
+                          <h3
+                            style={{ color: 'white' }}
+                          >{`${tmp}, 전체 투표 수입니다. 혁주야 `}</h3>
+                        </>
+                      )
+                    )
+                  ))
+              }
             </div>
           </div>
         ))}
