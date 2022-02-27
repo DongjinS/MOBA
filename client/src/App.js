@@ -19,7 +19,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import DressRoom from './components/views/DressRoomPage/DressRoom';
 import Vote from './components/views/VotePage/Vote';
 import VoteResult from './components/views/VoteResultPage/VoteResult';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 function App() {
   document.body.style.backgroundColor = 'white';
@@ -28,7 +28,7 @@ function App() {
   }, []);
   return (
     <Router>
-      <div>
+      <div id="routerDiv">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

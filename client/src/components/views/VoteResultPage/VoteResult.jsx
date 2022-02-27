@@ -4,8 +4,14 @@ import Cookies from 'universal-cookie';
 import Header from '../../header/Header';
 import styles from './VoteResult.module.css';
 let tmp;
+let totalTmp;
+
 const VoteResult = () => {
   const [voteResultList, setVoteResultList] = useState([]);
+  window.onload = function () {
+    totalTmp = tmp;
+    console.log(totalTmp, 'totalTmp');
+  };
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
@@ -31,7 +37,6 @@ const VoteResult = () => {
         }
       });
   }, []);
-
   async function handleDelete(id) {
     await axios
       .delete(`/vote`, {
@@ -42,6 +47,9 @@ const VoteResult = () => {
       });
 
     window.location.reload();
+  }
+  function handleClick(url) {
+    window.open(url);
   }
 
   return (
@@ -69,7 +77,7 @@ const VoteResult = () => {
             </div>
             <div className={styles.cards}>
               {
-                ((tmp = 0),
+                (((tmp = 0), totalTmp),
                 items.products
                   .sort(function (a, b) {
                     return b.likes - a.likes;
@@ -79,13 +87,16 @@ const VoteResult = () => {
                       (tmp += result.likes),
                       (
                         <>
-                          <div className={styles.card} key={index}>
+                          <div
+                            onClick={() => {
+                              handleClick(result.shop_url);
+                            }}
+                            className={styles.card}
+                            key={index}
+                          >
                             <img src={result.img} alt="img" />
-                            <h3>투표 결과 : {result.likes}</h3>
+                            <span>{(result.likes / tmp) * 100}%</span>
                           </div>
-                          <h3
-                            style={{ color: 'white' }}
-                          >{`${tmp}, 전체 투표 수입니다. 혁주야 `}</h3>
                         </>
                       )
                     )
