@@ -109,6 +109,14 @@ const DressRoom = (props) => {
   useEffect(async () => {
     console.log('useEffect []');
 
+    // const canvasWidth = canvasRef.current.offsetWidth;
+    // const canvasHeight = canvasRef.current.offsetHeight;
+    const canvasWidth = document.body.offsetWidth - 505;
+    const canvasHeight = canvasRef.current.offsetHeight;
+
+    // 개인 장바구니 상품을 가져온 후 로딩 종료
+    setCanvas(initCanvas(canvasWidth, canvasHeight));
+
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
@@ -155,11 +163,6 @@ const DressRoom = (props) => {
         });
       });
 
-    const canvasWidth = canvasRef.current.offsetWidth;
-    const canvasHeight = canvasRef.current.offsetHeight;
-
-    // 개인 장바구니 상품을 가져온 후 로딩 종료
-    setCanvas(initCanvas(canvasWidth, canvasHeight));
     getPointer();
     setIsLoading(false);
     axios
@@ -647,6 +650,16 @@ const DressRoom = (props) => {
   };
 
   /* ----- sidebar ----- */
+  const [detailSidebar, setDetailSidebar] = useState(false);
+
+  const hadnleChangeSideBar = () => {
+    if (detailSidebar === true) {
+      canvas.setWidth(document.body.offsetWidth - 505);
+    } else {
+      canvas.setWidth(650);
+    }
+    setDetailSidebar((prevState) => !prevState);
+  };
 
   /* ------------------ */
 
@@ -672,49 +685,110 @@ const DressRoom = (props) => {
           </header>
 
           {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
-          <div className={styles.sidebarA}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                {uniqueShops.map((shop, index) => (
-                  <div key={index} onClick={() => handleSelectShopBtn(shop)} className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}>
-                    {shop}
-                  </div>
-                ))}
-              </div>
-              {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
-                {categories.map((category, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectShopBtn(category)}
-                    className={
-                      category.includes(category)
-                        ? styles.activeShop
-                        : styles.selectShop
-                    }
-                  >
-                    {category}
-                  </div>
-                ))}
-              </div> */}
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>총 상품 수 {products.length} 개</div>
-                <select onChange={handleSelectChange}>
-                  {OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
-            <div className={styles.bodyContainer}>
-              <div className={styles.wishlist}>
-                {/* 중복되는 products 정보를 컴포넌트화 해야함 !!! */}
-                {selectedShops.length > 0
-                  ? products
-                      .filter((product) => selectedShops.includes(product.shop_name))
-                      .map((item, index) => (
+          {!detailSidebar ? (
+            <div style={{ transition: 'all ease 2s 0s', width: '100px', backgroundColor: '#e4e4e4' }}>
+              <div>small sidebar</div>
+              <button onClick={hadnleChangeSideBar}>늘리기</button>
+            </div>
+          ) : (
+            <div className={styles.DetailsidebarA}>
+              <button onClick={hadnleChangeSideBar}>늘리기</button>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  {uniqueShops.map((shop, index) => (
+                    <div key={index} onClick={() => handleSelectShopBtn(shop)} className={selectedShops.includes(shop) ? styles.activeShop : styles.selectShop}>
+                      {shop}
+                    </div>
+                  ))}
+                </div>
+                {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {categories.map((category, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleSelectShopBtn(category)}
+                  className={
+                    category.includes(category)
+                      ? styles.activeShop
+                      : styles.selectShop
+                  }
+                >
+                  {category}
+                </div>
+              ))}
+            </div> */}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div>총 상품 수 {products.length} 개</div>
+                  <select onChange={handleSelectChange}>
+                    {OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.bodyContainer}>
+                <div className={styles.wishlist}>
+                  {/* 중복되는 products 정보를 컴포넌트화 해야함 !!! */}
+                  {selectedShops.length > 0
+                    ? products
+                        .filter((product) => selectedShops.includes(product.shop_name))
+                        .map((item, index) => (
+                          <div key={index} className={styles.containerProduct}>
+                            <div className={styles.productInfo}>
+                              <div className={styles.containerImg}>
+                                <img className={styles.productImg} src={item.img} alt="상품 이미지" />
+                              </div>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  width: '100%',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                }}
+                              >
+                                <div className={styles.productTitle}>
+                                  <a href={item.shop_url} className={styles.shopLink} target="_blank">
+                                    {item.product_name}
+                                  </a>
+                                </div>
+                                {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'right',
+                                  }}
+                                >
+                                  <div className={styles.productTitle}>{item.price}원</div>
+                                </div>
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                  }}
+                                >
+                                  {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'right',
+                                    }}
+                                  >
+                                    <button className={styles.productAddbtn} type="button" onClick={(e) => HandleAddImgBtn(e, item, canvas)}>
+                                      추가
+                                    </button>
+                                    <button className={styles.productDelbtn} type="button" onClick={(e) => HandleDeleteProductBtn(item.shop_url)}>
+                                      삭제
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                    : products.map((item, index) => (
                         <div key={index} className={styles.containerProduct}>
                           <div className={styles.productInfo}>
                             <div className={styles.containerImg}>
@@ -766,63 +840,12 @@ const DressRoom = (props) => {
                             </div>
                           </div>
                         </div>
-                      ))
-                  : products.map((item, index) => (
-                      <div key={index} className={styles.containerProduct}>
-                        <div className={styles.productInfo}>
-                          <div className={styles.containerImg}>
-                            <img className={styles.productImg} src={item.img} alt="상품 이미지" />
-                          </div>
-                          <div
-                            style={{
-                              display: 'flex',
-                              width: '100%',
-                              flexDirection: 'column',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className={styles.productTitle}>
-                              <a href={item.shop_url} className={styles.shopLink} target="_blank">
-                                {item.product_name}
-                              </a>
-                            </div>
-                            {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'right',
-                              }}
-                            >
-                              <div className={styles.productTitle}>{item.price}원</div>
-                            </div>
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                              }}
-                            >
-                              {/* <div style={{ backgroundColor: "black", color: "white", padding: "2px 10px 2px 10px", borderRadius: "20px" }}>{item.shop_name}</div> */}
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'right',
-                                }}
-                              >
-                                <button className={styles.productAddbtn} type="button" onClick={(e) => HandleAddImgBtn(e, item, canvas)}>
-                                  추가
-                                </button>
-                                <button className={styles.productDelbtn} type="button" onClick={(e) => HandleDeleteProductBtn(item.shop_url)}>
-                                  삭제
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
           <div ref={canvasRef} className={styles.main}>
             <div className={styles.toolbar}>
               <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>

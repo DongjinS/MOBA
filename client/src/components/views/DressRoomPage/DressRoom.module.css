@@ -51,7 +51,7 @@
   /* border-radius: 10px 10px 10px 10px; */
 }
 
-.sidebarA {
+.DetailsidebarA {
   grid-area: a;
   background-color: #e5e5e5;
   overflow: auto;
@@ -59,26 +59,26 @@
   /* margin-left: 10px; */
 }
 
-.sidebarA::-webkit-scrollbar {
+.DetailsidebarA::-webkit-scrollbar {
   visibility: hidden;
   cursor: pointer;
   width: 8px;
   height: 10px;
 }
 
-.sidebarA::-webkit-scrollbar-thumb {
+.DetailsidebarA::-webkit-scrollbar-thumb {
   visibility: hidden;
   cursor: pointer;
   background-color: white; /*스크롤바의 색상*/
   border: 1px solid white;
 }
-.sidebarA:hover::-webkit-scrollbar {
+.DetailsidebarA:hover::-webkit-scrollbar {
   visibility: visible;
   cursor: pointer;
   width: 8px;
 }
 
-.sidebarA:hover::-webkit-scrollbar-thumb {
+.DetailsidebarA:hover::-webkit-scrollbar-thumb {
   visibility: visible;
   cursor: pointer;
   background-color: #9d9d9d; /*스크롤바의 색상*/
