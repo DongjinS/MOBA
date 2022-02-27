@@ -17,7 +17,7 @@ import {
 
 import styles from './DressRoom.module.css';
 
-import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
+import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 
@@ -115,7 +115,7 @@ const DressRoom = (props) => {
       width: width,
       height: height,
       backgroundColor: 'white',
-      isDrawingMode: true,
+      isDrawingMode: false,
     });
 
   useEffect(async () => {
@@ -278,42 +278,6 @@ const DressRoom = (props) => {
         opt.e.preventDefault();
         opt.e.stopPropagation();
       });
-
-      // function animate(e, dir) {
-      //   if (e.target) {
-      //     console.log(e);
-      //     fabric.util.animate({
-      //       startValue: e.target.get("angle"),
-      //       endValue: e.target.get("angle") + (dir ? 1 : -1),
-      //       duration: 100,
-      //       onChange: function (value) {
-      //         e.target.set("angle", 0);
-      //         canvas.renderAll();
-      //       },
-      //       onComplete: function () {
-      //         e.target.setCoords();
-      //       },
-      //     });
-      //     fabric.util.animate({
-      //       startValue: e.target.get("scaleX"),
-      //       endValue: e.target.get("scaleX") + (dir ? 0.2 : -0.2),
-      //       duration: 100,
-      //       onChange: function (value) {
-      //         e.target.scale(value);
-      //         canvas.renderAll();
-      //       },
-      //       onComplete: function () {
-      //         e.target.setCoords();
-      //       },
-      //     });
-      //   }
-      // }
-      // canvas.on("mouse:down", function (e) {
-      //   animate(e, 1);
-      // });
-      // canvas.on("mouse:up", function (e) {
-      //   animate(e, 0);
-      // });
 
       console.log('canvas socket:', socketRef.current);
     }
@@ -679,6 +643,16 @@ const DressRoom = (props) => {
     }
   };
 
+  const DrawingFalse = () => {
+    canvas.isDrawingMode = false;
+  }
+
+  const HandleDrawing = () => {
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.color = "black";
+    canvas.freeDrawingBrush.width = 5;
+  }
+
   return (
     <>
       {isLoading ? (
@@ -924,15 +898,15 @@ const DressRoom = (props) => {
               </button>
               <button
                 className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
+                onClick={DrawingFalse}
               >
-                <FaTrash size="25" />
+                <BsHandIndexThumb size="25" />
               </button>
               <button
                 className={styles.toolbarBtn}
-                onClick={HandleAddtoMyCartBtn}
+                onClick={HandleDrawing}
               >
-                <FaTrashAlt size="25" />
+                <BsPencilFill size="25" />
               </button>
               {/* <button className={styles.copyBtn} onClick={shareKakao}>
                 카카오톡 공유하기
