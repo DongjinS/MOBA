@@ -29,7 +29,8 @@ voteRouter.post("/", async (req, res) => {
     room_info: req.body.room_info,
     creater: cur_user.username,
     products: candidates,
-    room_message: req.body.room_message
+    room_message: req.body.room_message,
+    total_likes: 0
   });
 
   res.send("success create vote");
@@ -101,10 +102,13 @@ voteRouter.put("/:id", async (req, res) => {
       return element;
     }
   })
+
+  let total_likes = tmp.total_likes + 1
+
   await voteList.updateOne(
     { room_info: req.params.id }, {
     $set: {
-      products: tmp2
+      products: tmp2, total_likes: total_likes
     },
   }
   );
@@ -113,7 +117,6 @@ voteRouter.put("/:id", async (req, res) => {
 
 voteRouter.delete("/", async (req, res) => {
   if (req.body) {
-    console.log(req.body.id)
     await voteList.findByIdAndDelete(req.body.id)
     res.send("success to del vote")
     return;

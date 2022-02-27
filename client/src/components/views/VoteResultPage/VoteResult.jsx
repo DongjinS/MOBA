@@ -64,6 +64,7 @@ const VoteResult = () => {
               </div>
               <div className={styles.message}>
                 <span>{items.room_message}</span>
+                <span>{items.total_likes}</span>
               </div>
 
               <div

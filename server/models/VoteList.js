@@ -15,7 +15,8 @@ const voteListSchema = mongoose.Schema({
       likes: Number,
     },
   ],
-  room_message: String
+  room_message: String,
+  total_likes: Number
 });
 
 module.exports = mongoose.model("voteList", voteListSchema);
