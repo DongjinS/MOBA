@@ -113,7 +113,8 @@ voteRouter.put("/:id", async (req, res) => {
 
 voteRouter.delete("/", async (req, res) => {
   if (req.body) {
-    await voteList.findByIdAndDelete(req.body._id)
+    console.log(req.body.id)
+    await voteList.findByIdAndDelete(req.body.id)
     res.send("success to del vote")
     return;
   } else {

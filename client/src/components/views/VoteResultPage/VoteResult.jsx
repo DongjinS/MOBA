@@ -30,10 +30,19 @@ const VoteResult = () => {
         }
       });
   }, []);
-  const handleDelete = function () {
-    // 삭제 함수 구현
-    console.log('찍히냐?');
-  };
+
+  async function handleDelete(id) {
+    await axios
+      .delete(`/vote`, {
+        data: { id },
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+
+    window.location.reload();
+  }
+
   return (
     <div className={styles.resultPage}>
       <Header />
@@ -47,7 +56,13 @@ const VoteResult = () => {
               <div className={styles.message}>
                 <span>{items.room_message}</span>
               </div>
-              <div onClick={handleDelete} className={styles.close}>
+
+              <div
+                onClick={() => {
+                  handleDelete(items._id);
+                }}
+                className={styles.close}
+              >
                 삭제
               </div>
             </div>
