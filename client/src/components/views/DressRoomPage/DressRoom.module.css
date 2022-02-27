@@ -8,7 +8,7 @@
 
 .container {
   display: grid;
-  grid-template-columns: auto auto 400px;
+  grid-template-columns: auto auto 300px;
   grid-template-rows: 70px auto;
   height: 100vh;
   grid-template-areas:
@@ -51,12 +51,108 @@
   /* border-radius: 10px 10px 10px 10px; */
 }
 
+@keyframes slideDetail {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-100%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+@keyframes slideShort {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-100%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-100%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(0%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(100%);
+  }
+}
+
+.shortSidebarA {
+  /* transition: all ease 200s 0s,  */
+  width: 200px;
+  background-color: #e4e4e4;
+  overflow: auto;
+
+  animation-duration: 0.5s;
+  animation-name: slideShort;
+}
+
+.shortSidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.shortSidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.shortSidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.shortSidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
 .DetailsidebarA {
   grid-area: a;
   background-color: #e5e5e5;
   overflow: auto;
+  transition: all ease 200s 0s;
   /* width: 600px; */
   /* margin-left: 10px; */
+
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+
+  /* animation: openSiderbar; */
+}
+
+.openSidebar {
+  /* animation: slide 1s ease-in-out 0s 1 normal forwards; */
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.closeSidebar {
+  animation: slide 0.5s ease-in-out 0s 1 reverse forwards;
 }
 
 .DetailsidebarA::-webkit-scrollbar {
@@ -84,6 +180,47 @@
   background-color: #9d9d9d; /*스크롤바의 색상*/
   border: 1px solid grey;
   border-radius: 10px;
+}
+
+.Swishlist {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* small 시작 */
+.ScontainerProduct {
+  height: 140px;
+  width: 140px;
+  display: flex;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.ScontainerImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: center;
+  position: relative;
+}
+
+.SproductImg {
+  height: 130px;
+  width: 130px;
+  border-radius: 10%;
+}
+.SiconBox {
+  position: absolute;
+  visibility: hidden;
+}
+.ScontainerImg:hover {
+  opacity: 0.7;
+}
+.ScontainerImg:hover > .SiconBox {
+  visibility: visible;
+  opacity: 1;
 }
 
 .selectShop {
@@ -119,6 +256,11 @@
 }
 
 .bodyContainer {
+  display: flex;
+  /* height: 100vh; */
+  width: 100%;
+}
+.SbodyContainer {
   display: flex;
   /* height: 100vh; */
   width: 100%;

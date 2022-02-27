@@ -19,6 +19,7 @@ import { MdAddShoppingCart } from 'react-icons/md';
 import { IoTrashOutline } from 'react-icons/io';
 import { BsCartPlus } from 'react-icons/bs';
 import { FaTrash, FaTrashAlt } from 'react-icons/fa';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 import ClothesLoading from '../../loading/ClothesLoading';
 
@@ -651,12 +652,13 @@ const DressRoom = (props) => {
 
   /* ----- sidebar ----- */
   const [detailSidebar, setDetailSidebar] = useState(false);
+  const [unmountSidebar, setUnmountSidebar] = useState('');
 
   const hadnleChangeSideBar = () => {
     if (detailSidebar === true) {
       canvas.setWidth(document.body.offsetWidth - 505);
     } else {
-      canvas.setWidth(650);
+      canvas.setWidth(800);
     }
     setDetailSidebar((prevState) => !prevState);
   };
@@ -687,9 +689,27 @@ const DressRoom = (props) => {
           {/* 나의 위시리스트에 있는 상품정보 받아서 리스팅한다. */}
 
           {!detailSidebar ? (
-            <div style={{ transition: 'all ease 2s 0s', width: '100px', backgroundColor: '#e4e4e4' }}>
+            // <div style={{ transition: 'all ease 200s 0s', width: '100px', backgroundColor: '#e4e4e4' }}>
+            <div className={styles.shortSidebarA}>
               <div>small sidebar</div>
               <button onClick={hadnleChangeSideBar}>늘리기</button>
+              <div className={(styles.bodyContainer, styles.SbodyContainer)}>
+                <div className={(styles.wishlist, styles.Swishlist)}>
+                  {/* 중복되는 products 정보를 컴포넌트화 해야함 !!! */}
+
+                  {products.map((item, index) => (
+                    <div key={index} className={(styles.containerProduct, styles.ScontainerProduct)}>
+                      <div onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.productInfo}>
+                        <div className={(styles.containerImg, styles.ScontainerImg)}>
+                          <img className={(styles.productImg, styles.SproductImg)} src={item.img} alt="상품 이미지" />
+                          <AiFillPlusCircle className={styles.SiconBox} color="orange" size="35" />
+                          {/* <i className="fa-solid fa-circle-plus fa-2x"></i> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className={styles.DetailsidebarA}>
