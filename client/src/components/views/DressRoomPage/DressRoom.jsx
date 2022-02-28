@@ -53,9 +53,13 @@ const DressRoom = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    data.clientX = data.clientX * canvasRef.current.offsetWidth;
-    data.clientY = data.clientY * canvasRef.current.offsetHeight;
-    modifyMouse(data);
+    // data.clientX = data.clientX * canvasRef.current.offsetWidth;
+    // data.clientY = data.clientY * canvasRef.current.offsetHeight;
+    console.log( canvasRef.current.offsetWidth, data.clientX );
+    if (canvasRef.current.offsetWidth-25 > data.clientX ){
+      modifyMouse(data);
+    }
+    // modifyMouse(data);
   };
 
   const needCanvas = (canvas, data) => {
@@ -251,8 +255,10 @@ const DressRoom = (props) => {
 
       canvas.on('mouse:move', (options) => {
         const mouseobj = {
-          clientX: options.e.offsetX / canvasRef.current.offsetWidth,
-          clientY: options.e.offsetY / canvasRef.current.offsetHeight,
+          // clientX: options.e.offsetX / canvasRef.current.offsetWidth,
+          // clientY: options.e.offsetY / canvasRef.current.offsetHeight,
+          clientX: options.e.offsetX,
+          clientY: options.e.offsetY,
         };
 
         /*
