@@ -54,13 +54,14 @@
 @keyframes slideDetail {
   from {
     /* margin-left: -300px; */
-    transform: translateX(-100%);
+    transform: translateX(-30%);
   }
   to {
     /* margin-left: 0px; */
     transform: translateX(0%);
   }
 }
+
 @keyframes slideShort {
   from {
     /* margin-left: -300px; */
@@ -90,7 +91,7 @@
   }
   to {
     /* margin-left: 0px; */
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
 }
 
@@ -135,16 +136,40 @@
   grid-area: a;
   background-color: #e5e5e5;
   overflow: auto;
-  transition: all ease 200s 0s;
+  /* transition: all ease 200s 0s; */
   /* width: 600px; */
   /* margin-left: 10px; */
 
-  animation-duration: 0.5s;
-  animation-name: slideDetail;
+  /* animation-duration: 0.5s;
+  animation-name: slideDetail; */
+  /* transition: ease all 2s;*/
+  -webkit-transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
+  transition: width 2s, height 2s, background-color 2s, transform 2s;
 
   /* animation: openSiderbar; */
 }
 
+.displayNone {
+  /* display: none; */
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  transition: ease all 0.5s;
+  animation-duration: 0.5s;
+  animation-name: slideOut;
+}
+
+.show {
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.cardBody {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .openSidebar {
   /* animation: slide 1s ease-in-out 0s 1 normal forwards; */
   animation-duration: 0.5s;
@@ -184,7 +209,7 @@
 
 .Swishlist {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -198,7 +223,7 @@
   margin-top: 5px;
   cursor: pointer;
 }
-.ScontainerImg {
+.containerImg {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -206,19 +231,14 @@
   position: relative;
 }
 
-.SproductImg {
-  height: 130px;
-  width: 130px;
-  border-radius: 10%;
-}
 .SiconBox {
   position: absolute;
   visibility: hidden;
 }
-.ScontainerImg:hover {
+.containerImg:hover {
   opacity: 0.7;
 }
-.ScontainerImg:hover > .SiconBox {
+.containerImg:hover > .SiconBox {
   visibility: visible;
   opacity: 1;
 }
@@ -283,12 +303,13 @@
 .productInfo {
   display: flex;
   margin: 3px;
-  width: 100%;
+  /* width: 100%; */
+  width: 300px;
 }
 
 .productImg {
-  height: 100%;
-  width: 100px;
+  height: 130px;
+  width: 130px;
   border: 1px solod black;
   border-radius: 10%;
 }
