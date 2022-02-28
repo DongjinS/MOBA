@@ -9,7 +9,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
 
-import styles from './DressRoom.module.css';
+import styles from './DressRoomTest.module.css';
 
 import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
@@ -23,9 +23,11 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsFillArrowRightCircleFill, BsFillArrowLeftCircleFill } from 'react-icons/bs';
 
 import ClothesLoading from '../../loading/ClothesLoading';
-import '@fortawesome/fontawesome-free/js/all.js';
+import './dressroom.css';
 
-const DressRoom = (props) => {
+import { BiChevronLeft } from 'react-icons/bi';
+
+const DressRoomTestSidebar = (props) => {
   const [canvas, setCanvas] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -115,10 +117,11 @@ const DressRoom = (props) => {
   useEffect(async () => {
     console.log('useEffect []');
 
-    // const canvasWidth = canvasRef.current.offsetWidth;
     // const canvasHeight = canvasRef.current.offsetHeight;
-    const canvasWidth = document.body.offsetWidth - 505;
-    const canvasHeight = canvasRef.current.offsetHeight;
+    // const canvasHeight = 100;
+    // const canvasWidth = 100;
+    const canvasHeight = canvasRef.current.offsetHeight - 1;
+    const canvasWidth = canvasRef.current.offsetWidth - 1;
 
     // 개인 장바구니 상품을 가져온 후 로딩 종료
     setCanvas(initCanvas(canvasWidth, canvasHeight));
@@ -261,71 +264,9 @@ const DressRoom = (props) => {
         opt.e.stopPropagation();
       });
 
-      // function animate(e, dir) {
-      //   if (e.target) {
-      //     console.log(e);
-      //     fabric.util.animate({
-      //       startValue: e.target.get("angle"),
-      //       endValue: e.target.get("angle") + (dir ? 1 : -1),
-      //       duration: 100,
-      //       onChange: function (value) {
-      //         e.target.set("angle", 0);
-      //         canvas.renderAll();
-      //       },
-      //       onComplete: function () {
-      //         e.target.setCoords();
-      //       },
-      //     });
-      //     fabric.util.animate({
-      //       startValue: e.target.get("scaleX"),
-      //       endValue: e.target.get("scaleX") + (dir ? 0.2 : -0.2),
-      //       duration: 100,
-      //       onChange: function (value) {
-      //         e.target.scale(value);
-      //         canvas.renderAll();
-      //       },
-      //       onComplete: function () {
-      //         e.target.setCoords();
-      //       },
-      //     });
-      //   }
-      // }
-      // canvas.on("mouse:down", function (e) {
-      //   animate(e, 1);
-      // });
-      // canvas.on("mouse:up", function (e) {
-      //   animate(e, 0);
-      // });
-
       console.log('canvas socket:', socketRef.current);
     }
   }, [canvas]);
-
-  const addShape = (e) => {
-    let type = e.target.name;
-    let object;
-
-    if (type === 'rectangle') {
-      object = new fabric.Rect({
-        height: 75,
-        width: 150,
-      });
-    } else if (type === 'triangle') {
-      object = new fabric.Triangle({
-        width: 100,
-        height: 100,
-      });
-    } else if (type === 'circle') {
-      object = new fabric.Circle({
-        radius: 50,
-      });
-    }
-
-    object.set({ id: uuid() });
-    canvas.add(object);
-    console.log(object);
-    canvas.renderAll();
-  };
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
@@ -383,11 +324,6 @@ const DressRoom = (props) => {
     });
     canvas.discardActiveObject().renderAll();
   };
-
-  // ---------- 카카오톡 공유하기 ----------
-  // useEffect(() => {
-  //   window.Kakao.init("c45ed7c54965b8803ada1b6e2f293f4f");
-  // }, []);
 
   function copyLink() {
     let currentUrl = window.document.location.href; //복사 잘됨
@@ -599,8 +535,6 @@ const DressRoom = (props) => {
   };
 
   const HandleDeleteProductBtn = (shop_url) => {
-    // const token = getCookie("x_auth");
-
     axios
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
@@ -613,13 +547,18 @@ const DressRoom = (props) => {
   };
 
   window.addEventListener('resize', () => {
-    setCanvas((canvas) => {
-      console.log('resize!!');
-      console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
-      canvas.setWidth(canvasRef.current.offsetWidth);
-      canvas.setHeight(canvasRef.current.offsetHeight);
-      return canvas;
-    });
+    const canvasHeight = canvasRef.current.offsetHeight - 1;
+    const canvasWidth = canvasRef.current.offsetWidth - 1;
+
+    canvas.setWidth(canvasWidth);
+    canvas.setHeight(canvasHeight);
+    // setCanvas((canvas) => {
+    //   console.log('resize!!');
+    //   console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
+    //   canvas.setWidth(canvasRef.current.offsetWidth);
+    //   canvas.setHeight(canvasRef.current.offsetHeight);
+    //   return canvas;
+    // // });
   });
 
   const handleSelectChange = (e) => {
@@ -640,8 +579,6 @@ const DressRoom = (props) => {
     { value: 'increase-order', name: '가격 높은 순' },
     { value: 'decrease-order', name: '가격 낮은 순' },
   ];
-
-  const testClick = () => {};
 
   const [selectedShops, setSelectedShops] = useState([]);
   const [categories, setCategories] = useState(['상의', '하의', '바지', '악세사리', '신발']);
@@ -669,6 +606,24 @@ const DressRoom = (props) => {
   };
 
   /* ------------------ */
+  const shrinkBtnRef = useRef();
+  const [isActive, setIsActive] = useState();
+
+  const handleShrinkBtn = () => {
+    setIsActive(!isActive);
+    // document.body.classList.toggle('shrink');
+    // setTimeout(moveActiveTab, 400);
+    // shrinkBtnRef.current.classList.add('hovered');
+    // setTimeout(() => {
+    //   shrinkBtnRef.current.classList.remove('hovered');
+    // }, 500);
+    // const canvasHeight = canvasRef.current.offsetHeight - 1;
+    // const canvasWidth = canvasRef.current.offsetWidth - 1;
+
+    // canvas.setWidth(canvasWidth);
+    // canvas.setHeight(canvasHeight);
+  };
+  /* ------------------ */
 
   return (
     <>
@@ -691,7 +646,7 @@ const DressRoom = (props) => {
             {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
           </header>
 
-          <div ref={sidebarARef} className={styles.DetailsidebarA}>
+          {/* <div ref={sidebarARef} className={styles.DetailsidebarA}>
             <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '10px 10px 0px 0px' }}>
               {detailSidebar ? (
                 <BsFillArrowLeftCircleFill onClick={handleChangeSideBar} size="30" />
@@ -715,7 +670,6 @@ const DressRoom = (props) => {
                             {item.product_name}
                           </a>
                         </div>
-                        {/* <div className={styles.productTitle}>{item.shop_name}</div> */}
                         <div
                           style={{
                             display: 'flex',
@@ -750,40 +704,69 @@ const DressRoom = (props) => {
                 ))}
               </div>
             </div>
+          </div> */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+            <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
+              <div className={styles.ProductSidebar}>
+                <div className={styles.sidebarTop}>
+                  <div className={styles.shrinkBtn} ref={shrinkBtnRef} onClick={handleShrinkBtn}>
+                    <BiChevronLeft className={styles.chevronIcon} size="25" />
+                  </div>
+                </div>
+
+                <div className={styles.sidebarLinks}>
+                  <ul className={styles.productLists}>
+                    {products.map((item, index) => (
+                      <li className={styles.tooltipElement}>
+                        <div className={styles.productBox}>
+                          <img className={styles.newProductImg} src={item.img} alt="상품 이미지" />
+                          <AiFillPlusCircle className={styles.SiconBox} color="orange" size="50" />
+                          <div className={styles.hide + ' ' + styles.info}>
+                            <div>
+                              <span className={styles.shopName}>{item.shop_name}</span>
+                              <div className={styles.productName}>{item.product_name}</div>
+                            </div>
+                            <div className={styles.price}>{item.price}원</div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div ref={canvasRef} className={styles.canvasContainer}>
+                {/* <div className={styles.toolbar}>
+                  <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
+                    <BsTrash size="25" />
+                  </button>
+                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                    <MdAddShoppingCart size="25" />
+                  </button>
+                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                    <FaTrash size="25" />
+                  </button>
+                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                    <FaTrashAlt size="25" />
+                  </button>
+                </div> */}
+                <ToastContainer
+                  position="bottom-center"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
+                <div id="pointers" className={styles.pointers}></div>
+                <canvas className={styles.canvas} id="canvas"></canvas>
+              </div>
+            </div>
           </div>
 
-          <div ref={canvasRef} className={styles.main}>
-            <div className={styles.toolbar}>
-              <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
-                <BsTrash size="25" />
-              </button>
-              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                <MdAddShoppingCart size="25" />
-              </button>
-              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                <FaTrash size="25" />
-              </button>
-              <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                <FaTrashAlt size="25" />
-              </button>
-              {/* <button className={styles.copyBtn} onClick={shareKakao}>
-                카카오톡 공유하기
-              </button> */}
-            </div>
-            <ToastContainer
-              position="bottom-center"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-            <div id="pointers" className={styles.pointers}></div>
-            <canvas className={styles.canvas} id="canvas"></canvas>
-          </div>
           <div ref={sidebarBRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
@@ -813,4 +796,4 @@ const DressRoom = (props) => {
   );
 };
 
-export default DressRoom;
+export default DressRoomTestSidebar;
