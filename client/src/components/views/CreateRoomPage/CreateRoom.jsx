@@ -15,8 +15,6 @@ const CreateRoom = (props) => {
 
   const openModal = () => {
     const token = getCookie('x_auth');
-    console.log(token);
-
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
@@ -38,9 +36,9 @@ const CreateRoom = (props) => {
     return cookies.get(name);
   }
 
-  if (getCookie('room')) {
-    document.location.href = '/invited';
-  }
+  // if (getCookie('room')) {
+  //   document.location.href = '/invited';
+  // }
 
   function create() {
     const id = uuid();
@@ -140,16 +138,6 @@ const CreateRoom = (props) => {
             onClick={voteResult}
           >
             투표결과
-          </button>
-        </div>
-        <div className={styles.btnWrapper}>
-          <button
-            className={styles.buttons}
-            id={styles.logoutBtn}
-            onClick={logout}
-          >
-            {' '}
-            로그아웃{' '}
           </button>
         </div>
       </div>

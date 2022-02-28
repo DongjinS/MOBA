@@ -1,26 +1,60 @@
 .header {
-  display: flex;
-  align-items: center;
-  height: 70px;
-  width: 100%;
-  background-color: black;
-  position: fixed;
-  top: 0px;
-  z-index: 21;
+    display: flex;
+    align-items: center;
+    height: 70px;
+    width: 100%;
+    background-color: black;
+    position: fixed;
+    top: 0px;
+    z-index: 21;
 }
 
 .title {
-  all: unset;
+    all: unset;
 }
 .title {
-  font-size: 40px;
-  font-weight: 700;
-  margin-left: 0.5em;
-  padding: 0.3em;
-  color: #f37423;
+    font-size: 40px;
+    font-weight: 700;
+    margin-left: 0.5em;
+    padding: 0.3em;
+    color: #f37423;
 }
 .title:hover {
-  text-decoration: none;
-  color: #f37423;
-  cursor: pointer;
+    text-decoration: none;
+    color: #f37423;
+    cursor: pointer;
+}
+.buttons {
+    all: unset;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    margin-left: 83em;
+    transition: 0.3s ease-in-out;
+    height: 33px;
+    width: 70px;
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.buttons:hover {
+    all: unset;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    margin-left: 83em;
+    transition: 0.3s ease-in-out;
+    height: 33px;
+    width: 70px;
+    border: 2px solid #f37423;
+    border-radius: 10px;
+    background-color: black;
+    color: #f37423;
+    cursor: pointer;
 }
