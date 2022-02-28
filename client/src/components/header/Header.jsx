@@ -15,7 +15,6 @@ const Header = (props) => {
             return cookies.get(name);
         }
         setToken(getCookie("x_auth"));
-        console.log(token);
         if (token) {
             setIsToken(true);
         }
