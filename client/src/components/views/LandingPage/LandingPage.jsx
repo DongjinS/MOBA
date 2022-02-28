@@ -30,8 +30,7 @@ function LandingPage() {
           <span>함께 쇼핑하는 즐거움</span>
         </div>
         <button className={styles.buttons} onClick={signin}>
-          {' '}
-          시작하기{' '}
+          <span>시작하기</span>
         </button>
         <button className={styles.buttons} id={styles.loginBtn} onClick={login}>
           {' '}
