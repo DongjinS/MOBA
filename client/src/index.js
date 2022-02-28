@@ -10,7 +10,8 @@ import { applyMiddleware, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
 import Reducer from './_reducers';
-
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
   ReduxThunk
@@ -22,7 +23,7 @@ ReactDOM.render(
       store={createStoreWithMiddleware(
         Reducer,
         window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
+          window.__REDUX_DEVTOOLS_EXTENSION__()
       )}
     >
       <App />

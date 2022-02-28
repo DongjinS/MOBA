@@ -20,6 +20,7 @@ import DressRoom from './components/views/DressRoomPage/DressRoom';
 import Vote from './components/views/VotePage/Vote';
 import VoteResult from './components/views/VoteResultPage/VoteResult';
 import { useEffect } from 'react';
+import SimpleSlider from './components/SimpleSlider/SimpleSlider';
 
 function App() {
   document.body.style.backgroundColor = 'white';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/dressroom/:roomID" element={<DressRoom />} />
           <Route path="/vote/:roomID" element={<Vote />} />
           <Route path="/voteresult" element={<VoteResult />} />
+          <Route path="/SimpleSlider" element={<SimpleSlider />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>

@@ -1,7 +1,26 @@
-.container {
-  background-color: black;
-  width: 100%;
+.createRoom {
+  /* background-color: black; */
+  /* color: white; */
+  /* background-color: white; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   height: 100vh;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10em;
+  flex-direction: column;
+}
+.title p {
+  color: white;
+  font-size: 50px;
+}
+.container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,22 +59,22 @@
   background-position: 0 90%;
   background-repeat: repeat no-repeat;
   background-size: 4px 3px;
-  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
+  /* border-radius: 50%; */
   border-style: solid;
-  border-width: 2px;
-  box-shadow: rgba(248, 243, 243, 0.2) 15px 28px 25px -18px;
-  box-sizing: border-box;
+  border-width: 4px;
   cursor: pointer;
-  font-size: 1.8rem;
+  font-size: 1rem;
   line-height: 23px;
   outline: none;
   padding: 0.75rem;
   text-decoration: none;
   transition: all 235ms ease-in-out;
-  border-bottom-left-radius: 15px 255px;
+  /* box-shadow: rgba(248, 243, 243, 0.2) 15px 28px 25px -18px; */
+  /* border-radius: 15px 225px 255px 15px 15px 255px 225px 15px; */
+  /* border-bottom-left-radius: 15px 255px;
   border-bottom-right-radius: 225px 15px;
   border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
+  border-top-right-radius: 15px 225px; */
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;

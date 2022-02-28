@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, Component } from 'react';
 import { v1 as uuid } from 'uuid';
 import styles from './CreateRoom.module.css';
 import Auth from '../../../hoc/auth';
@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../header/Header';
 import Cookies from 'universal-cookie';
 import Modal from '../../Modal/Modal';
+import SimpleSlider from '../../SimpleSlider/SimpleSlider';
+// import Slider from "react-slick";
 
 const CreateRoom = (props) => {
   // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
   const [modalOpen, setModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
-
+  //장바구니
   const openModal = () => {
     const token = getCookie('x_auth');
     console.log(token);
@@ -20,7 +22,6 @@ const CreateRoom = (props) => {
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
-        console.log(Response);
         setProducts(Response.data);
       })
       .catch((Error) => {
@@ -38,9 +39,9 @@ const CreateRoom = (props) => {
     return cookies.get(name);
   }
 
-  if (getCookie('room')) {
-    document.location.href = '/invited';
-  }
+  // if (getCookie('room')) {
+  //   document.location.href = '/invited';
+  // }
 
   function create() {
     const id = uuid();
@@ -106,51 +107,58 @@ const CreateRoom = (props) => {
   return (
     <>
       <Header />
-      <div className={styles.container}>
-        <div className={styles.btnWrapper} id={styles.firstWrapper}>
-          <button className={styles.buttons} onClick={HandleDressRoomClick}>
-            코디하기
-          </button>
+      <div className={styles.createRoom}>
+        <div className={styles.title}>
+          <p>반갑습니다 000님</p>
+          <p>MOBA와 함께 즐거운 쇼핑하고 계신가요?</p>
         </div>
-        <div className={styles.btnWrapper}>
-          <button className={styles.buttons} onClick={openModal}>
-            장바구니
-          </button>
-        </div>
-        <div className={styles.btnWrapper}>
-          <button
-            id={styles.shoppingStart}
-            className={styles.buttons}
-            onClick={create}
-          >
-            쇼핑시작
-          </button>
-        </div>
-        <Modal
-          open={modalOpen}
-          close={closeModal}
-          header="나의 장바구니"
-          products={products}
-          deleteItem={deleteItem}
-        />
-        <div className={styles.btnWrapper}>
-          <button
-            id={styles.voteResult}
-            className={styles.buttons}
-            onClick={voteResult}
-          >
-            투표결과
-          </button>
-        </div>
-        <div className={styles.btnWrapper}>
-          <button
-            className={styles.buttons}
-            id={styles.logoutBtn}
-            onClick={logout}
-          >
-            {' '}
-            로그아웃{' '}
-          </button>
+        {/* <SimpleSlider /> */}
+        <div className={styles.container}>
+          <div className={styles.btnWrapper} id={styles.firstWrapper}>
+            <button className={styles.buttons} onClick={HandleDressRoomClick}>
+              코디하기
+            </button>
+          </div>
+          <div className={styles.btnWrapper}>
+            <button className={styles.buttons} onClick={openModal}>
+              장바구니
+            </button>
+          </div>
+          <div className={styles.btnWrapper}>
+            <button
+              id={styles.shoppingStart}
+              className={styles.buttons}
+              onClick={create}
+            >
+              쇼핑시작
+            </button>
+          </div>
+          <Modal
+            open={modalOpen}
+            close={closeModal}
+            header="나의 장바구니"
+            products={products}
+            deleteItem={deleteItem}
+          />
+          <div className={styles.btnWrapper}>
+            <button
+              id={styles.voteResult}
+              className={styles.buttons}
+              onClick={voteResult}
+            >
+              투표결과
+            </button>
+          </div>
+          <div className={styles.btnWrapper}>
+            <button
+              className={styles.buttons}
+              id={styles.logoutBtn}
+              onClick={logout}
+            >
+              {' '}
+              로그아웃{' '}
+            </button>
+          </div>
         </div>
       </div>
     </>
