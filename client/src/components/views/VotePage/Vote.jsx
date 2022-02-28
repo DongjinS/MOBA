@@ -102,7 +102,6 @@ const Vote = () => {
             <span className={styles.voteEndTitle}>
               투표해주셔서 감사합니다.
             </span>
-            <button onClick={exit}></button>
           </div>
         </div>
       )}
