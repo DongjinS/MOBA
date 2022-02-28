@@ -38,15 +38,16 @@
   box-shadow: 6px 6px 8px 0px rgb(230, 179, 131);
   border-radius: 10px;
   background-color: white;
-  margin: 0.5em;
+  margin: 0.8em;
   transition: all 235ms ease-in-out;
 }
 .voteContainer:hover {
-  transform: scale(1.06);
+  transform: scale(1.05);
   cursor: pointer;
 }
 .clicked {
   border: 3px solid #000000;
+	transform: scale(1.05);
 }
 .voteContainer img {
   width: 20em;
