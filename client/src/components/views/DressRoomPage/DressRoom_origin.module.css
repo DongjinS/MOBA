@@ -1,0 +1,430 @@
+.loadingContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: grid;
+  /* grid-template-columns: auto auto 300px; */
+  grid-template-rows: 70px auto;
+  height: 100vh;
+  grid-template-areas:
+    'header  header  header'
+    '   a     main     b   ';
+  row-gap: 1px;
+  column-gap: 1px;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 15px 10px 15px 10px;
+  font-size: 20px; */
+  background-color: #2c2c2c;
+  color: #d2dae3;
+}
+
+.logo {
+  display: flex;
+}
+
+.toolbar {
+  position: absolute;
+  z-index: 20;
+  margin-top: 10px;
+  width: 300px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border: 2px solid #456125;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  background-color: gold;
+
+  /* border-radius: 10px 10px 10px 10px; */
+}
+
+@keyframes slideDetail {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-30%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideShort {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-100%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(-100%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    /* margin-left: -300px; */
+    transform: translateX(0%);
+  }
+  to {
+    /* margin-left: 0px; */
+    transform: translateX(-100%);
+  }
+}
+
+.shortSidebarA {
+  /* transition: all ease 200s 0s,  */
+  width: 200px;
+  background-color: #e4e4e4;
+  overflow: auto;
+
+  animation-duration: 0.5s;
+  animation-name: slideShort;
+}
+
+.shortSidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.shortSidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.shortSidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.shortSidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.DetailsidebarA {
+  grid-area: a;
+  background-color: #e5e5e5;
+  overflow: auto;
+  /* transition: all ease 200s 0s; */
+  /* width: 600px; */
+  /* margin-left: 10px; */
+
+  /* animation-duration: 0.5s;
+  animation-name: slideDetail; */
+  /* transition: ease all 2s;*/
+  -webkit-transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
+  transition: width 2s, height 2s, background-color 2s, transform 2s;
+
+  /* animation: openSiderbar; */
+}
+
+.displayNone {
+  /* display: none; */
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  transition: ease all 0.5s;
+  animation-duration: 0.5s;
+  animation-name: slideOut;
+}
+
+.show {
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.cardBody {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.openSidebar {
+  /* animation: slide 1s ease-in-out 0s 1 normal forwards; */
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.closeSidebar {
+  animation: slide 0.5s ease-in-out 0s 1 reverse forwards;
+}
+
+.DetailsidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.DetailsidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.DetailsidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.DetailsidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.Swishlist {
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* small 시작 */
+.ScontainerProduct {
+  height: 140px;
+  width: 150px;
+  display: flex;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.DcontainerProduct {
+  height: 140px;
+  width: 400px;
+  display: flex;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.containerImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: center;
+  position: relative;
+}
+
+.SiconBox {
+  position: absolute;
+  visibility: hidden;
+}
+.containerImg:hover {
+  opacity: 0.7;
+}
+.containerImg:hover > .SiconBox {
+  visibility: visible;
+  opacity: 1;
+}
+
+.selectShop {
+  cursor: pointer;
+  margin: 5px;
+  padding: 3px 10px 3px 10px;
+  background-color: grey;
+  color: white;
+  border-radius: 30px;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.activeShop {
+  cursor: pointer;
+  margin: 5px;
+  padding: 3px 10px 3px 10px;
+  background-color: grey;
+  color: black;
+  background-color: orange;
+  border-radius: 30px;
+  border: 1px solid black;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bodyContainer {
+  display: flex;
+  /* height: 100vh; */
+  width: 100%;
+}
+.SbodyContainer {
+  display: flex;
+  /* height: 100vh; */
+  width: 100%;
+}
+
+.wishlist {
+  padding-left: 10px;
+}
+
+.containerProduct {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  border: 1px solid black;
+  margin-top: 5px;
+  /* margin: 3px; */
+  justify-content: space-between;
+}
+
+.productInfo {
+  display: flex;
+  margin: 3px;
+  /* width: 100%; */
+  width: 300px;
+}
+
+.productImg {
+  height: 130px;
+  width: 130px;
+  border: 1px solod black;
+  border-radius: 10%;
+}
+
+.shopLink:link {
+  color: red;
+  text-decoration: none;
+}
+.shopLink:visited {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.productAddbtn {
+  height: 100%;
+  width: 50px;
+  border-radius: 15px 0px 0px 15px;
+}
+
+.productDelbtn {
+  height: 100%;
+  width: 50px;
+  border-radius: 0px 15px 15px 0px;
+}
+
+.main {
+  grid-area: main;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbarBtn {
+  border-radius: 10px;
+  background-color: orangered;
+  color: white;
+}
+
+.canvas {
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  border: 3px solid black;
+}
+
+.pointers {
+  width: inherit;
+  height: inherit;
+  position: relative;
+}
+
+.sidebarB {
+  width: 300px;
+  grid-area: b;
+}
+
+.video_container {
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 10px; */
+  height: 100%;
+}
+
+.user1 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+}
+
+.control_box1 {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  width: 150px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  justify-content: space-around;
+  display: flex;
+}
+
+.controlBtn {
+  font-size: 20px;
+  background-color: white;
+  color: grey;
+  opacity: 0.7;
+  border-radius: 20px;
+}
+
+.video1 {
+  border-radius: 15px;
+  border: 7px solid #000;
+  margin-bottom: 5px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video2 {
+  border-radius: 15px;
+  border: 7px solid #000;
+  height: 100%;
+}
+
+.copyBtn {
+  color: black;
+}
