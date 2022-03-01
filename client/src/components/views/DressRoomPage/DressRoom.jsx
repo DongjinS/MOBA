@@ -597,7 +597,14 @@ const DressRoom = (props) => {
   };
 
   const HandleSoundBtnClick = () => {
-    isSoundOn ? setIsSoundOn(false) : setIsSoundOn(true);
+    let partnerVolume = document.querySelector('#muteCtrl');
+    if (isSoundOn) {
+      setIsSoundOn(false);
+      partnerVolume.muted = true;
+    } else {
+      setIsSoundOn(true);
+      partnerVolume.muted = false;
+    }
   };
 
   const HandleAddtoMyCartBtn = () => {
@@ -674,9 +681,34 @@ const DressRoom = (props) => {
     canvas.freeDrawingBrush.width = 5;
   };
 
-  function mobaOnClickHandler() {
+  const mobaOnClickHandler = () => {
     navigate('/');
+  };
+
+  /* ------ */
+
+  function shareScreen() {
+    window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
+
+    navigator.mediaDevices
+      .getDisplayMedia({ cursor: true })
+      .then((stream) => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+
+        const screenTrack = stream.getTracks()[0];
+        //face를 screen으로 바꿔줌
+        senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(screenTrack);
+        //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
+        screenTrack.onended = function () {
+          senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(userStream.current.getTracks()[1]);
+        };
+      })
+      .catch(() => {
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
+      });
   }
+
+  /* ------ */
 
   return (
     <>
@@ -774,6 +806,9 @@ const DressRoom = (props) => {
                   video 1
                 </video>
                 <div className={styles.control_box1}>
+                  <button className={styles.buttons} onClick={shareScreen}>
+                    <i className="fa-brands fa-slideshare fa-xl"></i>
+                  </button>
                   <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
                     {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
                   </button>
@@ -785,7 +820,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
+              <video id="muteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
                 video 2
               </video>
             </div>
