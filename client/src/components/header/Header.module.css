@@ -1,6 +1,7 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 70px;
   width: 100%;
   background-color: black;
@@ -23,4 +24,42 @@
   text-decoration: none;
   color: #f37423;
   cursor: pointer;
+}
+.buttons {
+  all: unset;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin-left: 83em;
+  transition: 0.3s ease-in-out;
+  height: 33px;
+  width: 150px;
+  /* border: 2px solid #f37423; */
+  border-radius: 10px;
+  background-color: black;
+  color: #f37423;
+  cursor: pointer;
+}
+.buttons:hover {
+  all: unset;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin-left: 83em;
+  transition: 0.3s ease-in-out;
+  height: 33px;
+  width: 150px;
+  /* border: 2px solid white; */
+  border-radius: 10px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+.buttons span {
+  font-size: 25px;
+  font-weight: 700;
 }

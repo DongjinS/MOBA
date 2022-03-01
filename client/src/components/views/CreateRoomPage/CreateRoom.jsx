@@ -14,13 +14,11 @@ const CreateRoom = (props) => {
   // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
   const [modalOpen, setModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [userId, setUserId] = useState('');
-  getUserInfo();
+  // const [userId, setUserId] = useState('');
+  // getUserInfo();
   //장바구니
   const openModal = () => {
     const token = getCookie('x_auth');
-    console.log(token);
-
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
@@ -41,13 +39,13 @@ const CreateRoom = (props) => {
     return cookies.get(name);
   }
   // ID 받아옴
-  function getUserInfo() {
-    let token = getCookie('x_auth');
-    axios.post('/api/users/info', { token }).then(function (response) {
-      console.log(response.data.username, 'getUserInfo');
-      setUserId(response.data.username);
-    });
-  }
+  // function getUserInfo() {
+  //   let token = getCookie('x_auth');
+  //   axios.post('/api/users/info', { token }).then(function (response) {
+  //     console.log(response.data.username, 'getUserInfo');
+  //     setUserId(response.data.username);
+  //   });
+  // }
 
   // if (getCookie('room')) {
   //   document.location.href = '/invited';
@@ -119,7 +117,7 @@ const CreateRoom = (props) => {
       <Header />
       <div className={styles.createRoom}>
         <div className={styles.title}>
-          <p>{userId}님 MOBA에 오신걸 환영합니다.</p>
+          <p>MOBA에 오신 것을 환영합니다</p>
         </div>
         <SimpleSlider
           handleCody={HandleDressRoomClick}

@@ -46,7 +46,6 @@ function SimpleSlider(props) {
           }}
         >
           <p>코디하기</p>
-          <p>친구와 함께 코디를 진행할 수 있어요.</p>
         </div>
         <div
           id="second"
@@ -56,7 +55,6 @@ function SimpleSlider(props) {
           }}
         >
           <p>장바구니</p>
-          <p>장바구니를 확인하고 투표도 진행할 수 있어요.</p>
         </div>
         <div
           id="third"
@@ -66,7 +64,6 @@ function SimpleSlider(props) {
           }}
         >
           <p>투표결과</p>
-          <p>투표 결과를 확인해 보세요.</p>
         </div>
         <div
           id="fourth"
@@ -76,7 +73,6 @@ function SimpleSlider(props) {
           }}
         >
           <p>쇼핑시작</p>
-          <p>친구와 함께 쇼핑 시작!</p>
         </div>
 
         {/* {titles.map((title, idx) => (

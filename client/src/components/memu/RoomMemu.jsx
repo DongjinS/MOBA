@@ -156,17 +156,17 @@ const RoomMemu = props => {
         <div className={styles.menuList}>
           {/* 화면 공유 */}
           <button className={styles.buttons} onClick={props.onShareScreen}>
-            <i class="fa-brands fa-slideshare fa-xl"></i>
+            <i className="fa-brands fa-slideshare fa-xl"></i>
           </button>
 
           {/* 공유 위시리스트  */}
           <button className={styles.buttons} onClick={HandleWishlist}>
-            <i class="fa-solid fa-hand-holding-heart fa-xl"></i>
+            <i className="fa-solid fa-hand-holding-heart fa-xl"></i>
           </button>
 
           {/* 장바구니 */}
           <button className={styles.buttons} onClick={handleMylistClick}>
-            <i class="fa-solid fa-cart-plus fa-xl"></i>
+            <i className="fa-solid fa-cart-plus fa-xl"></i>
           </button>
           <ToastContainer
             position="bottom-center"
