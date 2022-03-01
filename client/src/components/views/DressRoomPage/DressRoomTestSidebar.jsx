@@ -21,6 +21,7 @@ import { BsCartPlus } from 'react-icons/bs';
 import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsFillArrowRightCircleFill, BsFillArrowLeftCircleFill } from 'react-icons/bs';
+import { ImCross } from 'react-icons/im';
 
 import ClothesLoading from '../../loading/ClothesLoading';
 import './dressroom.css';
@@ -37,6 +38,7 @@ const DressRoomTestSidebar = (props) => {
 
   const [uniqueShops, setUniqueShops] = useState([]);
 
+  const [initialWidth, setInitialWidth] = useState(0);
   const canvasRef = useRef();
   const sidebarBRef = useRef();
   const sidebarARef = useRef();
@@ -117,11 +119,9 @@ const DressRoomTestSidebar = (props) => {
   useEffect(async () => {
     console.log('useEffect []');
 
-    // const canvasHeight = canvasRef.current.offsetHeight;
-    // const canvasHeight = 100;
-    // const canvasWidth = 100;
     const canvasHeight = canvasRef.current.offsetHeight - 1;
     const canvasWidth = canvasRef.current.offsetWidth - 1;
+    setInitialWidth(canvasWidth);
 
     // 개인 장바구니 상품을 가져온 후 로딩 종료
     setCanvas(initCanvas(canvasWidth, canvasHeight));
@@ -246,7 +246,7 @@ const DressRoomTestSidebar = (props) => {
         send시 error가 발생한다. try catch문을 통해 이를 방지한다. 
         */
         try {
-          console.log('dc mouse send');
+          console.log('dc mouse send', options);
           mouseobj.id = socketRef.current.id;
           mouseChannel.current.send(JSON.stringify(mouseobj));
         } catch (error) {
@@ -271,6 +271,8 @@ const DressRoomTestSidebar = (props) => {
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
     let url;
+
+    console.log('add image', item);
 
     if (item.removedBgImg) {
       url = item.removedBgImg;
@@ -546,20 +548,20 @@ const DressRoomTestSidebar = (props) => {
       });
   };
 
-  window.addEventListener('resize', () => {
-    const canvasHeight = canvasRef.current.offsetHeight - 1;
-    const canvasWidth = canvasRef.current.offsetWidth - 1;
+  // window.addEventListener('resize', () => {
+  //   const canvasHeight = canvasRef.current.height - 1;
+  //   const canvasWidth = canvasRef.current.width - 1;
 
-    canvas.setWidth(canvasWidth);
-    canvas.setHeight(canvasHeight);
-    // setCanvas((canvas) => {
-    //   console.log('resize!!');
-    //   console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
-    //   canvas.setWidth(canvasRef.current.offsetWidth);
-    //   canvas.setHeight(canvasRef.current.offsetHeight);
-    //   return canvas;
-    // // });
-  });
+  //   canvas.setWidth(canvasWidth);
+  //   canvas.setHeight(canvasHeight);
+  //   // setCanvas((canvas) => {
+  //   //   console.log('resize!!');
+  //   //   console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
+  //   //   canvas.setWidth(canvasRef.current.offsetWidth);
+  //   //   canvas.setHeight(canvasRef.current.offsetHeight);
+  //   //   return canvas;
+  //   // // });
+  // });
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
@@ -607,21 +609,24 @@ const DressRoomTestSidebar = (props) => {
 
   /* ------------------ */
   const shrinkBtnRef = useRef();
-  const [isActive, setIsActive] = useState();
+  const [isActive, setIsActive] = useState(false);
 
+  const [smallWidth, setSmallWidth] = useState(0);
+  const productSidebarRef = useRef();
   const handleShrinkBtn = () => {
+    if (smallWidth === 0) {
+      setSmallWidth(canvasRef.current.offsetWidth);
+    }
     setIsActive(!isActive);
-    // document.body.classList.toggle('shrink');
-    // setTimeout(moveActiveTab, 400);
-    // shrinkBtnRef.current.classList.add('hovered');
-    // setTimeout(() => {
-    //   shrinkBtnRef.current.classList.remove('hovered');
-    // }, 500);
-    // const canvasHeight = canvasRef.current.offsetHeight - 1;
-    // const canvasWidth = canvasRef.current.offsetWidth - 1;
 
-    // canvas.setWidth(canvasWidth);
-    // canvas.setHeight(canvasHeight);
+    console.log('handleShinkBtn ', initialWidth, smallWidth);
+    console.log('handleShinkBtn ', canvasRef.current.offsetWidth);
+
+    if (isActive) {
+      canvas.setWidth(initialWidth);
+    } else {
+      canvas.setWidth(document.body.offsetWidth - sidebarBRef.current.offsetWidth - 180);
+    }
   };
   /* ------------------ */
 
@@ -707,21 +712,26 @@ const DressRoomTestSidebar = (props) => {
           </div> */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
             <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
-              <div className={styles.ProductSidebar}>
+              <div ref={productSidebarRef} className={styles.ProductSidebar}>
                 <div className={styles.sidebarTop}>
-                  <div className={styles.shrinkBtn} ref={shrinkBtnRef} onClick={handleShrinkBtn}>
-                    <BiChevronLeft className={styles.chevronIcon} size="25" />
+                  {/* <div className={styles.shrinkBtn} ref={shrinkBtnRef} onClick={handleShrinkBtn}> */}
+                  <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
+                    <BiChevronLeft className={styles.chevronIcon} size="40" />
                   </div>
                 </div>
 
                 <div className={styles.sidebarLinks}>
                   <ul className={styles.productLists}>
                     {products.map((item, index) => (
-                      <li className={styles.tooltipElement}>
+                      <div className={styles.tooltipElement} key={index}>
                         <div className={styles.productBox}>
-                          <img className={styles.newProductImg} src={item.img} alt="상품 이미지" />
-                          <AiFillPlusCircle className={styles.SiconBox} color="orange" size="50" />
+                          <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
+                          <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.SiconBox} color="orange" size="50" />
                           <div className={styles.hide + ' ' + styles.info}>
+                            <ImCross
+                              onClick={(e) => HandleDeleteProductBtn(item.shop_url)}
+                              style={{ position: 'absolute', top: '20px', right: '25px', zIndex: '50' }}
+                            />
                             <div>
                               <span className={styles.shopName}>{item.shop_name}</span>
                               <div className={styles.productName}>{item.product_name}</div>
@@ -729,14 +739,14 @@ const DressRoomTestSidebar = (props) => {
                             <div className={styles.price}>{item.price}원</div>
                           </div>
                         </div>
-                      </li>
+                      </div>
                     ))}
                   </ul>
                 </div>
               </div>
 
               <div ref={canvasRef} className={styles.canvasContainer}>
-                {/* <div className={styles.toolbar}>
+                <div className={styles.toolbar}>
                   <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
                     <BsTrash size="25" />
                   </button>
@@ -749,7 +759,7 @@ const DressRoomTestSidebar = (props) => {
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                     <FaTrashAlt size="25" />
                   </button>
-                </div> */}
+                </div>
                 <ToastContainer
                   position="bottom-center"
                   autoClose={3000}
@@ -770,7 +780,7 @@ const DressRoomTestSidebar = (props) => {
           <div ref={sidebarBRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video autoPlay ref={userVideo} className={styles.video1} muted="muted">
+                <video autoPlay ref={userVideo} className={styles.video1} muted="muted" poster="/images/user1.png">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
@@ -785,7 +795,7 @@ const DressRoomTestSidebar = (props) => {
                   </button>
                 </div>
               </div>
-              <video autoPlay ref={partnerVideo} className={styles.video2}>
+              <video autoPlay ref={partnerVideo} className={styles.video2} poster="/images/user1.png">
                 video 2
               </video>
             </div>

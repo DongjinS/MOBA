@@ -241,7 +241,7 @@
 }
 
 .productBox:hover {
-  border-radius: 10px solid orange;
+  /* border-radius: 10px solid orange; */
   z-index: 20;
   overflow: auto;
   opacity: 0.7;
@@ -321,6 +321,7 @@
   width: 130px;
   border: 1px solod black;
   border-radius: 10%;
+  z-index: 50;
 }
 
 .shopLink:link {
@@ -350,9 +351,14 @@
 
 .canvas {
   grid-area: main;
-  background-color: white;
+  /* background-color: white; */
   display: flex;
   justify-content: center;
+  border: 1px solid black;
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  border: 3px solid black;
 }
 
 .toolbarBtn {
@@ -360,13 +366,6 @@
   background-color: orangered;
   color: white;
 }
-
-/* .canvas { */
-/* width: inherit;
-  height: inherit;
-  z-index: 10;
-  border: 3px solid black;
-} */
 
 .pointers {
   width: inherit;
@@ -406,24 +405,30 @@
 
 .controlBtn {
   font-size: 20px;
-  background-color: white;
-  color: grey;
+  background-color: grey;
+  color: white;
   opacity: 0.7;
-  border-radius: 20px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .video1 {
-  border-radius: 15px;
-  border: 7px solid #000;
-  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 3px solid #000;
   height: 100%;
   object-fit: cover;
 }
 
 .video2 {
-  border-radius: 15px;
-  border: 7px solid #000;
+  border-radius: 5px;
+  border: 3px solid #000;
   height: 100%;
+  object-fit: cover;
 }
 
 .copyBtn {
@@ -501,6 +506,7 @@
   grid-template-rows: 1fr;
   border-radius: 10px;
   /* width: 5rem; */
+  cursor: pointer;
 }
 
 .SiconBox {
@@ -561,7 +567,7 @@
   min-height: 0px;
   height: 100%;
   background-color: var(--main-color);
-  width: 27rem;
+  width: 26.5rem;
   padding: 0.5rem 0rem 1rem 0.8rem;
   color: #000;
   display: flex;
@@ -581,8 +587,10 @@
 .sidebarTop {
   position: relative;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   z-index: 50;
+  padding-right: 10px;
 }
 
 .sidebarLinks {
@@ -633,18 +641,17 @@
   z-index: 50;
 }
 
-.canvasContainer {
+/* .canvasContainer {
   background-color: pink;
   /* margin-left: 100px; */
-}
 
 .shrink .ProductSidebar {
-  width: 12.2rem;
+  width: 11.2rem;
 }
 
 .shrink .hide {
-  opacity: 0;
-  /* display: none; */
+  /* opacity: 0; */
+  display: none;
   pointer-events: none;
   transition-delay: 0s;
 }
@@ -655,10 +662,11 @@
 
 .canvasContainer {
   flex: 1;
-  padding: 3rem 0 0 0;
+  /* padding: 1.5rem 0 0 0; */
   color: #1f2027;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .hide {
   background-color: #e0e0e0;
