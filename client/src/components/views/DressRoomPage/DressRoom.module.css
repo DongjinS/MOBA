@@ -422,6 +422,10 @@
   border: 3px solid #000;
   height: 100%;
   object-fit: cover;
+  /* 좌우 반전 해제 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
 }
 
 .video2 {
@@ -429,6 +433,10 @@
   border: 3px solid #000;
   height: 100%;
   object-fit: cover;
+  /* 좌우 반전 해제 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
 }
 
 .copyBtn {
@@ -662,7 +670,6 @@
 
 .canvasContainer {
   flex: 1;
-  /* padding: 1.5rem 0 0 0; */
   color: #1f2027;
   display: flex;
   flex-direction: column;

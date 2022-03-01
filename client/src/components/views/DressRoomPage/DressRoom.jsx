@@ -9,9 +9,9 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
 
-import styles from './DressRoomTest.module.css';
+import styles from './DressRoom.module.css';
 
-import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
+import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 
@@ -29,7 +29,7 @@ import { BiChevronLeft } from 'react-icons/bi';
 
 import { ToastContainer, toast } from 'react-toastify';
 
-const DressRoomTestSidebar = (props) => {
+const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -57,9 +57,13 @@ const DressRoomTestSidebar = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    data.clientX = data.clientX * canvasRef.current.offsetWidth;
-    data.clientY = data.clientY * canvasRef.current.offsetHeight;
-    modifyMouse(data);
+    // data.clientX = data.clientX * canvasRef.current.offsetWidth;
+    // data.clientY = data.clientY * canvasRef.current.offsetHeight;
+    console.log(canvasRef.current.offsetWidth, data.clientX);
+    if (canvasRef.current.offsetWidth - 25 > data.clientX) {
+      modifyMouse(data);
+    }
+    // modifyMouse(data);
   };
 
   const needCanvas = (canvas, data) => {
@@ -86,6 +90,13 @@ const DressRoomTestSidebar = (props) => {
           }
         });
         break;
+      case 'drawing':
+        let path = new fabric.Path(data.path.path);
+        console.log(path);
+        path.set(data.path);
+        path.setCoords();
+        canvas.add(path);
+        break;
       default:
         break;
     }
@@ -96,8 +107,6 @@ const DressRoomTestSidebar = (props) => {
     console.log('handle item dc message', data);
 
     setCanvas((canvas) => {
-      console.log('hello');
-      console.log(canvas);
       needCanvas(canvas, data);
       return canvas;
     });
@@ -114,6 +123,7 @@ const DressRoomTestSidebar = (props) => {
       width: width,
       height: height,
       backgroundColor: 'white',
+      isDrawingMode: false,
     });
 
   useEffect(async () => {
@@ -204,6 +214,35 @@ const DressRoomTestSidebar = (props) => {
     console.log('useEffect canvas');
 
     if (canvas) {
+      // selection:cleared
+      // selection:created
+      // selection:updated
+      canvas.on('selection:cleared', (opt) => {
+        console.log('selection:cleared', canvas.getActiveObjects(), opt);
+      });
+      canvas.on('selection:created', (opt) => {
+        console.log('selection:created', canvas.getActiveObjects(), opt);
+        opt.selected.forEach((obj) => {});
+      });
+      canvas.on('selection:updated', (opt) => {
+        console.log('selection:updated', canvas.getActiveObjects(), opt);
+      });
+
+      canvas.on('before:path:created', (options) => {
+        console.log('before path created', options);
+      });
+      canvas.on('path:created', (options) => {
+        console.log('path created', options);
+        const data = {
+          order: 'drawing',
+          path: options.path,
+        };
+        try {
+          itemChannel.current.send(JSON.stringify(data));
+        } catch (error) {
+          // 상대 없을 때 send 시 에러
+        }
+      });
       canvas.on('object:modified', (options) => {
         if (options.target) {
           const modifiedObj = {
@@ -236,8 +275,10 @@ const DressRoomTestSidebar = (props) => {
 
       canvas.on('mouse:move', (options) => {
         const mouseobj = {
-          clientX: options.e.offsetX / canvasRef.current.offsetWidth,
-          clientY: options.e.offsetY / canvasRef.current.offsetHeight,
+          // clientX: options.e.offsetX / canvasRef.current.offsetWidth,
+          // clientY: options.e.offsetY / canvasRef.current.offsetHeight,
+          clientX: options.e.offsetX,
+          clientY: options.e.offsetY,
         };
 
         /*
@@ -431,14 +472,28 @@ const DressRoomTestSidebar = (props) => {
             const objects = canvas.getObjects();
             if (objects.length > 0) {
               objects.forEach((obj) => {
-                const sendObj = {
-                  obj: obj,
-                  order: 'add',
-                  id: obj.id,
-                  url: obj.product_info.img,
-                  product_info: obj.product_info,
-                };
-                itemChannel.current.send(JSON.stringify(sendObj));
+                if (obj.id) {
+                  let url;
+                  if (obj.product_info.removedBgImg) {
+                    url = obj.product_info.removedBgImg;
+                  } else {
+                    url = obj.product_info.img;
+                  }
+                  const sendObj = {
+                    obj: obj,
+                    order: 'add',
+                    id: obj.id,
+                    url: url,
+                    product_info: obj.product_info,
+                  };
+                  itemChannel.current.send(JSON.stringify(sendObj));
+                } else {
+                  const data = {
+                    order: 'drawing',
+                    path: obj,
+                  };
+                  itemChannel.current.send(JSON.stringify(data));
+                }
               });
             }
             return canvas;
@@ -548,13 +603,17 @@ const DressRoomTestSidebar = (props) => {
       });
   };
 
-  // window.addEventListener('resize', () => {
-  //   const canvasHeight = canvasRef.current.height - 1;
-  //   const canvasWidth = canvasRef.current.width - 1;
-
-  //   canvas.setWidth(canvasWidth);
-  //   canvas.setHeight(canvasHeight);
-  // });
+  window.addEventListener('resize', () => {
+    setCanvas((canvas) => {
+      try {
+        canvas.setWidth(canvasRef.current.offsetWidth);
+        canvas.setHeight(canvasRef.current.offsetHeight);
+        return canvas;
+      } catch (error) {
+        return canvas;
+      }
+    });
+  });
 
   /* ----- sidebar ----- */
   const shrinkBtnRef = useRef();
@@ -573,6 +632,16 @@ const DressRoomTestSidebar = (props) => {
     } else {
       canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 180);
     }
+  };
+
+  const DrawingFalse = () => {
+    canvas.isDrawingMode = false;
+  };
+
+  const HandleDrawing = () => {
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.color = 'black';
+    canvas.freeDrawingBrush.width = 5;
   };
 
   return (
@@ -639,11 +708,11 @@ const DressRoomTestSidebar = (props) => {
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                     <MdAddShoppingCart size="25" />
                   </button>
-                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                    <FaTrash size="25" />
+                  <button className={styles.toolbarBtn} onClick={DrawingFalse}>
+                    <BsHandIndexThumb size="25" />
                   </button>
-                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                    <FaTrashAlt size="25" />
+                  <button className={styles.toolbarBtn} onClick={HandleDrawing}>
+                    <BsPencilFill size="25" />
                   </button>
                 </div>
                 <ToastContainer
@@ -692,4 +761,4 @@ const DressRoomTestSidebar = (props) => {
   );
 };
 
-export default DressRoomTestSidebar;
+export default DressRoom;
