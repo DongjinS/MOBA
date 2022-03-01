@@ -14,6 +14,8 @@ const CreateRoom = (props) => {
   // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
   const [modalOpen, setModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [userId, setUserId] = useState('');
+  getUserInfo();
   //장바구니
   const openModal = () => {
     const token = getCookie('x_auth');
@@ -37,6 +39,14 @@ const CreateRoom = (props) => {
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
+  }
+  // ID 받아옴
+  function getUserInfo() {
+    let token = getCookie('x_auth');
+    axios.post('/api/users/info', { token }).then(function (response) {
+      console.log(response.data.username, 'getUserInfo');
+      setUserId(response.data.username);
+    });
   }
 
   // if (getCookie('room')) {
@@ -109,57 +119,21 @@ const CreateRoom = (props) => {
       <Header />
       <div className={styles.createRoom}>
         <div className={styles.title}>
-          <p>반갑습니다 000님</p>
-          <p>MOBA와 함께 즐거운 쇼핑하고 계신가요?</p>
+          <p>{userId}님 MOBA에 오신걸 환영합니다.</p>
         </div>
-        {/* <SimpleSlider /> */}
-        <div className={styles.container}>
-          <div className={styles.btnWrapper} id={styles.firstWrapper}>
-            <button className={styles.buttons} onClick={HandleDressRoomClick}>
-              코디하기
-            </button>
-          </div>
-          <div className={styles.btnWrapper}>
-            <button className={styles.buttons} onClick={openModal}>
-              장바구니
-            </button>
-          </div>
-          <div className={styles.btnWrapper}>
-            <button
-              id={styles.shoppingStart}
-              className={styles.buttons}
-              onClick={create}
-            >
-              쇼핑시작
-            </button>
-          </div>
-          <Modal
-            open={modalOpen}
-            close={closeModal}
-            header="나의 장바구니"
-            products={products}
-            deleteItem={deleteItem}
-          />
-          <div className={styles.btnWrapper}>
-            <button
-              id={styles.voteResult}
-              className={styles.buttons}
-              onClick={voteResult}
-            >
-              투표결과
-            </button>
-          </div>
-          <div className={styles.btnWrapper}>
-            <button
-              className={styles.buttons}
-              id={styles.logoutBtn}
-              onClick={logout}
-            >
-              {' '}
-              로그아웃{' '}
-            </button>
-          </div>
-        </div>
+        <SimpleSlider
+          handleCody={HandleDressRoomClick}
+          handleCart={openModal}
+          handleVoteResult={voteResult}
+          handleShopping={create}
+        />
+        <Modal
+          open={modalOpen}
+          close={closeModal}
+          header="나의 장바구니"
+          products={products}
+          deleteItem={deleteItem}
+        />
       </div>
     </>
   );

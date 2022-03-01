@@ -1,28 +1,21 @@
 import './SimpleSlider.css';
 import { useState } from 'react';
 import Slider from 'react-slick';
-import styled from 'styled-components';
-
-import brandy from '../../images/brandy.png';
-import musinsa from '../../images/musinsa.png';
-import wconcept from '../../images/wconcept.jpg';
 
 import React from 'react';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
-const images = [brandy, musinsa, wconcept];
-
-function SimpleSlider() {
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+function SimpleSlider(props) {
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
-        <FaArrowRight />
+        <AiOutlineRight className="arrow__i" />
       </div>
     );
   };
   const PrevArrow = ({ onClick }) => {
     return (
       <div className="arrow prev" onClick={onClick}>
-        <FaArrowLeft />
+        <AiOutlineLeft className="arrow__i" />
       </div>
     );
   };
@@ -36,6 +29,7 @@ function SimpleSlider() {
     slidesToShow: 3,
     centerMode: true,
     centerPadding: 0,
+    arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (current, next) => setImageIndex(next),
@@ -44,11 +38,53 @@ function SimpleSlider() {
   return (
     <div className="slider__container">
       <Slider {...settings}>
-        {images.map((img, idx) => (
+        <div
+          id="first"
+          className={0 === imageIndex ? 'slide activeSlide' : 'slide'}
+          onClick={() => {
+            props.handleCody();
+          }}
+        >
+          <p>코디하기</p>
+          <p>친구와 함께 코디를 진행할 수 있어요.</p>
+        </div>
+        <div
+          id="second"
+          className={1 === imageIndex ? 'slide activeSlide' : 'slide'}
+          onClick={() => {
+            props.handleCart();
+          }}
+        >
+          <p>장바구니</p>
+          <p>장바구니를 확인하고 투표도 진행할 수 있어요.</p>
+        </div>
+        <div
+          id="third"
+          className={2 === imageIndex ? 'slide activeSlide' : 'slide'}
+          onClick={() => {
+            props.handleVoteResult();
+          }}
+        >
+          <p>투표결과</p>
+          <p>투표 결과를 확인해 보세요.</p>
+        </div>
+        <div
+          id="fourth"
+          className={3 === imageIndex ? 'slide activeSlide' : 'slide'}
+          onClick={() => {
+            props.handleShopping();
+          }}
+        >
+          <p>쇼핑시작</p>
+          <p>친구와 함께 쇼핑 시작!</p>
+        </div>
+
+        {/* {titles.map((title, idx) => (
           <div className={idx === imageIndex ? 'slide activeSlide' : 'slide'}>
-            <img src={img} alt={img} />
+            <span>{title}</span>
+            <span>{idx}</span>
           </div>
-        ))}
+        ))} */}
       </Slider>
     </div>
   );

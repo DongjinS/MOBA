@@ -1,19 +1,20 @@
 .createRoom {
-  /* background-color: black; */
+  background-color: black;
   /* color: white; */
   /* background-color: white; */
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
   flex-direction: column;
   height: 100vh;
 }
 .title {
+  margin-top: 8em;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10em;
   flex-direction: column;
+  margin-bottom: 4em;
 }
 .title p {
   color: white;
@@ -25,7 +26,7 @@
   justify-content: center;
   align-items: center;
 }
-.description {
+/* .description {
   color: white;
   margin-bottom: 3em;
   font-size: 2em;
@@ -35,7 +36,7 @@
 .description p {
   font-size: 2em;
   margin-bottom: 0.3em;
-}
+} */
 
 .buttons:hover {
   cursor: pointer;
