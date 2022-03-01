@@ -8,14 +8,14 @@
 
 .container {
   display: grid;
-  grid-template-columns: auto 15vw;
+  /* grid-template-columns: auto auto 300px; */
   grid-template-rows: 70px auto;
   height: 100vh;
   grid-template-areas:
-    'header  header'
-    'main     b   ';
-  /* row-gap: 1px;
-  column-gap: 1px; */
+    'header  header  header'
+    '   a     main     b   ';
+  row-gap: 1px;
+  column-gap: 1px;
 }
 
 .header {
@@ -169,7 +169,6 @@
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
 }
 .openSidebar {
   /* animation: slide 1s ease-in-out 0s 1 normal forwards; */
@@ -240,16 +239,16 @@
   position: relative;
 }
 
-.productBox:hover {
-  /* border-radius: 10px solid orange; */
-  z-index: 20;
-  overflow: auto;
+.SiconBox {
+  position: absolute;
+  visibility: hidden;
+}
+.containerImg:hover {
   opacity: 0.7;
 }
-.productBox:hover > .SiconBox {
+.containerImg:hover > .SiconBox {
   visibility: visible;
   opacity: 1;
-  z-index: 10;
 }
 
 .selectShop {
@@ -321,7 +320,6 @@
   width: 130px;
   border: 1px solod black;
   border-radius: 10%;
-  z-index: 50;
 }
 
 .shopLink:link {
@@ -349,22 +347,24 @@
   border-radius: 0px 15px 15px 0px;
 }
 
-.canvas {
+.main {
   grid-area: main;
-  /* background-color: white; */
+  background-color: white;
   display: flex;
   justify-content: center;
-  border: 1px solid black;
-  width: inherit;
-  height: inherit;
-  z-index: 10;
-  border: 3px solid black;
 }
 
 .toolbarBtn {
   border-radius: 10px;
   background-color: orangered;
   color: white;
+}
+
+.canvas {
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  border: 3px solid black;
 }
 
 .pointers {
@@ -374,7 +374,7 @@
 }
 
 .sidebarB {
-  /* width: 300px; */
+  width: 300px;
   grid-area: b;
 }
 
@@ -405,272 +405,26 @@
 
 .controlBtn {
   font-size: 20px;
-  background-color: grey;
-  color: white;
+  background-color: white;
+  color: grey;
   opacity: 0.7;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 30px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 20px;
 }
 
 .video1 {
-  border-radius: 5px;
-  border: 3px solid #000;
+  border-radius: 15px;
+  border: 7px solid #000;
+  margin-bottom: 5px;
   height: 100%;
   object-fit: cover;
 }
 
 .video2 {
-  border-radius: 5px;
-  border: 3px solid #000;
+  border-radius: 15px;
+  border: 7px solid #000;
   height: 100%;
-  object-fit: cover;
 }
 
 .copyBtn {
   color: black;
-}
-
-/* -------------------------- */
-
-:root {
-  --main-color: #f0f0f0;
-  --main-color-dark: grey;
-  --main-color-light: grey;
-  --text-color: black;
-}
-
-.body {
-  /* flex: 1; */
-  flex-grow: 1;
-  flex-basis: 0;
-  overflow: auto;
-  background-color: #e4e2f5;
-  display: flex;
-  position: relative;
-}
-
-.sidebarLinks::-webkit-scrollbar {
-  visibility: hidden;
-  cursor: pointer;
-  width: 8px;
-  height: 10px;
-  /* display: none; */
-}
-
-.sidebarLinks::-webkit-scrollbar-thumb {
-  visibility: hidden;
-  cursor: pointer;
-  background-color: white; /*스크롤바의 색상*/
-  border: 1px solid white;
-}
-.sidebarLinks:hover::-webkit-scrollbar {
-  visibility: visible;
-  cursor: pointer;
-  width: 8px;
-}
-
-.sidebarLinks:hover::-webkit-scrollbar-thumb {
-  visibility: visible;
-  cursor: pointer;
-  background-color: #9d9d9d; /*스크롤바의 색상*/
-  border: 1px solid grey;
-  border-radius: 10px;
-}
-
-.productLists {
-  list-style: none;
-}
-
-.productBox {
-  color: var(--text-color);
-  /* font-weight: 400;
-  font-size: 0.9rem; */
-  display: flex;
-  align-items: center;
-  height: 150px;
-}
-
-.newProductImg {
-  /* font-size: 1.3rem; */
-  text-align: center;
-  min-width: 150px;
-  width: 150px;
-  height: 150px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  border-radius: 10px;
-  /* width: 5rem; */
-  cursor: pointer;
-}
-
-.SiconBox {
-  position: absolute;
-  visibility: hidden;
-  /* margin: 0 auto; */
-  left: 50px;
-}
-
-/* .newProductImg:hover > .SiconBox {
-  visibility: visible;
-  opacity: 1;
-  z-index: 99;
-} */
-
-.info {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px 15px;
-}
-
-.shopName {
-  color: white;
-  background-color: black;
-  padding: 2px 5px 2px 5px;
-  font-size: 12px;
-  border-radius: 5px;
-}
-
-.productName {
-  margin-top: 5px;
-  font-size: 15px;
-}
-
-.price {
-  font-size: 20px;
-  font-weight: 5000px;
-}
-
-.productLists {
-  position: relative;
-  /* margin-right: 0.6rem; */
-  /* margin-right: 20px; */
-}
-.tooltipElement {
-  position: relative;
-  padding: 5px 0;
-  /* margin: 10px; */
-}
-
-.ProductSidebar {
-  /* overflow-x: hidden; */
-  position: sticky;
-  top: 0;
-  left: 0;
-  min-height: 0px;
-  height: 100%;
-  background-color: var(--main-color);
-  width: 26.5rem;
-  padding: 0.5rem 0rem 1rem 0.8rem;
-  color: #000;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.5s ease-in-out;
-}
-
-.ProductSidebar::before {
-  content: '';
-  position: absolute;
-  width: 3rem;
-  height: 100%;
-  top: 0;
-  left: 100%;
-}
-
-.sidebarTop {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  z-index: 50;
-  padding-right: 10px;
-}
-
-.sidebarLinks {
-  overflow: auto;
-}
-
-.shrinkBtn {
-  position: absolute;
-  top: 50%;
-  height: 35px;
-  padding: 0 0.3rem;
-  background-color: var(--main-color);
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 3px 10px -3px rgba(70, 46, 118, 0.3);
-  right: -3rem;
-  top: 1rem;
-  transform: translateY(-50%) translateX(-8px);
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.1s;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 50;
-}
-
-.chevronIcon {
-  line-height: 40px;
-  /* size: 10; */
-  transition: 0.3s;
-  z-index: 50;
-}
-
-.shrinkBtn:hover {
-  z-index: 50;
-  color: white;
-  background-color: var(--main-color-dark);
-}
-
-.ProductSidebar:hover .shrinkBtn,
-.shrinkBtn.hovered {
-  transform: translateY(-50%) translateX(0px);
-  opacity: 1;
-  pointer-events: all;
-  z-index: 50;
-}
-
-/* .canvasContainer {
-  background-color: pink;
-  /* margin-left: 100px; */
-
-.shrink .ProductSidebar {
-  width: 11.2rem;
-}
-
-.shrink .hide {
-  /* opacity: 0; */
-  display: none;
-  pointer-events: none;
-  transition-delay: 0s;
-}
-
-.shrink .chevronIcon {
-  transform: rotate(-180deg);
-}
-
-.canvasContainer {
-  flex: 1;
-  /* padding: 1.5rem 0 0 0; */
-  color: #1f2027;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.hide {
-  background-color: #e0e0e0;
-  width: 250px;
-  transition: opacity 0.3s 0.2s;
-  border-radius: 0 10px 10px 0;
 }

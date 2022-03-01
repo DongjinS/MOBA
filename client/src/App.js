@@ -33,8 +33,8 @@ function App() {
           <Route path="/chooseshop" element={<ChooseShop />} />
           <Route path="/room/:roomID" element={<Room />} />
           <Route path="/invited" element={<InvitedPage />} />
-          <Route path="/dressroom/:roomID" element={<DressRoomTestSidebar />} />
-          {/* <Route path="/dressroom/:roomID" element={<DressRoom />} /> */}
+          {/* <Route path="/dressroom/:roomID" element={<DressRoomTestSidebar />} /> */}
+          <Route path="/dressroom/:roomID" element={<DressRoom />} />
           <Route path="/vote/:roomID" element={<Vote />} />
           <Route path="/voteresult" element={<VoteResult />} />
           <Route path="*" element={<Navigate replace to="/" />} />
