@@ -1,24 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+import io from 'socket.io-client';
 
 import { fabric } from 'fabric';
 import { v1 as uuid } from 'uuid';
-import io from 'socket.io-client';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
 import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
-
-import styles from './DressRoom.module.css';
-
-import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
-import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
-import { GoUnmute, GoMute } from 'react-icons/go';
+import Cookies from 'universal-cookie';
 
 import ClothesLoading from '../../loading/ClothesLoading';
 
-import './dressroom.css';
+import styles from './DressRoom.module.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Icons
+import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
+import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
+import { GoUnmute, GoMute } from 'react-icons/go';
 import { MdAddShoppingCart } from 'react-icons/md';
 import { IoTrashOutline } from 'react-icons/io';
 import { BsCartPlus } from 'react-icons/bs';
@@ -27,7 +27,6 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { BiChevronLeft } from 'react-icons/bi';
 
-import { ToastContainer, toast } from 'react-toastify';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -166,18 +165,15 @@ const DressRoom = (props) => {
         socketRef.current.on('offer', handleRecieveCall);
         socketRef.current.on('answer', handleAnswer);
         socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
-
         socketRef.current.on('peer-leaving', function (id) {
           deleteMouse(id);
           otherUser.current = '';
-
           try {
             partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
               track.stop();
             });
             partnerVideo.current.srcObject = null;
           } catch (error) {}
-
           peerRef.current.close();
         });
       });
@@ -203,20 +199,14 @@ const DressRoom = (props) => {
       })
       .then(() => {
         setIsLoading(false);
-
         console.log('products : ', products);
-
         console.log('uniqueShops : ', uniqueShops);
       });
   }, []);
 
   useEffect(() => {
     console.log('useEffect canvas');
-
     if (canvas) {
-      // selection:cleared
-      // selection:created
-      // selection:updated
       canvas.on('selection:cleared', (opt) => {
         console.log('selection:cleared', canvas.getActiveObjects(), opt);
       });
@@ -239,8 +229,7 @@ const DressRoom = (props) => {
         };
         try {
           itemChannel.current.send(JSON.stringify(data));
-        } catch (error) {
-          // 상대 없을 때 send 시 에러
+        } catch (error) { // 상대 없을 때 send 시 에러
         }
       });
       canvas.on('object:modified', (options) => {
@@ -280,7 +269,6 @@ const DressRoom = (props) => {
           clientX: options.e.offsetX,
           clientY: options.e.offsetY,
         };
-
         /*
         mouseChannel은 마우스 현재 위치 전송을 위한 webRTC 채널이다. 
         다른 유저가 룸에 들어왔을때 초기화되므로 룸에 다른 유저가 없을때는
@@ -360,8 +348,7 @@ const DressRoom = (props) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
         itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
-      } catch (error) {
-        // 상대 없을 때 send 시 에러
+      } catch (error) { // 상대 없을 때 send 시 에러
       }
       canvas.remove(obj);
     });
@@ -681,12 +668,9 @@ const DressRoom = (props) => {
                       <div className={styles.tooltipElement} key={index}>
                         <div className={styles.productBox}>
                           <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
-                          <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.SiconBox} color="orange" size="50" />
+                          <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
                           <div className={styles.hide + ' ' + styles.info}>
-                            <ImCross
-                              onClick={(e) => HandleDeleteProductBtn(item.shop_url)}
-                              style={{ position: 'absolute', top: '20px', right: '25px', zIndex: '50' }}
-                            />
+                            <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
                             <div>
                               <span className={styles.shopName}>{item.shop_name}</span>
                               <div className={styles.productName}>{item.product_name}</div>
@@ -735,7 +719,7 @@ const DressRoom = (props) => {
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video autoPlay ref={userVideo} className={styles.video1} muted="muted" poster="/images/user1.png">
+                <video autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
@@ -750,7 +734,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video autoPlay ref={partnerVideo} className={styles.video2} poster="/images/user1.png">
+              <video autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
                 video 2
               </video>
             </div>

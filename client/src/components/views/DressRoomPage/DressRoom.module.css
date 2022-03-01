@@ -1,3 +1,10 @@
+:root {
+  --main-color: #f0f0f0;
+  --main-color-dark: grey;
+  --main-color-light: grey;
+  --text-color: black;
+}
+
 .loadingContainer {
   width: 100%;
   height: 100vh;
@@ -33,6 +40,224 @@
   display: flex;
 }
 
+.copyBtn {
+  color: black;
+}
+
+.body {
+  /* flex: 1; */
+  flex-grow: 1;
+  flex-basis: 0;
+  overflow: auto;
+  background-color: #e4e2f5;
+  display: flex;
+  position: relative;
+}
+
+.shrink .ProductSidebar {
+  width: 11.2rem;
+}
+
+.shrink .hide {
+  /* opacity: 0; */
+  display: none;
+  pointer-events: none;
+  transition-delay: 0s;
+}
+
+.shrink .chevronIcon {
+  transform: rotate(-180deg);
+}
+
+.ProductSidebar {
+  /* overflow-x: hidden; */
+  position: sticky;
+  top: 0;
+  left: 0;
+  min-height: 0px;
+  height: 100%;
+  background-color: var(--main-color);
+  width: 26.5rem;
+  padding: 0.5rem 0rem 1rem 0.8rem;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.5s ease-in-out;
+}
+
+.ProductSidebar::before {
+  content: '';
+  position: absolute;
+  width: 3rem;
+  height: 100%;
+  top: 0;
+  left: 100%;
+}
+
+.ProductSidebar:hover .shrinkBtn,
+.shrinkBtn.hovered {
+  transform: translateY(-50%) translateX(0px);
+  opacity: 1;
+  pointer-events: all;
+  z-index: 50;
+}
+
+.sidebarTop {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 50;
+  padding-right: 10px;
+}
+
+.chevronIcon {
+  line-height: 40px;
+  /* size: 10; */
+  transition: 0.3s;
+  z-index: 50;
+  cursor: pointer;
+}
+
+.sidebarLinks {
+  overflow: auto;
+}
+
+.sidebarLinks::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+  /* display: none; */
+}
+
+.sidebarLinks::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.sidebarLinks:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.sidebarLinks:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.productLists {
+  list-style: none;
+}
+
+.productLists {
+  position: relative;
+  /* margin-right: 0.6rem; */
+  /* margin-right: 20px; */
+}
+
+.tooltipElement {
+  position: relative;
+  padding: 5px 0;
+  /* margin: 10px; */
+}
+
+.productBox {
+  color: var(--text-color);
+  /* font-weight: 400;
+  font-size: 0.9rem; */
+  display: flex;
+  align-items: center;
+  height: 150px;
+}
+
+.productBox:hover {
+  /* border-radius: 10px solid orange; */
+  z-index: 20;
+  overflow: auto;
+  opacity: 0.7;
+}
+.productBox:hover > .SiconBox {
+  visibility: visible;
+  opacity: 1;
+  z-index: 10;
+}
+
+.newProductImg {
+  /* font-size: 1.3rem; */
+  text-align: center;
+  min-width: 150px;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  border-radius: 10px;
+  /* width: 5rem; */
+  cursor: pointer;
+}
+
+.addProductIcon {
+  position: absolute;
+  visibility: hidden;
+  /* margin: 0 auto; */
+  left: 50px;
+}
+
+.hide {
+  background-color: #e0e0e0;
+  width: 250px;
+  transition: opacity 0.3s 0.2s;
+  border-radius: 0 10px 10px 0;
+}
+
+.info {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+
+.removeProductIcon {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  z-index: 50;
+  cursor: pointer;
+}
+
+.shopName {
+  color: white;
+  background-color: black;
+  padding: 2px 5px 2px 5px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.productName {
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 5000px;
+}
+
+.canvasContainer {
+  flex: 1;
+  color: #1f2027;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
 .toolbar {
   position: absolute;
   z-index: 20;
@@ -47,56 +272,125 @@
   display: flex;
   justify-content: space-around;
   background-color: gold;
-
   /* border-radius: 10px 10px 10px 10px; */
 }
 
-@keyframes slideDetail {
+.toolbarBtn {
+  border-radius: 10px;
+  background-color: orangered;
+  color: white;
+}
+
+.pointers {
+  width: inherit;
+  height: inherit;
+  position: relative;
+}
+
+.canvas {
+  grid-area: main;
+  /* background-color: white; */
+  display: flex;
+  justify-content: center;
+  border: 1px solid black;
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  border: 3px solid black;
+}
+
+.sidebarB {
+  /* width: 300px; */
+  grid-area: b;
+}
+
+.video_container {
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 10px; */
+  height: 100%;
+}
+
+.user1 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+}
+
+.video {
+  border-radius: 5px;
+  border: 3px solid #000;
+  height: 100%;
+  object-fit: cover;
+  /* 좌우 반전 해제 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
+}
+
+.control_box1 {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  width: 150px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  justify-content: space-around;
+  display: flex;
+}
+
+.controlBtn {
+  font-size: 20px;
+  background-color: grey;
+  color: white;
+  opacity: 0.7;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* @keyframes slideDetail {
   from {
-    /* margin-left: -300px; */
     transform: translateX(-30%);
   }
   to {
-    /* margin-left: 0px; */
     transform: translateX(0%);
   }
 }
 
 @keyframes slideShort {
   from {
-    /* margin-left: -300px; */
     transform: translateX(-100%);
   }
   to {
-    /* margin-left: 0px; */
     transform: translateX(0%);
   }
 }
 
 @keyframes slideIn {
   from {
-    /* margin-left: -300px; */
     transform: translateX(-100%);
   }
   to {
-    /* margin-left: 0px; */
     transform: translateX(0%);
   }
 }
 
 @keyframes slideOut {
   from {
-    /* margin-left: -300px; */
     transform: translateX(0%);
   }
   to {
-    /* margin-left: 0px; */
     transform: translateX(-100%);
   }
 }
 
 .shortSidebarA {
-  /* transition: all ease 200s 0s,  */
   width: 200px;
   background-color: #e4e4e4;
   overflow: auto;
@@ -115,7 +409,7 @@
 .shortSidebarA::-webkit-scrollbar-thumb {
   visibility: hidden;
   cursor: pointer;
-  background-color: white; /*스크롤바의 색상*/
+  background-color: white; 
   border: 1px solid white;
 }
 .shortSidebarA:hover::-webkit-scrollbar {
@@ -127,7 +421,7 @@
 .shortSidebarA:hover::-webkit-scrollbar-thumb {
   visibility: visible;
   cursor: pointer;
-  background-color: #9d9d9d; /*스크롤바의 색상*/
+  background-color: #9d9d9d; 
   border: 1px solid grey;
   border-radius: 10px;
 }
@@ -136,21 +430,21 @@
   grid-area: a;
   background-color: #e5e5e5;
   overflow: auto;
-  /* transition: all ease 200s 0s; */
-  /* width: 600px; */
-  /* margin-left: 10px; */
+  transition: all ease 200s 0s;
+  width: 600px;
+  margin-left: 10px;
 
-  /* animation-duration: 0.5s;
-  animation-name: slideDetail; */
-  /* transition: ease all 2s;*/
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+  transition: ease all 2s;
   -webkit-transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
   transition: width 2s, height 2s, background-color 2s, transform 2s;
 
-  /* animation: openSiderbar; */
+  animation: openSiderbar;
 }
 
 .displayNone {
-  /* display: none; */
+  display: none;
   opacity: 0;
   visibility: hidden;
   position: absolute;
@@ -172,7 +466,7 @@
   position: relative;
 }
 .openSidebar {
-  /* animation: slide 1s ease-in-out 0s 1 normal forwards; */
+  animation: slide 1s ease-in-out 0s 1 normal forwards;
   animation-duration: 0.5s;
   animation-name: slideDetail;
 }
@@ -191,7 +485,7 @@
 .DetailsidebarA::-webkit-scrollbar-thumb {
   visibility: hidden;
   cursor: pointer;
-  background-color: white; /*스크롤바의 색상*/
+  background-color: white; 
   border: 1px solid white;
 }
 .DetailsidebarA:hover::-webkit-scrollbar {
@@ -203,20 +497,19 @@
 .DetailsidebarA:hover::-webkit-scrollbar-thumb {
   visibility: visible;
   cursor: pointer;
-  background-color: #9d9d9d; /*스크롤바의 색상*/
+  background-color: #9d9d9d; 
   border: 1px solid grey;
   border-radius: 10px;
 }
 
 .Swishlist {
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-/* small 시작 */
 .ScontainerProduct {
   height: 140px;
   width: 150px;
@@ -238,18 +531,6 @@
   align-items: center;
   flex-direction: center;
   position: relative;
-}
-
-.productBox:hover {
-  /* border-radius: 10px solid orange; */
-  z-index: 20;
-  overflow: auto;
-  opacity: 0.7;
-}
-.productBox:hover > .SiconBox {
-  visibility: visible;
-  opacity: 1;
-  z-index: 10;
 }
 
 .selectShop {
@@ -286,12 +567,12 @@
 
 .bodyContainer {
   display: flex;
-  /* height: 100vh; */
+  height: 100vh;
   width: 100%;
 }
 .SbodyContainer {
   display: flex;
-  /* height: 100vh; */
+  height: 100vh;
   width: 100%;
 }
 
@@ -305,14 +586,14 @@
   display: flex;
   border: 1px solid black;
   margin-top: 5px;
-  /* margin: 3px; */
+  margin: 3px;
   justify-content: space-between;
 }
 
 .productInfo {
   display: flex;
   margin: 3px;
-  /* width: 100%; */
+  width: 100%;
   width: 300px;
 }
 
@@ -349,260 +630,14 @@
   border-radius: 0px 15px 15px 0px;
 }
 
-.canvas {
-  grid-area: main;
-  /* background-color: white; */
-  display: flex;
-  justify-content: center;
-  border: 1px solid black;
-  width: inherit;
-  height: inherit;
-  z-index: 10;
-  border: 3px solid black;
-}
-
-.toolbarBtn {
-  border-radius: 10px;
-  background-color: orangered;
-  color: white;
-}
-
-.pointers {
-  width: inherit;
-  height: inherit;
-  position: relative;
-}
-
-.sidebarB {
-  /* width: 300px; */
-  grid-area: b;
-}
-
-.video_container {
-  display: flex;
-  flex-direction: column;
-  /* margin-right: 10px; */
-  height: 100%;
-}
-
-.user1 {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  height: 100%;
-}
-
-.control_box1 {
-  position: absolute;
-  bottom: 1%;
-  left: 50%;
-  width: 150px;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
-  justify-content: space-around;
-  display: flex;
-}
-
-.controlBtn {
-  font-size: 20px;
-  background-color: grey;
-  color: white;
-  opacity: 0.7;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 30px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.video1 {
-  border-radius: 5px;
-  border: 3px solid #000;
-  height: 100%;
-  object-fit: cover;
-  /* 좌우 반전 해제 */
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
-  -moz-transform: rotateY(180deg); /* Firefox */
-}
-
 .video2 {
   border-radius: 5px;
   border: 3px solid #000;
   height: 100%;
   object-fit: cover;
-  /* 좌우 반전 해제 */
   transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
-  -moz-transform: rotateY(180deg); /* Firefox */
-}
-
-.copyBtn {
-  color: black;
-}
-
-/* -------------------------- */
-
-:root {
-  --main-color: #f0f0f0;
-  --main-color-dark: grey;
-  --main-color-light: grey;
-  --text-color: black;
-}
-
-.body {
-  /* flex: 1; */
-  flex-grow: 1;
-  flex-basis: 0;
-  overflow: auto;
-  background-color: #e4e2f5;
-  display: flex;
-  position: relative;
-}
-
-.sidebarLinks::-webkit-scrollbar {
-  visibility: hidden;
-  cursor: pointer;
-  width: 8px;
-  height: 10px;
-  /* display: none; */
-}
-
-.sidebarLinks::-webkit-scrollbar-thumb {
-  visibility: hidden;
-  cursor: pointer;
-  background-color: white; /*스크롤바의 색상*/
-  border: 1px solid white;
-}
-.sidebarLinks:hover::-webkit-scrollbar {
-  visibility: visible;
-  cursor: pointer;
-  width: 8px;
-}
-
-.sidebarLinks:hover::-webkit-scrollbar-thumb {
-  visibility: visible;
-  cursor: pointer;
-  background-color: #9d9d9d; /*스크롤바의 색상*/
-  border: 1px solid grey;
-  border-radius: 10px;
-}
-
-.productLists {
-  list-style: none;
-}
-
-.productBox {
-  color: var(--text-color);
-  /* font-weight: 400;
-  font-size: 0.9rem; */
-  display: flex;
-  align-items: center;
-  height: 150px;
-}
-
-.newProductImg {
-  /* font-size: 1.3rem; */
-  text-align: center;
-  min-width: 150px;
-  width: 150px;
-  height: 150px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  border-radius: 10px;
-  /* width: 5rem; */
-  cursor: pointer;
-}
-
-.SiconBox {
-  position: absolute;
-  visibility: hidden;
-  /* margin: 0 auto; */
-  left: 50px;
-}
-
-/* .newProductImg:hover > .SiconBox {
-  visibility: visible;
-  opacity: 1;
-  z-index: 99;
-} */
-
-.info {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px 15px;
-}
-
-.shopName {
-  color: white;
-  background-color: black;
-  padding: 2px 5px 2px 5px;
-  font-size: 12px;
-  border-radius: 5px;
-}
-
-.productName {
-  margin-top: 5px;
-  font-size: 15px;
-}
-
-.price {
-  font-size: 20px;
-  font-weight: 5000px;
-}
-
-.productLists {
-  position: relative;
-  /* margin-right: 0.6rem; */
-  /* margin-right: 20px; */
-}
-.tooltipElement {
-  position: relative;
-  padding: 5px 0;
-  /* margin: 10px; */
-}
-
-.ProductSidebar {
-  /* overflow-x: hidden; */
-  position: sticky;
-  top: 0;
-  left: 0;
-  min-height: 0px;
-  height: 100%;
-  background-color: var(--main-color);
-  width: 26.5rem;
-  padding: 0.5rem 0rem 1rem 0.8rem;
-  color: #000;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.5s ease-in-out;
-}
-
-.ProductSidebar::before {
-  content: '';
-  position: absolute;
-  width: 3rem;
-  height: 100%;
-  top: 0;
-  left: 100%;
-}
-
-.sidebarTop {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  z-index: 50;
-  padding-right: 10px;
-}
-
-.sidebarLinks {
-  overflow: auto;
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg); 
 }
 
 .shrinkBtn {
@@ -628,56 +663,8 @@
   z-index: 50;
 }
 
-.chevronIcon {
-  line-height: 40px;
-  /* size: 10; */
-  transition: 0.3s;
-  z-index: 50;
-}
-
 .shrinkBtn:hover {
   z-index: 50;
   color: white;
   background-color: var(--main-color-dark);
-}
-
-.ProductSidebar:hover .shrinkBtn,
-.shrinkBtn.hovered {
-  transform: translateY(-50%) translateX(0px);
-  opacity: 1;
-  pointer-events: all;
-  z-index: 50;
-}
-
-/* .canvasContainer {
-  background-color: pink;
-  /* margin-left: 100px; */
-
-.shrink .ProductSidebar {
-  width: 11.2rem;
-}
-
-.shrink .hide {
-  /* opacity: 0; */
-  display: none;
-  pointer-events: none;
-  transition-delay: 0s;
-}
-
-.shrink .chevronIcon {
-  transform: rotate(-180deg);
-}
-
-.canvasContainer {
-  flex: 1;
-  color: #1f2027;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.hide {
-  background-color: #e0e0e0;
-  width: 250px;
-  transition: opacity 0.3s 0.2s;
-  border-radius: 0 10px 10px 0;
-}
+} */
