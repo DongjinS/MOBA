@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { fabric } from 'fabric';
 import { v1 as uuid } from 'uuid';
 import io from 'socket.io-client';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -15,18 +15,19 @@ import { BsCameraVideoFill, BsCameraVideoOffFill } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 
+import ClothesLoading from '../../loading/ClothesLoading';
+
+import './dressroom.css';
+
 import { MdAddShoppingCart } from 'react-icons/md';
 import { IoTrashOutline } from 'react-icons/io';
 import { BsCartPlus } from 'react-icons/bs';
 import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BsFillArrowRightCircleFill, BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { ImCross } from 'react-icons/im';
-
-import ClothesLoading from '../../loading/ClothesLoading';
-import './dressroom.css';
-
 import { BiChevronLeft } from 'react-icons/bi';
+
+import { ToastContainer, toast } from 'react-toastify';
 
 const DressRoomTestSidebar = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -40,8 +41,7 @@ const DressRoomTestSidebar = (props) => {
 
   const [initialWidth, setInitialWidth] = useState(0);
   const canvasRef = useRef();
-  const sidebarBRef = useRef();
-  const sidebarARef = useRef();
+  const videoContainerRef = useRef();
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -103,10 +103,10 @@ const DressRoomTestSidebar = (props) => {
     });
   };
 
-  function getCookie(name) {
+  const getCookie = (name) => {
     const cookies = new Cookies();
     return cookies.get(name);
-  }
+  };
   const token = getCookie('x_auth');
 
   const initCanvas = (width, height) =>
@@ -327,7 +327,7 @@ const DressRoomTestSidebar = (props) => {
     canvas.discardActiveObject().renderAll();
   };
 
-  function copyLink() {
+  const copyLink = () => {
     let currentUrl = window.document.location.href; //복사 잘됨
     navigator.clipboard.writeText(currentUrl);
     toast.success('초대링크 복사 완료!', {
@@ -362,7 +362,7 @@ const DressRoomTestSidebar = (props) => {
       });
     };
     shareKakao();
-  }
+  };
 
   // ---------- webTRC video call ----------
   const callUser = (userID) => {
@@ -470,12 +470,12 @@ const DressRoomTestSidebar = (props) => {
       });
   };
 
-  function handleAnswer(message) {
+  const handleAnswer = (message) => {
     const desc = new RTCSessionDescription(message.sdp);
     peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
-  }
+  };
 
-  function handleICECandidateEvent(e) {
+  const handleICECandidateEvent = (e) => {
     if (e.candidate) {
       const payload = {
         target: otherUser.current,
@@ -483,17 +483,17 @@ const DressRoomTestSidebar = (props) => {
       };
       socketRef.current.emit('ice-candidate', payload);
     }
-  }
+  };
 
-  function handleNewICECandidateMsg(incoming) {
+  const handleNewICECandidateMsg = (incoming) => {
     const candidate = new RTCIceCandidate(incoming);
 
     peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
-  }
+  };
 
-  function handleTrackEvent(e) {
+  const handleTrackEvent = (e) => {
     partnerVideo.current.srcObject = e.streams[0];
-  }
+  };
 
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
@@ -554,60 +554,9 @@ const DressRoomTestSidebar = (props) => {
 
   //   canvas.setWidth(canvasWidth);
   //   canvas.setHeight(canvasHeight);
-  //   // setCanvas((canvas) => {
-  //   //   console.log('resize!!');
-  //   //   console.log(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
-  //   //   canvas.setWidth(canvasRef.current.offsetWidth);
-  //   //   canvas.setHeight(canvasRef.current.offsetHeight);
-  //   //   return canvas;
-  //   // // });
   // });
 
-  const handleSelectChange = (e) => {
-    const value = e.target.value;
-    let sortedProducts = [...products];
-    if (value === 'increase-order') {
-      sortedProducts = sortedProducts.sort((a, b) => b.price - a.price);
-    }
-    if (value === 'decrease-order') {
-      sortedProducts = sortedProducts.sort((a, b) => a.price - b.price);
-    }
-    console.log('sorted products : ', sortedProducts);
-    setProducts(sortedProducts);
-  };
-
-  const OPTIONS = [
-    { value: 'default-order', name: '기본' },
-    { value: 'increase-order', name: '가격 높은 순' },
-    { value: 'decrease-order', name: '가격 낮은 순' },
-  ];
-
-  const [selectedShops, setSelectedShops] = useState([]);
-  const [categories, setCategories] = useState(['상의', '하의', '바지', '악세사리', '신발']);
-
-  const handleSelectShopBtn = (clickedShop) => {
-    console.log('handleSelectShopBtn : ', selectedShops);
-    if (selectedShops.includes(clickedShop)) {
-      setSelectedShops(selectedShops.filter((shop) => shop !== clickedShop));
-    } else {
-      setSelectedShops([...selectedShops, clickedShop]);
-    }
-  };
-
   /* ----- sidebar ----- */
-  const [detailSidebar, setDetailSidebar] = useState(false);
-  const [unmountSidebar, setUnmountSidebar] = useState('');
-
-  const handleChangeSideBar = () => {
-    if (detailSidebar === true) {
-      canvas.setWidth(document.body.offsetWidth - 505);
-    } else {
-      canvas.setWidth(800);
-    }
-    setDetailSidebar((prevState) => !prevState);
-  };
-
-  /* ------------------ */
   const shrinkBtnRef = useRef();
   const [isActive, setIsActive] = useState(false);
 
@@ -619,16 +568,12 @@ const DressRoomTestSidebar = (props) => {
     }
     setIsActive(!isActive);
 
-    console.log('handleShinkBtn ', initialWidth, smallWidth);
-    console.log('handleShinkBtn ', canvasRef.current.offsetWidth);
-
     if (isActive) {
       canvas.setWidth(initialWidth);
     } else {
-      canvas.setWidth(document.body.offsetWidth - sidebarBRef.current.offsetWidth - 180);
+      canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 180);
     }
   };
-  /* ------------------ */
 
   return (
     <>
@@ -651,65 +596,6 @@ const DressRoomTestSidebar = (props) => {
             {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
           </header>
 
-          {/* <div ref={sidebarARef} className={styles.DetailsidebarA}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '10px 10px 0px 0px' }}>
-              {detailSidebar ? (
-                <BsFillArrowLeftCircleFill onClick={handleChangeSideBar} size="30" />
-              ) : (
-                <BsFillArrowRightCircleFill onClick={handleChangeSideBar} size="30" />
-              )}
-            </div>
-
-            <div className={(styles.bodyContainer, styles.SbodyContainer)}>
-              <div className={(styles.wishlist, styles.Swishlist)}>
-                {products.map((item, index) => (
-                  <div key={index} className={detailSidebar ? styles.DcontainerProduct : styles.ScontainerProduct}>
-                    <div onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.productInfo}>
-                      <div className={styles.containerImg}>
-                        <img className={styles.productImg} src={item.img} alt="상품 이미지" />
-                        <AiFillPlusCircle className={styles.SiconBox} color="orange" size="35" />
-                      </div>
-                      <div style={{}} className={detailSidebar ? styles.show : styles.displayNone}>
-                        <div className={styles.productTitle}>
-                          <a href={item.shop_url} className={styles.shopLink} target="_blank">
-                            {item.product_name}
-                          </a>
-                        </div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'right',
-                          }}
-                        >
-                          <div className={styles.productTitle}>{item.price}원</div>
-                        </div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'right',
-                            }}
-                          >
-                            <button className={styles.productAddbtn} type="button" onClick={(e) => HandleAddImgBtn(e, item, canvas)}>
-                              추가
-                            </button>
-                            <button className={styles.productDelbtn} type="button" onClick={(e) => HandleDeleteProductBtn(item.shop_url)}>
-                              삭제
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div> */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
             <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
@@ -777,7 +663,7 @@ const DressRoomTestSidebar = (props) => {
             </div>
           </div>
 
-          <div ref={sidebarBRef} className={styles.sidebarB}>
+          <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
                 <video autoPlay ref={userVideo} className={styles.video1} muted="muted" poster="/images/user1.png">
