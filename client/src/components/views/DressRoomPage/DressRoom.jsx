@@ -210,6 +210,22 @@ const DressRoom = (props) => {
     console.log('useEffect canvas');
 
     if (canvas) {
+      // selection:cleared
+      // selection:created
+      // selection:updated
+      canvas.on('selection:cleared', (opt) => {
+        console.log("selection:cleared", canvas.getActiveObjects(), opt);
+      });
+      canvas.on('selection:created', (opt) => {
+        console.log("selection:created", canvas.getActiveObjects(), opt);
+        opt.selected.forEach((obj) => {
+          
+        })
+      });
+      canvas.on('selection:updated', (opt) => {
+        console.log("selection:updated", canvas.getActiveObjects(), opt);
+      });
+
       canvas.on('before:path:created', (options) => {console.log("before path created",options)});
       canvas.on('path:created', (options) => {
         console.log("path created",options);
@@ -464,11 +480,17 @@ const DressRoom = (props) => {
             if (objects.length > 0) {
               objects.forEach((obj) => {
                 if (obj.id){
+                  let url;
+                  if (obj.product_info.removedBgImg) {
+                    url = obj.product_info.removedBgImg;
+                  } else {
+                    url = obj.product_info.img;
+                  }
                   const sendObj = {
                     obj: obj,
                     order: 'add',
                     id: obj.id,
-                    url: obj.product_info.img,
+                    url: url,
                     product_info: obj.product_info,
                   };
                   itemChannel.current.send(JSON.stringify(sendObj));
