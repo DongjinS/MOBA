@@ -26,6 +26,7 @@ import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { BiChevronLeft } from 'react-icons/bi';
+import { CgScreen } from 'react-icons/cg';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -688,8 +689,6 @@ const DressRoom = (props) => {
   /* ------ */
 
   function shareScreen() {
-    window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
-
     navigator.mediaDevices
       .getDisplayMedia({ cursor: true })
       .then((stream) => {
@@ -806,8 +805,8 @@ const DressRoom = (props) => {
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button className={styles.buttons} onClick={shareScreen}>
-                    <i className="fa-brands fa-slideshare fa-xl"></i>
+                  <button className={styles.controlBtn} onClick={shareScreen}>
+                    <CgScreen />
                   </button>
                   <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
                     {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
