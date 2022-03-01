@@ -228,13 +228,15 @@ const DressRoom = (props) => {
     if (canvas) {
       canvas.on('selection:cleared', (opt) => {
         console.log('selection:cleared', canvas.getActiveObjects(), opt);
-        opt.deselected.forEach((obj) => {
-          try {
-            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' }));
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
-          }
-        });
+        if (opt.deselected) {
+          opt.deselected.forEach((obj) => {
+            try {
+              itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' }));
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
+          });
+        }
       });
       canvas.on('selection:created', (opt) => {
         console.log('selection:created', canvas.getActiveObjects(), opt);
