@@ -22,21 +22,15 @@ const VoteResult = () => {
       })
       .then((response) => {
         console.log(response.data, 'response.data');
-        setVoteResultList(response.data);
+        setVoteResultList(response.data.reverse());
         for (var result of response.data) {
-          console.log(result.room_message);
-          console.log(result.products);
-
           let maxLike = -1;
           for (var itemResult of result.products) {
             if (maxLike < itemResult.likes) {
               maxLike = itemResult.likes;
             }
-            console.log(itemResult.likes, 'likes??');
           }
           mostLikes.push(maxLike);
-          console.log(mostLikes, 'mostLikes');
-          console.log('----------------------------');
         }
         setIsReady(false);
       });
@@ -70,7 +64,7 @@ const VoteResult = () => {
             <div className={styles.vote__container} key={index}>
               <div className={styles.vote__title}>
                 <div className={styles.voteNum}>
-                  <span>vote {index + 1}</span>
+                  <span>vote {voteResultList.length - index}</span>
                 </div>
                 <div className={styles.message}>
                   <span>{items.room_message}</span>

@@ -11,7 +11,7 @@
   align-items: center;
   text-align: center;
   vertical-align: middle;
-  border: 5px solid orange;
+  border: 7px solid orange;
   transform: scale(0.3);
   transition: transform 300ms;
   opacity: 0.5;
@@ -19,8 +19,8 @@
   height: 340px;
   width: auto;
   padding: 1em;
-  /* border-radius: 50%; */
   border-image: linear-gradient(45deg, rgb(0, 0, 0), rgb(255, 160, 19)) 1;
+  /* border-radius: 50%; */
 }
 .slide p {
   margin-top: 2.5em;
@@ -30,9 +30,8 @@
 
 .activeSlide {
   transform: scale(1);
-  border-image: linear-gradient(45deg, rgb(255, 0, 0), rgb(255, 251, 0)) 1;
-  border-image: linear-gradient(45deg, rgb(0, 0, 0), rgb(255, 145, 0)) 1;
   opacity: 1;
+  border: 7px solid orange;
 }
 .activeSlide:hover {
   cursor: pointer;
@@ -55,9 +54,9 @@
 }
 .next {
   right: 0%;
-  top: 50%;
+  top: 45%;
 }
 .prev {
   left: 0%;
-  top: 50%;
+  top: 45%;
 }

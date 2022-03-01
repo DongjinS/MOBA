@@ -54,7 +54,7 @@ function SimpleSlider(props) {
             props.handleCart();
           }}
         >
-          <p>장바구니</p>
+          <p>투표/장바구니</p>
         </div>
         <div
           id="third"
