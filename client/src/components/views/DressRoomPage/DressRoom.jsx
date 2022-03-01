@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import io from 'socket.io-client';
+import Cookies from 'universal-cookie';
+import ClothesLoading from '../../loading/ClothesLoading';
 
+// Fabric JS
 import { fabric } from 'fabric';
 import { v1 as uuid } from 'uuid';
 import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
-import Cookies from 'universal-cookie';
 
-import ClothesLoading from '../../loading/ClothesLoading';
-
+// Styles
 import styles from './DressRoom.module.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,7 +26,6 @@ import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { BiChevronLeft } from 'react-icons/bi';
-
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -53,6 +52,8 @@ const DressRoom = (props) => {
   const roomID = useParams().roomID;
   const mouseChannel = useRef();
   const itemChannel = useRef();
+
+  const navigate = useNavigate();
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
@@ -267,7 +268,8 @@ const DressRoom = (props) => {
         };
         try {
           itemChannel.current.send(JSON.stringify(data));
-        } catch (error) { // 상대 없을 때 send 시 에러
+        } catch (error) {
+          // 상대 없을 때 send 시 에러
         }
       });
       canvas.on('object:modified', (options) => {
@@ -386,7 +388,8 @@ const DressRoom = (props) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
         itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
-      } catch (error) { // 상대 없을 때 send 시 에러
+      } catch (error) {
+        // 상대 없을 때 send 시 에러
       }
       canvas.remove(obj);
     });
@@ -642,7 +645,7 @@ const DressRoom = (props) => {
 
   /* ----- sidebar ----- */
   const shrinkBtnRef = useRef();
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
 
   const [smallWidth, setSmallWidth] = useState(0);
   const productSidebarRef = useRef();
@@ -653,9 +656,9 @@ const DressRoom = (props) => {
     setIsActive(!isActive);
 
     if (isActive) {
-      canvas.setWidth(initialWidth);
+      canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 430);
     } else {
-      canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 180);
+      canvas.setWidth(initialWidth);
     }
   };
 
@@ -669,6 +672,10 @@ const DressRoom = (props) => {
     canvas.freeDrawingBrush.width = 5;
   };
 
+  function mobaOnClickHandler() {
+    navigate('/');
+  }
+
   return (
     <>
       {isLoading ? (
@@ -680,12 +687,16 @@ const DressRoom = (props) => {
           <header className={styles.header}>
             <div className={styles.logo}>
               {/* <div>모바 LOGO 자리</div> */}
-              <img src="/images/logo_clothes.png" alt="모바 로고"></img>
-              <div> , ToolBox 자리 (그림 그림기, 사물 등)</div>
+              <button onClick={mobaOnClickHandler} className={styles.title}>
+                MOBA
+              </button>
             </div>
-            <div>내 닉네임 / 방번호가 들어갈 자리</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img src="/images/logo_clothes.png" alt="모바 로고"></img>
+              <div style={{ fontSize: '25px', margin: '10px' }}>ㅁㅁㅁ 님의 코디룸</div>
+            </div>
             <button className={styles.copyBtn} onClick={copyLink}>
-              초대링크 복사
+              초대링크 복사하기
             </button>
             {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
           </header>
@@ -725,16 +736,16 @@ const DressRoom = (props) => {
               <div ref={canvasRef} className={styles.canvasContainer}>
                 <div className={styles.toolbar}>
                   <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
-                    <BsTrash size="25" />
+                    <BsTrash size="30" />
                   </button>
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                    <MdAddShoppingCart size="25" />
+                    <MdAddShoppingCart size="30" />
                   </button>
                   <button className={styles.toolbarBtn} onClick={DrawingFalse}>
-                    <BsHandIndexThumb size="25" />
+                    <BsHandIndexThumb size="30" />
                   </button>
                   <button className={styles.toolbarBtn} onClick={HandleDrawing}>
-                    <BsPencilFill size="25" />
+                    <BsPencilFill size="30" />
                   </button>
                 </div>
                 <ToastContainer
@@ -772,7 +783,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video autoPlay ref={partnerVideo} className={styles.video2} poster="/images/user1.png">
+              <video autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
                 video 2
               </video>
             </div>
