@@ -96,6 +96,24 @@ const DressRoom = (props) => {
         path.setCoords();
         canvas.add(path);
         break;
+      case 'selected':
+        canvas.getObjects().forEach((object) => {
+          console.log('data : ', data);
+          if (object.id === data.id) {
+            console.log('obj : ', object);
+            object.selectable = false;
+          }
+        });
+        break;
+      case 'deselected':
+        canvas.getObjects().forEach((object) => {
+          console.log('data : ', data);
+          if (object.id === data.id) {
+            console.log('obj : ', object);
+            object.selectable = true;
+          }
+        });
+        break;
       default:
         break;
     }
@@ -209,13 +227,33 @@ const DressRoom = (props) => {
     if (canvas) {
       canvas.on('selection:cleared', (opt) => {
         console.log('selection:cleared', canvas.getActiveObjects(), opt);
+        opt.deselected.forEach((obj) => {
+          try {
+            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' }));
+          } catch (error) {
+            // 상대 없을 때 send 시 에러
+          }
+        });
       });
       canvas.on('selection:created', (opt) => {
         console.log('selection:created', canvas.getActiveObjects(), opt);
-        opt.selected.forEach((obj) => {});
+        opt.selected.forEach((obj) => {
+          try {
+            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'selected' }));
+          } catch (error) {
+            // 상대 없을 때 send 시 에러
+          }
+        });
       });
       canvas.on('selection:updated', (opt) => {
         console.log('selection:updated', canvas.getActiveObjects(), opt);
+        opt.selected.forEach((obj) => {
+          try {
+            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'selected' }));
+          } catch (error) {
+            // 상대 없을 때 send 시 에러
+          }
+        });
       });
 
       canvas.on('before:path:created', (options) => {
@@ -734,7 +772,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
+              <video autoPlay ref={partnerVideo} className={styles.video2} poster="/images/user1.png">
                 video 2
               </video>
             </div>
