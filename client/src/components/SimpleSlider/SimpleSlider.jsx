@@ -3,19 +3,19 @@ import { useState } from 'react';
 import Slider from 'react-slick';
 
 import React from 'react';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 function SimpleSlider(props) {
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
-        <AiOutlineRight className="arrow__i" />
+        <FaAngleRight className="arrow__i" />
       </div>
     );
   };
   const PrevArrow = ({ onClick }) => {
     return (
       <div className="arrow prev" onClick={onClick}>
-        <AiOutlineLeft className="arrow__i" />
+        <FaAngleLeft className="arrow__i" />
       </div>
     );
   };

@@ -32,6 +32,7 @@
   transform: scale(1);
   opacity: 1;
   border: 7px solid orange;
+  border-radius: 20px;
 }
 .activeSlide:hover {
   cursor: pointer;
