@@ -49,7 +49,6 @@ const Header = (props) => {
       ) : (
         <></>
       )}
-      ;
     </header>
   );
 };

@@ -54,89 +54,91 @@ const VoteResult = () => {
     console.log(firstCard, 'firstCard');
   };
   return (
-    <div className={styles.resultPage}>
+    <>
       <Header />
-      {isReady ? (
-        <h1>준비안됨</h1>
-      ) : (
-        <div className={styles.votes__container}>
-          {voteResultList.map((items, index) => (
-            <div className={styles.vote__container} key={index}>
-              <div className={styles.vote__title}>
-                <div className={styles.voteNum}>
-                  <span>vote {voteResultList.length - index}</span>
-                </div>
-                <div className={styles.message}>
-                  <span>{items.room_message}</span>
-                  <span>총 투표 수: {items.total_likes}</span>
-                </div>
+      <div className={styles.resultPage}>
+        {isReady ? (
+          <h1>준비안됨</h1>
+        ) : (
+          <div className={styles.votes__container}>
+            {voteResultList.map((items, index) => (
+              <div className={styles.vote__container} key={index}>
+                <div className={styles.vote__title}>
+                  <div className={styles.voteNum}>
+                    <span>vote {voteResultList.length - index}</span>
+                  </div>
+                  <div className={styles.message}>
+                    <span>{items.room_message}</span>
+                    <span>총 투표 수: {items.total_likes}</span>
+                  </div>
 
-                <div
-                  onClick={() => {
-                    handleDelete(items._id);
-                  }}
-                  className={styles.close}
-                >
-                  삭제
+                  <div
+                    onClick={() => {
+                      handleDelete(items._id);
+                    }}
+                    className={styles.close}
+                  >
+                    삭제
+                  </div>
+                </div>
+                <div className="cards">
+                  {
+                    ((tmp = mostLikes[index]),
+                    items.products
+                      .sort(function (a, b) {
+                        return b.likes - a.likes;
+                      })
+                      .map((result, index) =>
+                        tmp == result.likes ? (
+                          <>
+                            <div
+                              onClick={() => {
+                                handleClick(result.shop_url);
+                              }}
+                              className="card winCard"
+                              key={index}
+                            >
+                              <img src={result.img} alt="img" />
+                              <span>
+                                {Math.round(
+                                  (result.likes / items.total_likes +
+                                    Number.EPSILON) *
+                                    100
+                                )}
+                                %
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div
+                              onClick={() => {
+                                handleClick(result.shop_url);
+                              }}
+                              className="card"
+                              key={index}
+                            >
+                              <img src={result.img} alt="img" />
+                              <span>
+                                {Math.round(
+                                  (result.likes / items.total_likes +
+                                    Number.EPSILON) *
+                                    100
+                                )}
+                                %
+                              </span>
+                            </div>
+                          </>
+                        )
+                      ))
+                  }
                 </div>
               </div>
-              <div className="cards">
-                {
-                  ((tmp = mostLikes[index]),
-                  items.products
-                    .sort(function (a, b) {
-                      return b.likes - a.likes;
-                    })
-                    .map((result, index) =>
-                      tmp == result.likes ? (
-                        <>
-                          <div
-                            onClick={() => {
-                              handleClick(result.shop_url);
-                            }}
-                            className="card winCard"
-                            key={index}
-                          >
-                            <img src={result.img} alt="img" />
-                            <span>
-                              {Math.round(
-                                (result.likes / items.total_likes +
-                                  Number.EPSILON) *
-                                  100
-                              )}
-                              %
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div
-                            onClick={() => {
-                              handleClick(result.shop_url);
-                            }}
-                            className="card"
-                            key={index}
-                          >
-                            <img src={result.img} alt="img" />
-                            <span>
-                              {Math.round(
-                                (result.likes / items.total_likes +
-                                  Number.EPSILON) *
-                                  100
-                              )}
-                              %
-                            </span>
-                          </div>
-                        </>
-                      )
-                    ))
-                }
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

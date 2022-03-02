@@ -2,9 +2,36 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: black;
+  background-color: rgb(37, 37, 37);
   height: 100vh;
   overflow: auto;
+}
+.resultPage::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+  /* display: none; */
+}
+
+.resultPage::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.resultPage:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.resultPage:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
 }
 .votes__container {
   background-color: black;
