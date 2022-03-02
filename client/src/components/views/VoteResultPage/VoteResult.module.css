@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(37, 37, 37);
+  background-color: rgb(0, 0, 0);
   height: 100vh;
   overflow: auto;
 }
@@ -34,7 +34,7 @@
   border-radius: 10px;
 }
 .votes__container {
-  background-color: black;
+  /* background-color: black; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,17 +47,20 @@
   display: flex;
   width: 95%;
   height: 33em;
+  border: 3px solid rgb(136, 136, 136);
+  border-radius: 10px;
   align-items: center;
   margin-bottom: 1.2em;
   flex-direction: column;
   padding: 0, 1em, 0, 1em;
   background-color: black;
-  border-bottom: 3px solid rgb(255, 255, 255);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 .vote__title {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   margin-bottom: 0.5em;
   font-weight: 600;
@@ -70,9 +73,10 @@
   flex-direction: column;
   /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   border-radius: 10px;
-  background-color: #fa9231;
+  background-color: black;
   padding: 0.5em 1em 0.5em 1em;
   color: white;
+  flex: 1;
 }
 .message {
   display: flex;
@@ -81,6 +85,7 @@
   flex-direction: column;
   border-radius: 10px;
   padding: 0.5em 1em 0.5em 1em;
+  flex: 6;
 }
 .message span {
   font-size: 1.3em;
@@ -97,11 +102,13 @@
   flex-direction: column;
   /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   border-radius: 10px;
-  background-color: rgb(255, 144, 52);
+  background-color: black;
   padding: 0.5em 1em 0.5em 1em;
   cursor: pointer;
   color: white;
   margin-right: 1em;
+  width: 6em;
+  flex: 1;
 }
 .cards {
   display: flex;
@@ -130,4 +137,11 @@
 .card span {
   font-size: 2em;
   font-weight: 600;
+}
+
+.i__close {
+  font-size: 3em;
+}
+.vote__number {
+  font-size: 2em;
 }

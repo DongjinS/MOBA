@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import Header from '../../header/Header';
 import styles from './VoteResult.module.css';
 import './VoteResult.css';
+import { RiCloseLine } from 'react-icons/ri';
 let tmp;
 let mostLikes = [];
 const VoteResult = () => {
@@ -65,20 +66,22 @@ const VoteResult = () => {
               <div className={styles.vote__container} key={index}>
                 <div className={styles.vote__title}>
                   <div className={styles.voteNum}>
-                    <span>vote {voteResultList.length - index}</span>
+                    <span className={styles.vote__number}>
+                      vote {voteResultList.length - index}
+                    </span>
                   </div>
                   <div className={styles.message}>
                     <span>{items.room_message}</span>
                     <span>총 투표 수: {items.total_likes}</span>
                   </div>
 
-                  <div
-                    onClick={() => {
-                      handleDelete(items._id);
-                    }}
-                    className={styles.close}
-                  >
-                    삭제
+                  <div className={styles.close}>
+                    <RiCloseLine
+                      onClick={() => {
+                        handleDelete(items._id);
+                      }}
+                      className={styles.i__close}
+                    />
                   </div>
                 </div>
                 <div className="cards">

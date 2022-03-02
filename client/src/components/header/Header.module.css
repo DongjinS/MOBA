@@ -22,7 +22,8 @@
 }
 .title:hover {
   text-decoration: none;
-  color: #f37423;
+  transition: 0.3s ease-in-out;
+  color: white;
   cursor: pointer;
 }
 .buttons {
