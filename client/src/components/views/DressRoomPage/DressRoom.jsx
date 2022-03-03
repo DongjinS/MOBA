@@ -280,6 +280,17 @@ const DressRoom = (props) => {
             // 상대 없을 때 send 시 에러
           }
         });
+        if (opt.deselected) {
+          opt.deselected.forEach((obj) => {
+            try {
+              itemChannel.current.send(
+                JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' })
+              );
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
+          });
+        }
       });
 
       canvas.on('before:path:created', (options) => {
