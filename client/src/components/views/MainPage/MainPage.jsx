@@ -1,13 +1,13 @@
-import React, { useState, Component } from "react";
-import { v1 as uuid } from "uuid";
-import styles from "./MainPage.module.css";
-import Auth from "../../../hoc/auth";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Header from "../../header/Header";
-import Cookies from "universal-cookie";
-import Modal from "../../Modal/Modal";
-import SimpleSlider from "../../SimpleSlider/SimpleSlider";
+import React, { useState, Component } from 'react';
+import { v1 as uuid } from 'uuid';
+import styles from './MainPage.module.css';
+import Auth from '../../../hoc/auth';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../header/Header';
+import Cookies from 'universal-cookie';
+import Modal from '../../Modal/Modal';
+import SimpleSlider from '../../SimpleSlider/SimpleSlider';
 // import Slider from "react-slick";
 
 const MainPage = (props) => {
@@ -18,7 +18,7 @@ const MainPage = (props) => {
   // getUserInfo();
   //장바구니
   const openModal = () => {
-    const token = getCookie("x_auth");
+    const token = getCookie('x_auth');
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
@@ -57,8 +57,8 @@ const MainPage = (props) => {
     const userWidth = window.screen.width * 0.15;
 
     window.open(
-      "./chooseshop",
-      "shops",
+      './chooseshop',
+      'shops',
       `width=${shopWidth}, left=${userWidth}, top=0, height=10000, scrollbars=yes, resizable, status=yes, menubar=yes, titlebar=yes`
     );
 
@@ -66,22 +66,22 @@ const MainPage = (props) => {
       `/room/${id}`,
       `videochat`,
       `width=${userWidth}, top=0, left=0, height=10000, scrollbars=yes, resizable=no`,
-      "target"
+      'target'
     );
     // props.history.push(`/room/${id}`);
   }
   const navigate = useNavigate();
   const logout = () => {
-    axios.get("/api/users/logout").then((response) => {
+    axios.get('/api/users/logout').then((response) => {
       if (response.data.success) {
-        navigate("/");
+        navigate('/');
       }
-      navigate("/");
+      navigate('/');
     });
   };
 
   const deleteAPIWishlistItem = (shop_url) => {
-    const token = getCookie("x_auth");
+    const token = getCookie('x_auth');
     console.log(token);
 
     axios
@@ -98,7 +98,7 @@ const MainPage = (props) => {
   };
 
   const deleteItem = (product) => {
-    console.log("create room delete : ", product);
+    console.log('create room delete : ', product);
     deleteAPIWishlistItem(product);
   };
 
@@ -116,22 +116,47 @@ const MainPage = (props) => {
     <>
       <Header />
       <div className={styles.mainPage}>
-        <div className={styles.title}>
-          <p>MOBA에 오신 것을 환영합니다</p>
+        <img src="./images/mainimg.jpg" className={styles.img}></img>
+        <div className={styles.titles}>
+          <div className={styles.title}>
+            <p
+              onClick={() => {
+                HandleDressRoomClick();
+              }}
+            >
+              코디하기
+            </p>
+            <p
+              onClick={() => {
+                openModal();
+              }}
+            >
+              장바구니 + 투표
+            </p>
+            <p
+              onClick={() => {
+                voteResult();
+              }}
+            >
+              투표결과
+            </p>
+            <p
+              onClick={() => {
+                create();
+              }}
+            >
+              쇼핑시작
+            </p>
+          </div>
+          <div className={styles.subtitle}>{/* <p>어쩌구저쩌구..</p> */}</div>
+          <Modal
+            open={modalOpen}
+            close={closeModal}
+            header="나의 장바구니"
+            products={products}
+            deleteItem={deleteItem}
+          />
         </div>
-        <SimpleSlider
-          handleCody={HandleDressRoomClick}
-          handleCart={openModal}
-          handleVoteResult={voteResult}
-          handleShopping={create}
-        />
-        <Modal
-          open={modalOpen}
-          close={closeModal}
-          header="나의 장바구니"
-          products={products}
-          deleteItem={deleteItem}
-        />
       </div>
     </>
   );

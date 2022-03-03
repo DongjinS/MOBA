@@ -1,24 +1,75 @@
+@font-face {
+  font-family: 'InfinitySans-BoldA1';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-BoldA1.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.img {
+  width: 100%;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: auto;
+  position: fixed;
+  opacity: 0.17;
+}
 .mainPage {
-  background-color: black;
-  /* color: white; */
-  /* background-color: white; */
+  background-color: #121212;
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
 }
-.title {
-  margin-top: 8em;
+.titles {
+  z-index: 2;
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+@keyframes scale {
+  100% {
+    transform: scale(1);
+  }
+}
+.title {
+  transform: scale(0.94);
+  animation: scale 0.5s forwards ease-in;
+  font-family: 'InfinitySans-BoldA1';
+  display: flex;
   flex-direction: column;
-  margin-bottom: 4em;
+  flex: 1;
 }
 .title p {
+  filter: blur(4px);
+  animation: fade-in 0.7s 0.2s forwards ease-in;
+  opacity: 1;
+  width: 95%;
+  margin: 0 auto;
+  color: white;
+  font-size: 70px;
+  cursor: pointer;
+}
+@keyframes fade-in {
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+.subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.subtitle p {
   color: white;
   font-size: 50px;
+  margin: 0;
 }
 .container {
   width: 100%;
