@@ -42,10 +42,10 @@ const VoteResult = () => {
         data: { id },
       })
       .then((response) => {
-        console.log(response.data);
+        setVoteResultList(voteResultList?.filter((items) => items._id !== id));
       });
 
-    window.location.reload();
+    // window.location.reload();
   }
   function handleClick(url) {
     window.open(url);
@@ -91,7 +91,7 @@ const VoteResult = () => {
                       .sort(function (a, b) {
                         return b.likes - a.likes;
                       })
-                      .map((result, index) =>
+                      ?.map((result, index) =>
                         tmp == result.likes ? (
                           <>
                             <div
