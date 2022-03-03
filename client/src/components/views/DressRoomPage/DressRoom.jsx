@@ -376,7 +376,7 @@ const DressRoom = (props) => {
         cornerSize: 12,
         transparentCorners: false,
       });
-      img.scale(0.5);
+      img.scale(0.4);
 
       console.log('new_img', img);
       const sendObj = {
