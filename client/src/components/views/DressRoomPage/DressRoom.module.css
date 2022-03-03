@@ -270,6 +270,19 @@
   border-radius: 5px;
 }
 
+.shopLink:link {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:visited {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:hover {
+  color: black;
+  text-decoration: none;
+}
+
 .productName {
   margin-top: 5px;
   font-size: 15px;
@@ -334,6 +347,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  box-shadow: 1px 1px 1px 1px #b0b0b0;
 }
 
 .toolbarBtn:hover {

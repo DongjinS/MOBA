@@ -763,7 +763,11 @@ const DressRoom = (props) => {
                               <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
                               <div>
                                 <span className={styles.shopName}>{item.shop_name}</span>
-                                <div className={styles.productName}>{item.product_name}</div>
+                                <div className={styles.productName}>
+                                  <a className={styles.shopLink} href={item.shop_url}>
+                                    {item.product_name}
+                                  </a>
+                                </div>
                               </div>
                               <div className={styles.price}>{item.price}원</div>
                             </div>
