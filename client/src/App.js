@@ -8,7 +8,8 @@ import {
 } from 'react-router-dom';
 
 import ChooseShop from '../src/components/views/ChooseShopPage/ChooseShop';
-import CreateRoom from '../src/components/views/CreateRoomPage/CreateRoom.jsx';
+// import CreateRoom from '../src/components/views/CreateRoomPage/CreateRoom.jsx';
+import MainPage from '../src/components/views/MainPage/MainPage.jsx';
 import LandingPage from './components/views/LandingPage/LandingPage';
 import LoginPage from './components/views/LoginPage/LoginPage';
 import RegisterPage from './components/views/RegisterPage/RegisterPage';
@@ -34,7 +35,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/createroom" exact element={<CreateRoom />} />
+          <Route path="/mainpage" exact element={<MainPage />} />
           <Route path="/chooseshop" element={<ChooseShop />} />
           <Route path="/room/:roomID" element={<Room />} />
           <Route path="/invited" element={<InvitedPage />} />

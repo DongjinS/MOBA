@@ -28,9 +28,9 @@ function LoginPage(props) {
 
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess && response.payload.room) {
-        navigate('/createroom');
+        navigate('/mainpage');
       } else if (response.payload.loginSuccess) {
-        navigate('/createroom');
+        navigate('/mainpage');
       } else {
         alert('아이디와 비밀번호를 확인해주세요.');
       }

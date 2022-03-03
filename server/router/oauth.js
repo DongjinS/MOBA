@@ -111,7 +111,7 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
 
   res
     .cookie('x_auth', token.access_token)
-    .redirect('http://localhost:3000/createroom')
+    .redirect('http://localhost:3000/mainpage')
 })
 
 module.exports = oauthRouter;

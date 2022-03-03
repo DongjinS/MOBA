@@ -21,7 +21,7 @@ const Header = (props) => {
   }, [token]);
   function mobaOnClickHandler() {
     if (token) {
-      navigate('/createroom');
+      navigate('/mainpage');
     } else {
       navigate('/');
     }
