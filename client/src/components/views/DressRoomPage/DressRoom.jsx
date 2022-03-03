@@ -26,6 +26,7 @@ import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { BiChevronLeft } from 'react-icons/bi';
+import { CgScreen } from 'react-icons/cg';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -203,7 +204,7 @@ const DressRoom = (props) => {
       .get(`/privatebasket/${token}`)
       .then((Response) => {
         console.log(Response);
-        setProducts(Response.data);
+        setProducts(Response.data.reverse());
         console.log('axios get products :', products);
         console.log('axios get Response :', Response.data);
 
@@ -398,6 +399,28 @@ const DressRoom = (props) => {
     canvas.discardActiveObject().renderAll();
   };
 
+  const shareKakao = () => {
+    window.Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '모바',
+        description: '친구랑 코디하기',
+        imageUrl: '#',
+        link: {
+          webUrl: window.location.href,
+        },
+      },
+      buttons: [
+        {
+          title: '웹으로 이동',
+          link: {
+            webUrl: window.location.href,
+          },
+        },
+      ],
+    });
+  };
+
   const copyLink = () => {
     let currentUrl = window.document.location.href; //복사 잘됨
     navigator.clipboard.writeText(currentUrl);
@@ -411,27 +434,6 @@ const DressRoom = (props) => {
       progress: undefined,
     });
 
-    const shareKakao = () => {
-      window.Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: '모바',
-          description: '친구랑 코디하기',
-          imageUrl: '#',
-          link: {
-            webUrl: window.location.href,
-          },
-        },
-        buttons: [
-          {
-            title: '웹으로 이동',
-            link: {
-              webUrl: window.location.href,
-            },
-          },
-        ],
-      });
-    };
     shareKakao();
   };
 
@@ -597,13 +599,18 @@ const DressRoom = (props) => {
   };
 
   const HandleSoundBtnClick = () => {
-    let partnerVolume = document.querySelector('#muteCtrl');
+    // let partnerVolume = document.querySelector('#muteCtrl');
+
+    console.log('partnerVideo : ', partnerVideo.current);
+
     if (isSoundOn) {
       setIsSoundOn(false);
-      partnerVolume.muted = true;
+      partnerVideo.current.muted = true;
+      // partnerVolume.muted = true;
     } else {
       setIsSoundOn(true);
-      partnerVolume.muted = false;
+      partnerVideo.current.muted = false;
+      // partnerVolume.muted = false;
     }
   };
 
@@ -667,6 +674,7 @@ const DressRoom = (props) => {
     if (isActive) {
       canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 430);
     } else {
+      // canvas.setWidth(initialWidth);
       canvas.setWidth(initialWidth);
     }
   };
@@ -688,13 +696,11 @@ const DressRoom = (props) => {
   /* ------ */
 
   function shareScreen() {
-    window.resizeTo((window.screen.availWidth / 7) * 3, window.screen.availHeight);
-
     navigator.mediaDevices
       .getDisplayMedia({ cursor: true })
       .then((stream) => {
         window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
-
+        console.log('sharescreen : ', stream.getTracks());
         const screenTrack = stream.getTracks()[0];
         //face를 screen으로 바꿔줌
         senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(screenTrack);
@@ -730,7 +736,7 @@ const DressRoom = (props) => {
               <div style={{ fontSize: '25px', margin: '10px' }}>ㅁㅁㅁ 님의 코디룸</div>
             </div>
             <button className={styles.copyBtn} onClick={copyLink}>
-              초대링크 복사하기
+              링크복사
             </button>
             {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
           </header>
@@ -747,22 +753,34 @@ const DressRoom = (props) => {
 
                 <div className={styles.sidebarLinks}>
                   <ul className={styles.productLists}>
-                    {products.map((item, index) => (
-                      <div className={styles.tooltipElement} key={index}>
-                        <div className={styles.productBox}>
-                          <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
-                          <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
-                          <div className={styles.hide + ' ' + styles.info}>
-                            <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
-                            <div>
-                              <span className={styles.shopName}>{item.shop_name}</span>
-                              <div className={styles.productName}>{item.product_name}</div>
+                    {products.length > 0 ? (
+                      products.map((item, index) => (
+                        <div className={styles.tooltipElement} key={index}>
+                          <div className={styles.productBox}>
+                            <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
+                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
+                            <div className={styles.hide + ' ' + styles.info}>
+                              <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
+                              <div>
+                                <span className={styles.shopName}>{item.shop_name}</span>
+                                <div className={styles.productName}>
+                                  <a className={styles.shopLink} href={item.shop_url}>
+                                    {item.product_name}
+                                  </a>
+                                </div>
+                              </div>
+                              <div className={styles.price}>{item.price}원</div>
                             </div>
-                            <div className={styles.price}>{item.price}원</div>
                           </div>
                         </div>
+                      ))
+                    ) : (
+                      <div className={styles.emptyBascket}>
+                        <img className={styles.emptyImg} src="/images/privateBascket2.png" alt="빈장바구니"></img>
+                        <div className={styles.emptyInfo}>장바구니에 </div>
+                        <div className={styles.emptyInfo}>상품이 없어요</div>
                       </div>
-                    ))}
+                    )}
                   </ul>
                 </div>
               </div>
@@ -802,12 +820,12 @@ const DressRoom = (props) => {
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
+                <video id="UserMuteCtrl" autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
-                  <button className={styles.buttons} onClick={shareScreen}>
-                    <i className="fa-brands fa-slideshare fa-xl"></i>
+                  <button className={styles.controlBtn} onClick={shareScreen}>
+                    <CgScreen />
                   </button>
                   <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
                     {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
@@ -820,7 +838,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video id="muteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
+              <video id="partnerMuteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
                 video 2
               </video>
             </div>
