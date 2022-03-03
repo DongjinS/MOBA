@@ -8,13 +8,7 @@ import ClothesLoading from '../../loading/ClothesLoading';
 // Fabric JS
 import { fabric } from 'fabric';
 import { v1 as uuid } from 'uuid';
-import {
-  modifyObj,
-  modifyMouse,
-  getPointer,
-  deleteMouse,
-  addImg,
-} from './ReceiveHandler';
+import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
 
 // Styles
 import styles from './DressRoom.module.css';
@@ -22,12 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Icons
-import {
-  BsCameraVideoFill,
-  BsCameraVideoOffFill,
-  BsPencilFill,
-  BsHandIndexThumb,
-} from 'react-icons/bs';
+import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 import { MdAddShoppingCart } from 'react-icons/md';
@@ -181,9 +170,7 @@ const DressRoom = (props) => {
         socketRef.current.on('other user', async (userID) => {
           callUser(userID);
 
-          mouseChannel.current = await peerRef.current.createDataChannel(
-            'mouse'
-          );
+          mouseChannel.current = await peerRef.current.createDataChannel('mouse');
           mouseChannel.current.addEventListener('message', (event) => {
             handleRecievedMouse(event.data);
           });
@@ -248,9 +235,7 @@ const DressRoom = (props) => {
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
             try {
-              itemChannel.current.send(
-                JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' })
-              );
+              itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' }));
             } catch (error) {
               // 상대 없을 때 send 시 에러
             }
@@ -261,9 +246,7 @@ const DressRoom = (props) => {
         console.log('selection:created', canvas.getActiveObjects(), opt);
         opt.selected.forEach((obj) => {
           try {
-            itemChannel.current.send(
-              JSON.stringify({ obj: obj, id: obj.id, order: 'selected' })
-            );
+            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'selected' }));
           } catch (error) {
             // 상대 없을 때 send 시 에러
           }
@@ -273,9 +256,7 @@ const DressRoom = (props) => {
         console.log('selection:updated', canvas.getActiveObjects(), opt);
         opt.selected.forEach((obj) => {
           try {
-            itemChannel.current.send(
-              JSON.stringify({ obj: obj, id: obj.id, order: 'selected' })
-            );
+            itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'selected' }));
           } catch (error) {
             // 상대 없을 때 send 시 에러
           }
@@ -283,9 +264,7 @@ const DressRoom = (props) => {
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
             try {
-              itemChannel.current.send(
-                JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' })
-              );
+              itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'deselected' }));
             } catch (error) {
               // 상대 없을 때 send 시 에러
             }
@@ -397,6 +376,7 @@ const DressRoom = (props) => {
         cornerSize: 12,
         transparentCorners: false,
       });
+      img.scale(0.5);
 
       console.log('new_img', img);
       const sendObj = {
@@ -413,7 +393,7 @@ const DressRoom = (props) => {
         console.log(error);
       }
 
-      img.scale(0.75);
+      // img.scale(0.5);
       canvi.add(img);
       canvi.renderAll();
     });
@@ -423,9 +403,7 @@ const DressRoom = (props) => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        itemChannel.current.send(
-          JSON.stringify({ obj: obj, id: obj.id, order: 'delete' })
-        );
+        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
@@ -476,13 +454,7 @@ const DressRoom = (props) => {
   const callUser = (userID) => {
     peerRef.current = createPeer(userID);
     //senders에 넣어준다 - 중요!
-    userStream.current
-      .getTracks()
-      .forEach((track) =>
-        senders.current.push(
-          peerRef.current.addTrack(track, userStream.current)
-        )
-      );
+    userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
   };
 
   const createPeer = (userID) => {
@@ -580,13 +552,7 @@ const DressRoom = (props) => {
     await peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current
-          .getTracks()
-          .forEach((track) =>
-            senders.current.push(
-              peerRef.current.addTrack(track, userStream.current)
-            )
-          );
+        userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
       })
       .then(() => {
         return peerRef.current.createAnswer();
@@ -687,9 +653,7 @@ const DressRoom = (props) => {
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
-        setProducts(
-          products?.filter((product) => product.shop_url !== shop_url)
-        );
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
         console.log(error.response);
@@ -721,9 +685,7 @@ const DressRoom = (props) => {
     setIsActive(!isActive);
 
     if (isActive) {
-      canvas.setWidth(
-        document.body.offsetWidth - videoContainerRef.current.offsetWidth - 430
-      );
+      canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 430);
     } else {
       // canvas.setWidth(initialWidth);
       canvas.setWidth(initialWidth);
@@ -750,28 +712,18 @@ const DressRoom = (props) => {
     navigator.mediaDevices
       .getDisplayMedia({ cursor: true })
       .then((stream) => {
-        window.resizeTo(
-          window.screen.availWidth * 0.15,
-          window.screen.availHeight
-        );
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
         console.log('sharescreen : ', stream.getTracks());
         const screenTrack = stream.getTracks()[0];
         //face를 screen으로 바꿔줌
-        senders.current
-          .find((sender) => sender.track.kind === 'video')
-          .replaceTrack(screenTrack);
+        senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(screenTrack);
         //크롬에서 사용자가 공유중지를 누르면, screen을 face로 다시 바꿔줌
         screenTrack.onended = function () {
-          senders.current
-            .find((sender) => sender.track.kind === 'video')
-            .replaceTrack(userStream.current.getTracks()[1]);
+          senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(userStream.current.getTracks()[1]);
         };
       })
       .catch(() => {
-        window.resizeTo(
-          window.screen.availWidth * 0.15,
-          window.screen.availHeight
-        );
+        window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
       });
   }
 
@@ -801,9 +753,7 @@ const DressRoom = (props) => {
               </button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ fontSize: '25px', margin: '10px' }}>
-                {userId} 님의 코디룸
-              </div>
+              <div style={{ fontSize: '25px', margin: '10px' }}>{userId} 님의 코디룸</div>
             </div>
             <button className={styles.copyBtn} onClick={copyLink}>
               링크복사
@@ -818,11 +768,7 @@ const DressRoom = (props) => {
               alignItems: 'stretch',
             }}
           >
-            <div
-              className={
-                isActive ? styles.shrink + ' ' + styles.body : styles.body
-              }
-            >
+            <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
                 <div className={styles.sidebarTop}>
                   {/* <div className={styles.shrinkBtn} ref={shrinkBtnRef} onClick={handleShrinkBtn}> */}
@@ -837,35 +783,14 @@ const DressRoom = (props) => {
                       products.map((item, index) => (
                         <div className={styles.tooltipElement} key={index}>
                           <div className={styles.productBox}>
-                            <img
-                              onClick={(e) => HandleAddImgBtn(e, item, canvas)}
-                              className={styles.newProductImg}
-                              src={item.img}
-                              alt="상품 이미지"
-                            />
-                            <AiFillPlusCircle
-                              onClick={(e) => HandleAddImgBtn(e, item, canvas)}
-                              className={styles.addProductIcon}
-                              color="orange"
-                              size="50"
-                            />
+                            <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
+                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
                             <div className={styles.hide + ' ' + styles.info}>
-                              <ImCross
-                                onClick={(e) =>
-                                  HandleDeleteProductBtn(item.shop_url)
-                                }
-                                className={styles.removeProductIcon}
-                              />
+                              <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
                               <div>
-                                <span className={styles.shopName}>
-                                  {item.shop_name}
-                                </span>
+                                <span className={styles.shopName}>{item.shop_name}</span>
                                 <div className={styles.productName}>
-                                  <a
-                                    className={styles.shopLink}
-                                    href={item.shop_url}
-                                    target="_blank"
-                                  >
+                                  <a className={styles.shopLink} href={item.shop_url} target="_blank">
                                     {item.product_name}
                                   </a>
                                 </div>
@@ -877,11 +802,7 @@ const DressRoom = (props) => {
                       ))
                     ) : (
                       <div className={styles.emptyBascket}>
-                        <img
-                          className={styles.emptyImg}
-                          src="/images/privateBascket2.png"
-                          alt="빈장바구니"
-                        ></img>
+                        <img className={styles.emptyImg} src="/images/privateBascket2.png" alt="빈장바구니"></img>
                         <div className={styles.emptyInfo}>장바구니에 </div>
                         <div className={styles.emptyInfo}>상품이 없어요</div>
                       </div>
@@ -892,18 +813,10 @@ const DressRoom = (props) => {
 
               <div ref={canvasRef} className={styles.canvasContainer}>
                 <div className={styles.toolbar}>
-                  <button
-                    type="button"
-                    className={styles.toolbarBtn}
-                    name="delete"
-                    onClick={HandleDeleteCanvasBtn}
-                  >
+                  <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
                     <BsTrash size="30" />
                   </button>
-                  <button
-                    className={styles.toolbarBtn}
-                    onClick={HandleAddtoMyCartBtn}
-                  >
+                  <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                     <MdAddShoppingCart size="30" />
                   </button>
                   <button className={styles.toolbarBtn} onClick={DrawingFalse}>
@@ -933,51 +846,25 @@ const DressRoom = (props) => {
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video
-                  id="UserMuteCtrl"
-                  autoPlay
-                  ref={userVideo}
-                  className={styles.video}
-                  muted="muted"
-                  poster="/images/user1.png"
-                >
+                <video id="UserMuteCtrl" autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
                   video 1
                 </video>
                 <div className={styles.control_box1}>
                   <button className={styles.controlBtn} onClick={shareScreen}>
                     <CgScreen />
                   </button>
-                  <button
-                    className={(styles.cameraBtn, styles.controlBtn)}
-                    onClick={HandleCameraBtnClick}
-                  >
-                    {isCameraOn ? (
-                      <BsCameraVideoFill />
-                    ) : (
-                      <BsCameraVideoOffFill />
-                    )}
+                  <button className={(styles.cameraBtn, styles.controlBtn)} onClick={HandleCameraBtnClick}>
+                    {isCameraOn ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
                   </button>
-                  <button
-                    className={(styles.micBtn, styles.controlBtn)}
-                    onClick={HandleMicBtnClick}
-                  >
+                  <button className={(styles.micBtn, styles.controlBtn)} onClick={HandleMicBtnClick}>
                     {isMicOn ? <BsFillMicFill /> : <BsFillMicMuteFill />}
                   </button>
-                  <button
-                    className={(styles.muteBtn, styles.controlBtn)}
-                    onClick={HandleSoundBtnClick}
-                  >
+                  <button className={(styles.muteBtn, styles.controlBtn)} onClick={HandleSoundBtnClick}>
                     {isSoundOn ? <GoUnmute /> : <GoMute />}
                   </button>
                 </div>
               </div>
-              <video
-                id="partnerMuteCtrl"
-                autoPlay
-                ref={partnerVideo}
-                className={styles.video}
-                poster="/images/user1.png"
-              >
+              <video id="partnerMuteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
                 video 2
               </video>
             </div>
