@@ -51,19 +51,12 @@ const PrivateBasket = (props) => {
             <div className={styles.experienceList}>
               {products.map((item, index) => (
                 <div className={styles.experienceItem}>
-                  <a className={styles.itemLink}>
-                    <div className={styles.itemFrame}>
-                      <div className={styles.itemDimd}></div>
-                      <div className={styles.itemVisual}>
-                        <div className={styles.imageBox}>
-                          <img />
-                        </div>
-                        <div className={styles.hoverBox}>
-                          <img className={styles.itemImg} src={item.removedBgImg} />
-                        </div>
-                      </div>
-                    </div>
-                  </a>
+                  <img className={styles.itemImg} src={item.removedBgImg} />
+                  <div className={styles.productInfo} id="explain">
+                    <div>{item.shop_name}</div>
+                    <div>{item.product_name}</div>
+                    <div>{item.price}</div>
+                  </div>
                 </div>
               ))}
             </div>
