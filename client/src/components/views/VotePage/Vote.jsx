@@ -62,8 +62,6 @@ const Vote = () => {
                 className={styles.voteContainer}
                 onClick={() => {
                   setChooseOne(items.shop_url);
-                  // console.log(items.shop_url, '현재 url값');
-                  // console.log(chooseOne, '선택된 url값');
                 }}
               >
                 <img className="voteContainer" src={items.img} alt="img" />

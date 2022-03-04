@@ -5,11 +5,13 @@ import NormalHeader from '../../NormalHeader/NormalHeader';
 import styles from './VoteResult.module.css';
 import './VoteResult.css';
 import { RiCloseLine } from 'react-icons/ri';
+import Accordion from '../../Accordion/Accordion';
 let tmp;
 let mostLikes = [];
 const VoteResult = () => {
   const [voteResultList, setVoteResultList] = useState([]);
   const [isReady, setIsReady] = useState(true);
+  console.log(voteResultList, 'voteResultList');
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
@@ -61,84 +63,28 @@ const VoteResult = () => {
         {isReady ? (
           <h1>준비안됨</h1>
         ) : (
-          <div className={styles.votes__container}>
-            {voteResultList.map((items, index) => (
-              <div className={styles.vote__container} key={index}>
-                <div className={styles.vote__title}>
-                  <div className={styles.voteNum}>
-                    <span className={styles.vote__number}>
-                      vote {voteResultList.length - index}
-                    </span>
-                  </div>
-                  <div className={styles.message}>
-                    <span>{items.room_message}</span>
-                    <span>총 투표 수: {items.total_likes}</span>
-                  </div>
-
-                  <div className={styles.close}>
-                    <RiCloseLine
-                      onClick={() => {
-                        handleDelete(items._id);
-                      }}
-                      className={styles.i__close}
-                    />
-                  </div>
-                </div>
-                <div className="cards">
-                  {
-                    ((tmp = mostLikes[index]),
-                    items.products
-                      .sort(function (a, b) {
-                        return b.likes - a.likes;
-                      })
-                      ?.map((result, index) =>
-                        tmp == result.likes ? (
-                          <>
-                            <div
-                              onClick={() => {
-                                handleClick(result.shop_url);
-                              }}
-                              className="card winCard"
-                              key={index}
-                            >
-                              <img src={result.img} alt="img" />
-                              <span>
-                                {Math.round(
-                                  (result.likes / items.total_likes +
-                                    Number.EPSILON) *
-                                    100
-                                )}
-                                %
-                              </span>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div
-                              onClick={() => {
-                                handleClick(result.shop_url);
-                              }}
-                              className="card"
-                              key={index}
-                            >
-                              <img src={result.img} alt="img" />
-                              <span>
-                                {Math.round(
-                                  (result.likes / items.total_likes +
-                                    Number.EPSILON) *
-                                    100
-                                )}
-                                %
-                              </span>
-                            </div>
-                          </>
-                        )
-                      ))
-                  }
-                </div>
+          <>
+            <div className={styles.titles}>
+              <div className={styles.title}>
+                <p>투표</p>
+                <p>결과</p>
               </div>
-            ))}
-          </div>
+            </div>
+            <div className={styles.votes__container}>
+              {voteResultList.map((items, index) => (
+                <div className={styles.vote__container} key={index}>
+                  {console.log(items, 'items.products')}
+                  <Accordion
+                    voteNum={voteResultList.length - index}
+                    title={items.room_message}
+                    content={items}
+                    mostLikes={mostLikes}
+                    index={index}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </>

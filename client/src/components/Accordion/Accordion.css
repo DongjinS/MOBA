@@ -1,0 +1,86 @@
+.accordion-item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.accordion-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  border: 1px solid white;
+  color: white;
+  font-size: 25px;
+}
+.accordion-title span {
+  margin-left: 10px;
+}
+.i__active {
+  margin-right: 10px;
+}
+.accordion-content {
+  width: 100%;
+  z-index: 5;
+  background-color: rgb(255, 218, 169);
+}
+.card {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  z-index: 2;
+}
+.card:hover > .productInfo {
+  animation: 2s card forwards ease-in;
+}
+.card img {
+  width: 120px;
+  height: 120px;
+}
+.productInfo {
+  z-index: 3;
+  opacity: 0;
+  position: absolute;
+  height: 180px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+  color: black;
+}
+
+.product_shop {
+  text-overflow: ellipsis;
+  opacity: 1;
+  overflow: hidden;
+  text-align: right;
+  color: black;
+}
+
+.product_name {
+  text-overflow: ellipsis;
+  opacity: 1;
+  overflow: hidden;
+  text-align: right;
+  color: black;
+}
+
+.price {
+  text-overflow: ellipsis;
+  opacity: 1;
+  overflow: hidden;
+  text-align: right;
+  color: black;
+}
+@keyframes card {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 0.8;
+    transform: translateX(0%);
+  }
+}
