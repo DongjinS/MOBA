@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Auth from '../../../hoc/auth';
 import styles from './RegisterPage.module.css';
 import Header from '../../header/Header';
-import axios from 'axios';
+import { v1 as uuid } from 'uuid';
 
 function RegisterPage(props) {
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ function RegisterPage(props) {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
 
-    const target = '/s3Url/' + Username;
+    const target = '/s3Url/' + uuid();
     const S3url = await fetch(target).then((res) => res.json());
 
     await fetch(S3url.url, {
