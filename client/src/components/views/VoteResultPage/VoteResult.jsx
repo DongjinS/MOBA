@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import Header from '../../header/Header';
+import NormalHeader from '../../NormalHeader/NormalHeader';
 import styles from './VoteResult.module.css';
 import './VoteResult.css';
 import { RiCloseLine } from 'react-icons/ri';
@@ -56,7 +56,7 @@ const VoteResult = () => {
   };
   return (
     <>
-      <Header />
+      <NormalHeader />
       <div className={styles.resultPage}>
         {isReady ? (
           <h1>준비안됨</h1>
