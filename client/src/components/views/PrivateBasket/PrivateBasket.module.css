@@ -141,6 +141,22 @@
   flex-direction: column;
 }
 
+.voteInfo {
+  background-color: #f0f0f0;
+  color: black;
+  position: absolute;
+  opacity: 0.9;
+  top: 5px;
+  left: 5px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  /* visibility: hidden; */
+
+  display: flex;
+  flex-direction: column;
+}
+
 .shopName {
   background-color: black;
   color: white;
@@ -157,20 +173,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   /* white-space: nowrap; */
-}
-
-.dummy {
-  z-index: 100;
-  width: 300px;
-  border: 10px solid orange;
-}
-
-.parentDummy:hover > .dummy {
-  border: 5px solid blue;
-  width: 400px; /* 사진크기 조절 */
-  transform: scale(1.5); /* 가로2배 새로 1.5배 로 커짐 */
-  transition: transform.5s; /* 커지는 시간 */
-}
-
-.dummy :hover {
 }

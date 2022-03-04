@@ -60,22 +60,20 @@ const PrivateBasket = (props) => {
           <div className={styles.experienceGrid}>
             <div className={styles.experienceList}>
               {products.map((item, index) => (
-                <a href={item.shop_url} target="_blank">
+                <a href={item.shop_url} target="_blank" r>
                   <div className={styles.productContainer}>
                     <div className={styles.productImgContainer}>
                       <img className={styles.itemImg} src={item.removedBgImg} />
 
-                      <div className={styles.productInfo}>
+                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
                         <div style={{ margin: '25% 15%' }}>
                           <span className={styles.shopName}>{item.shop_name}</span>
                           <div className={styles.productName}>{item.product_name}</div>
 
                           {item.price === item.sale_price ? (
-                            <>
-                              <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '800' }}>
-                                {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-                              </div>
-                            </>
+                            <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '800' }}>
+                              {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+                            </div>
                           ) : (
                             <>
                               <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', color: 'grey', textDecoration: 'line-through' }}>
@@ -95,11 +93,7 @@ const PrivateBasket = (props) => {
             </div>
           </div>
 
-          <div className={styles.experienceLoading}>
-            <div className={styles.parentDummy}>
-              {/* <img className={styles.dummy} src={'https://pbs.twimg.com/media/D0AEcLJVYAErhXl?format=jpg&name=medium'} /> */}
-            </div>
-          </div>
+          <div className={styles.experienceLoading}></div>
         </div>
       </div>
     </div>
