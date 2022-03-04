@@ -104,7 +104,6 @@ const MainPage = (props) => {
 
   const HandleDressRoomClick = () => {
     const id = uuid();
-
     navigate(`/dressroom/${id}`);
   };
 
@@ -116,39 +115,47 @@ const MainPage = (props) => {
     <>
       <Header />
       <div className={styles.mainPage}>
-        <img src="./images/mainimg.jpg" className={styles.img}></img>
+        <img src="./images/mainpage.jpg" className={styles.img}></img>
         <div className={styles.titles}>
           <div className={styles.title}>
-            <p
-              onClick={() => {
-                HandleDressRoomClick();
-              }}
-            >
-              코디하기
-            </p>
-            <p
-              onClick={() => {
-                openModal();
-              }}
-            >
-              장바구니 + 투표
-            </p>
-            <p
-              onClick={() => {
-                voteResult();
-              }}
-            >
-              투표결과
-            </p>
-            <p
-              onClick={() => {
-                create();
-              }}
-            >
-              쇼핑시작
-            </p>
+            <div className={styles.main}>
+              <p
+                onClick={() => {
+                  HandleDressRoomClick();
+                }}
+              >
+                코디
+              </p>
+            </div>
+            <div className={styles.main}>
+              <p
+                onClick={() => {
+                  openModal();
+                }}
+              >
+                장바구니/투표
+              </p>
+            </div>
+            <div className={styles.main}>
+              <p
+                onClick={() => {
+                  voteResult();
+                }}
+              >
+                투표결과
+              </p>
+            </div>
+            <div className={styles.main}>
+              <p
+                onClick={() => {
+                  create();
+                }}
+              >
+                쇼핑시작
+              </p>
+            </div>
           </div>
-          <div className={styles.subtitle}>{/* <p>어쩌구저쩌구..</p> */}</div>
+          <div className={styles.subtitle}></div>
           <Modal
             open={modalOpen}
             close={closeModal}

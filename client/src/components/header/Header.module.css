@@ -1,15 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Palanquin+Dark:wght@500&display=swap');
 .header {
+  font-family: 'Palanquin Dark', sans-serif;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 70px;
   width: 100%;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.05);
   position: fixed;
   top: 0px;
   z-index: 21;
+  opacity: 0;
+  animation: header 0.7s forwards ease-in;
+  animation-delay: 1.5s;
+  transition: 0.5s ease-in-out;
 }
-
+.header:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+@keyframes header {
+  100% {
+    opacity: 1;
+  }
+}
 .title {
   all: unset;
 }
@@ -23,7 +36,6 @@
 .title:hover {
   text-decoration: none;
   transition: 0.3s ease-in-out;
-  color: white;
   cursor: pointer;
 }
 .buttons {
@@ -33,24 +45,16 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  /* margin-left: 83em; */
   transition: 0.3s ease-in-out;
-  height: 33px;
-  width: 150px;
-  border-radius: 10px;
-  background-color: black;
   color: #f37423;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 20px;
 }
-.buttons:hover {
-  padding: 0;
-  margin: 0;
-  transition: 0.3s ease-in-out;
-  color: white;
-  margin-right: 10px;
-}
-.buttons span {
-  font-size: 25px;
-  font-weight: 700;
+/* .logout {
+  stroke: red;
+  stroke-width: 5;
+} */
+.logoutImg {
+  color: #f37423;
+  font-weight: bold;
 }
