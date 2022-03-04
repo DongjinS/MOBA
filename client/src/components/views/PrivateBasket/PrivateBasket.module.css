@@ -92,6 +92,7 @@
 
 .productContainer {
   position: relative;
+  cursor: pointer;
 }
 
 .productImgContainer {
@@ -109,7 +110,7 @@
 }
 
 .productContainer :hover > .productInfo {
-  opacity: 0.9;
+  opacity: 0.85;
   background-color: #f0f0f0;
   /* background-color: #313131; */
   color: black;

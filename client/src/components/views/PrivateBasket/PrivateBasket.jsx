@@ -30,6 +30,12 @@ const PrivateBasket = (props) => {
 
   console.log('products: ', products);
 
+  const handleProductClick = (url) => {
+    if (!checked) {
+      window.open(url);
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -60,35 +66,40 @@ const PrivateBasket = (props) => {
           <div className={styles.experienceGrid}>
             <div className={styles.experienceList}>
               {products.map((item, index) => (
-                <a href={item.shop_url} target="_blank" r>
-                  <div className={styles.productContainer}>
-                    <div className={styles.productImgContainer}>
-                      <img className={styles.itemImg} src={item.removedBgImg} />
+                // <a href={item.shop_url} target="_blank">
+                <div
+                  className={styles.productContainer}
+                  onClick={() => {
+                    handleProductClick(item.shop_url);
+                  }}
+                >
+                  <div className={styles.productImgContainer}>
+                    <img className={styles.itemImg} src={item.removedBgImg} />
 
-                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
-                        <div style={{ margin: '25% 15%' }}>
-                          <span className={styles.shopName}>{item.shop_name}</span>
-                          <div className={styles.productName}>{item.product_name}</div>
+                    <div className={!checked ? styles.productInfo : styles.voteInfo}>
+                      <div style={{ margin: '25% 15%' }}>
+                        <span className={styles.shopName}>{item.shop_name}</span>
+                        <div className={styles.productName}>{item.product_name}</div>
 
-                          {item.price === item.sale_price ? (
-                            <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '800' }}>
+                        {item.price === item.sale_price ? (
+                          <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '800' }}>
+                            {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+                          </div>
+                        ) : (
+                          <>
+                            <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', color: 'grey', textDecoration: 'line-through' }}>
                               {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
                             </div>
-                          ) : (
-                            <>
-                              <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', color: 'grey', textDecoration: 'line-through' }}>
-                                {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-                              </div>
-                              <div style={{ fontSize: '20px', fontWeight: '800', color: '#a02226' }}>
-                                {item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-                              </div>
-                            </>
-                          )}
-                        </div>
+                            <div style={{ fontSize: '20px', fontWeight: '800', color: '#a02226' }}>
+                              {item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
-                </a>
+                </div>
+                // </a>
               ))}
             </div>
           </div>
