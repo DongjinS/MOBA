@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../../_actions/user_action';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../../../hoc/auth';
 import styles from './RegisterPage.module.css';
 import Header from '../../header/Header';
+import axios from 'axios';
 
 function RegisterPage(props) {
   const dispatch = useDispatch();
@@ -32,6 +33,38 @@ function RegisterPage(props) {
     setEmail(event.currentTarget.value);
   };
 
+  // 프로필 이미지 업로드 구현 영역
+  const [ImageUrl, setImageUrl] = useState(null);
+  const imgRef = useRef();
+
+  // [프로필 이미지를 업로드해주세요] 버튼 클릭 시 실행
+  const onClickFileBtn = (e) => {
+    imgRef.current.click();
+  };
+  const onChangeImage = async () => {
+    const reader = new FileReader();
+    const file = imgRef.current.files[0];
+
+    const target = '/s3Url/' + Username;
+    const S3url = await fetch(target).then((res) => res.json());
+
+    await fetch(S3url.url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: file,
+    });
+
+    const imageUrl = S3url.url?.split('?')[0];
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImageUrl(imageUrl);
+    };
+  };
+  // 프로필 이미지 업로드 구현 영역
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
 
@@ -44,6 +77,7 @@ function RegisterPage(props) {
       password: Password,
       name: Name,
       email: Email,
+      profileImage: ImageUrl,
     };
 
     dispatch(registerUser(body)).then((response) => {
@@ -65,7 +99,32 @@ function RegisterPage(props) {
             <div className={styles.loginText}>
               <span>회원가입</span>
             </div>
-            <form className={styles.loginForm} onSubmit={onSubmitHandler}>
+            <form
+              className={styles.loginForm}
+              encType="multipart/form-data"
+              onSubmit={onSubmitHandler}
+            >
+              {/* 프로필 이미지 업로드 : 시작 */}
+              <input
+                style={{ display: 'none' }}
+                type="file"
+                ref={imgRef}
+                onChange={onChangeImage}
+              />
+              <div
+                className={styles.inputs}
+                onClick={() => {
+                  onClickFileBtn();
+                }}
+              >
+                <img
+                  className={styles.uploadImage}
+                  src={ImageUrl ? ImageUrl : ''}
+                />
+                프로필 이미지를 업로드해주세요.
+              </div>
+              {/* 프로필 이미지 업로드 : 끝 */}
+
               <input
                 autoFocus
                 className={styles.inputs}
