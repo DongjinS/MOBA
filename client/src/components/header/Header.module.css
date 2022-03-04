@@ -4,7 +4,7 @@
   justify-content: space-between;
   height: 70px;
   width: 100%;
-  background-color: black;
+  background-color: white;
   position: fixed;
   top: 0px;
   z-index: 21;
@@ -38,7 +38,7 @@
   height: 33px;
   width: 150px;
   border-radius: 10px;
-  background-color: black;
+  background-color: white;
   color: #f37423;
   cursor: pointer;
   margin-right: 10px;

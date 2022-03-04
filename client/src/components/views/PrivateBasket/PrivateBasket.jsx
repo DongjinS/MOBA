@@ -37,12 +37,22 @@ const PrivateBasket = (props) => {
         <div className={styles.experienceContents}>
           <ul className={styles.experienceCategory}>
             <li className={styles.categoryName}>
-              <div className={styles.maskText}>
+              <div
+                className={checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
+                onClick={() => {
+                  setChecked(false);
+                }}
+              >
                 <span>장바구니</span>
               </div>
             </li>
             <li className={styles.categoryName}>
-              <div className={styles.maskText}>
+              <div
+                className={!checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
+                onClick={() => {
+                  setChecked(true);
+                }}
+              >
                 <span>투표</span>
               </div>
             </li>
