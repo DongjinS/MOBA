@@ -30,6 +30,8 @@ const PrivateBasket = (props) => {
 
   console.log('products: ', products);
 
+  const [voteProducts, setVoteProducts] = useState();
+
   const handleProductClick = (url) => {
     if (!checked) {
       window.open(url);
