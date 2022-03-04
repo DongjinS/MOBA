@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 
+
 userRouter.post('/register', (req, res) => {
   //회원 가입 할때 필요한 정보들을 client에서 가져오면 데이터 베이스에 넣어준다.
   const user = new User(req.body);

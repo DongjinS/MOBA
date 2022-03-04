@@ -16,6 +16,7 @@ const basketRouter = require("./router/privatebasket");
 const voteRouter = require("./router/vote");
 const voteResultRouter = require("./router/voteResult");
 
+
 const app = express();
 
 ///// 소셜 로그인 관련 /////
@@ -50,6 +51,7 @@ app.use("/privatebasket", basketRouter);
 app.use("/vote", voteRouter);
 //////////////////////////////
 app.use("/voteResult", voteResultRouter);
+
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
