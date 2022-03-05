@@ -68,33 +68,55 @@ const Collection = () => {
       <h1>콜렉션 페이지</h1>
       <div>
         <h1> 아래는 콜렉션 이미지 입니다. </h1>
-        <ul>
+        <div className={styles.collectionSets}>
           {collectionImg.map((items, index) => (
             <div>
-              <img
-                className={styles.collectionImg}
-                key={index}
-                src={items.top.removedBgImg}
-                alt="img"
-              ></img>
-              <img
-                className={styles.collectionImg}
-                key={index}
-                src={items.bottom.removedBgImg}
-                alt="img"
-              ></img>
-              <img
-                className={styles.collectionImg}
-                key={index}
-                src={items.shoes.removedBgImg}
-                alt="img"
-              ></img>
+              <div className={styles.collectionSet}>
+                <img
+                  className={styles.collectionImgTop}
+                  key={index}
+                  src={items.top.removedBgImg}
+                  alt="img"
+                ></img>
+                <img
+                  className={styles.collectionImgBottom}
+                  key={index}
+                  src={items.bottom.removedBgImg}
+                  alt="img"
+                ></img>
+                <img
+                  className={styles.collectionImgShoes}
+                  key={index}
+                  src={items.shoes.removedBgImg}
+                  alt="img"
+                ></img>
+              </div>
+              <div>
+                <img
+                  className={styles.collectionSmallImgTop}
+                  key={index}
+                  src={items.top.removedBgImg}
+                  alt="img"
+                ></img>
+                <img
+                  className={styles.collectionSmallImgBottom}
+                  key={index}
+                  src={items.bottom.removedBgImg}
+                  alt="img"
+                ></img>
+                <img
+                  className={styles.collectionSmallImgShoes}
+                  key={index}
+                  src={items.shoes.removedBgImg}
+                  alt="img"
+                ></img>
+              </div>
             </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      <section className={styles.sectionImg}>
+      {/* <section className={styles.sectionImg}>
         <article className={styles.articleImg}>
           <div className={styles.imgContainer}>
             <ul className={styles.imgUl}>
@@ -109,7 +131,7 @@ const Collection = () => {
             </ul>
           </div>
         </article>
-      </section>
+      </section> */}
     </>
   );
 };
