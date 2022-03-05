@@ -17,7 +17,6 @@ const Collection = () => {
     let productImg = [];
     await axios.get('/collection').then((response) => {
       const users = response.data;
-      console.log(users);
 
       for (let user of users) {
         for (let product of user.products) {
@@ -36,21 +35,50 @@ const Collection = () => {
       })
       .then((response) => {
         const collectionLists = response.data;
-        console.log(collectionLists);
 
-        // for (let user of users) {
-        //   for (let product of user.products) {
-        //     productImg.push(product.img);
-        //   }
-        // }
-        // setProductImg(productImg);
+        for (let collectionlist of collectionLists) {
+          console.log('------------------셋트 시작------------------');
+          let collectionSet = {
+            outer: '',
+            top: '',
+            bottom: '',
+            shoes: '',
+          };
+          for (let collection of collectionlist) {
+            if (collection.category === '아우터') {
+              collectionSet.outer = collection;
+            } else if (collection.category === '상의') {
+              collectionSet.top = collection;
+            } else if (collection.category === '하의') {
+              collectionSet.bottom = collection;
+            } else {
+              collectionSet.shoes = collection;
+            }
+          }
+          collectionImg.push(collectionSet);
+        }
+        console.log(collectionImg);
+        setCollectionImg(collectionImg);
       });
+    console.log(collectionImg);
   }, []);
 
   return (
     <>
       <h1>콜렉션 페이지</h1>
-      <div>여기는 콜렉션 이미지가 들어갑니다.</div>
+      <div>
+        <h1> 아래는 콜렉션 이미지 입니다. </h1>
+        <ul>
+          {collectionImg.map(
+            (item, index) => (
+              (<img src={item.top}></img>),
+              (<img src={item.bottom}></img>),
+              (<img src={item.shoes}></img>)
+            )
+          )}
+        </ul>
+      </div>
+
       <section>
         <article>
           <div>
