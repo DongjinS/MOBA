@@ -130,7 +130,7 @@ const MainPage = (props) => {
             <div className={styles.main}>
               <p
                 onClick={() => {
-                  openModal();
+                  navigate('/privateBasket');
                 }}
               >
                 장바구니/투표

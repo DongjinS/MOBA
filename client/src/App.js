@@ -22,7 +22,7 @@ import Vote from './components/views/VotePage/Vote';
 import VoteResult from './components/views/VoteResultPage/VoteResult';
 import { useEffect } from 'react';
 import SimpleSlider from './components/SimpleSlider/SimpleSlider';
-import Preview from './components/Preview/Preview';
+import PrivateBasket from './components/views/PrivateBasket/PrivateBasket';
 
 function App() {
   document.body.style.backgroundColor = 'white';
@@ -44,7 +44,8 @@ function App() {
           <Route path="/dressroom/:roomID" element={<DressRoom />} />
           <Route path="/vote/:roomID" element={<Vote />} />
           <Route path="/voteresult" element={<VoteResult />} />
-          <Route path="/Preview" element={<Preview />} />
+          <Route path="/SimpleSlider" element={<SimpleSlider />} />
+          <Route path="/privateBasket" element={<PrivateBasket />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>

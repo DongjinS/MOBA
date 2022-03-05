@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
+
 const Header = (props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState('');

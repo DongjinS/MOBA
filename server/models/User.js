@@ -31,6 +31,9 @@ const userSchema = mongoose.Schema({
   tokenExp: {
     type: Number,
   },
+  profileImage: {
+    type: String,
+  },
   products: [
     {
       product_name: String,

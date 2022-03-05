@@ -62,12 +62,7 @@ const CreateRoom = (props) => {
       `width=${shopWidth}, left=${userWidth}, top=0, height=10000, scrollbars=yes, resizable, status=yes, menubar=yes, titlebar=yes`
     );
 
-    window.open(
-      `/room/${id}`,
-      `videochat`,
-      `width=${userWidth}, top=0, left=0, height=10000, scrollbars=yes, resizable=no`,
-      'target'
-    );
+    window.open(`/room/${id}`, `videochat`, `width=${userWidth}, top=0, left=0, height=10000, scrollbars=yes, resizable=no`, 'target');
     // props.history.push(`/room/${id}`);
   }
   const navigate = useNavigate();
@@ -88,9 +83,7 @@ const CreateRoom = (props) => {
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
-        setProducts(
-          products?.filter((product) => product.shop_url !== shop_url)
-        );
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
         console.log(error.response);
@@ -108,9 +101,13 @@ const CreateRoom = (props) => {
     navigate(`/dressroom/${id}`);
   };
 
-  function voteResult() {
+  const voteResult = () => {
     navigate(`/voteresult`);
-  }
+  };
+
+  const handlePrivateBasket = () => {
+    navigate('/privateBasket');
+  };
 
   return (
     <>
@@ -124,14 +121,9 @@ const CreateRoom = (props) => {
           handleCart={openModal}
           handleVoteResult={voteResult}
           handleShopping={create}
+          handlePrivateBasket={handlePrivateBasket}
         />
-        <Modal
-          open={modalOpen}
-          close={closeModal}
-          header="나의 장바구니"
-          products={products}
-          deleteItem={deleteItem}
-        />
+        <Modal open={modalOpen} close={closeModal} header="나의 장바구니" products={products} deleteItem={deleteItem} />
       </div>
     </>
   );

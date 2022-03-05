@@ -75,6 +75,16 @@ function SimpleSlider(props) {
           <p>쇼핑시작</p>
         </div>
 
+        <div
+          id="fifth"
+          className={4 === imageIndex ? 'slide activeSlide' : 'slide'}
+          onClick={() => {
+            props.handlePrivateBasket();
+          }}
+        >
+          <p>스타일리쉬 장바구니</p>
+        </div>
+
         {/* {titles.map((title, idx) => (
           <div className={idx === imageIndex ? 'slide activeSlide' : 'slide'}>
             <span>{title}</span>
