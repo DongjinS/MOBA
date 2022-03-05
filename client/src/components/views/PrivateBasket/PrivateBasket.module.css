@@ -100,7 +100,7 @@
   margin: 5px;
   position: relative;
   padding: 5px;
-  width: 300px;
+  width: 290px;
   height: 323px;
   vertical-align: top;
   /* display: none; */
@@ -191,7 +191,7 @@
 }
 @keyframes slide {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
   to {
     transform: translateX(0%);

@@ -32,9 +32,12 @@ const PrivateBasket = (props) => {
 
   const [voteProducts, setVoteProducts] = useState();
 
-  const handleProductClick = (url) => {
+  const handleProductClick = (e, item) => {
     if (!checked) {
-      window.open(url);
+      window.open(item.shop_url);
+    } else {
+      alert(item.product_name);
+      // alert(e.target.classList);
     }
   };
 
@@ -71,8 +74,8 @@ const PrivateBasket = (props) => {
                 // <a href={item.shop_url} target="_blank">
                 <div
                   className={styles.productContainer}
-                  onClick={() => {
-                    handleProductClick(item.shop_url);
+                  onClick={(e) => {
+                    handleProductClick(e, item);
                   }}
                 >
                   <div className={styles.productImgContainer}>
