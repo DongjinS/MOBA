@@ -15,6 +15,8 @@ const oauthRouter = require("./router/oauth");
 const basketRouter = require("./router/privatebasket");
 const voteRouter = require("./router/vote");
 const voteResultRouter = require("./router/voteResult");
+// 컬렉션 관련 //
+const collectionRouter = require("./router/collection");
 
 const app = express();
 
@@ -50,6 +52,9 @@ app.use("/privatebasket", basketRouter);
 app.use("/vote", voteRouter);
 //////////////////////////////
 app.use("/voteResult", voteResultRouter);
+
+/// 콜렉션 ///
+app.use("/collection", collectionRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
