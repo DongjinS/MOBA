@@ -11,10 +11,11 @@
   align-items: center;
   width: 100%;
   height: 70px;
-  border: 1px solid white;
-  color: white;
+  background-color: white;
+  color: black;
   font-size: 25px;
   cursor: pointer;
+  border: 1px solid black;
 }
 .accordion-title span {
   margin-left: 10px;
@@ -22,16 +23,22 @@
 .i__active {
   margin-right: 10px;
 }
+.i__delete {
+  margin-right: 10px;
+}
 .accordion-content {
   position: relative;
   width: 100%;
   background-color: rgb(255, 218, 169);
-  padding: 30px 0;
+  background: linear-gradient(90deg, rgb(255, 236, 173), rgb(255, 173, 173));
+  padding: 50px 5px;
+  border: 1px solid black;
+  border-top: 0;
 }
 .card {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 270px;
+  height: 270px;
   background-color: white;
   display: flex;
   justify-content: center;
@@ -46,8 +53,8 @@
 }
 
 .card img {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
 }
 .productInfo {
   opacity: 0;
@@ -97,4 +104,29 @@
 }
 .voteNums {
   font-size: 30px;
+}
+.winCard > .voteRank {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  font-size: 40px;
+  text-decoration: underline;
+  text-underline-position: under;
+  text-decoration-color: #f37423;
+}
+.voteRank {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  font-size: 40px;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+.i__crown {
+  position: absolute;
+  top: -33px;
+  left: 13px;
+  font-size: 45px;
+  color: #f37423;
+  -webkit-text-stroke-color: black;
 }

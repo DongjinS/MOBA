@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import './Accordion.css';
 import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs';
-const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
+import { RiCloseLine } from 'react-icons/ri';
+// import { BiCrown } from 'react-icons/bi';
+// import { FaCrown } from 'react-icons/fa';
+import { RiVipCrownFill } from 'react-icons/ri';
+import { RiVipCrown2Fill } from 'react-icons/ri';
+
+const Accordion = ({ title, content, mostLikes, index, handleDelete }) => {
   const [isActive, setIsActive] = useState(false);
   let tmp;
   function handleClick(url) {
@@ -11,11 +17,17 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
     <div className="accordion-item">
       <div className="accordion-title" onClick={() => setIsActive(!isActive)}>
         <span>
-          vote{voteNum} {title}
+          <span className="i__active">
+            {isActive ? <BsCaretUpFill /> : <BsCaretDownFill />}
+          </span>
+          {title}
         </span>
-        <span className="i__active">
-          {isActive ? <BsCaretUpFill /> : <BsCaretDownFill />}
-        </span>
+        <RiCloseLine
+          onClick={() => {
+            handleDelete(content._id);
+          }}
+          className="i__delete"
+        />
       </div>
       {isActive && (
         <div className="accordion-content">
@@ -27,7 +39,7 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                   return b.likes - a.likes;
                 })
                 ?.map((result, index) =>
-                  tmp == result.likes ? (
+                  tmp !== 0 && tmp == result.likes ? (
                     <>
                       <div
                         onClick={() => {
@@ -36,9 +48,17 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                         className="card winCard"
                         key={index}
                       >
+                        <span>
+                          <RiVipCrown2Fill className="i__crown" />
+                        </span>
+                        <span className="voteRank">1등</span>
                         <img
                           className="imgCtrl"
-                          src={result.removedBgImg}
+                          src={
+                            result.removedBgImg !== undefined
+                              ? result.removedBgImg
+                              : result.img
+                          }
                           alt="img"
                         />
                         <div className="productInfo">
@@ -71,9 +91,14 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                         className="card"
                         key={index}
                       >
+                        <span className="voteRank">{index + 1}등</span>
                         <img
                           className="imgCtrl"
-                          src={result.removedBgImg}
+                          src={
+                            result.removedBgImg !== undefined
+                              ? result.removedBgImg
+                              : result.img
+                          }
                           alt="img"
                         />
                         <div className="productInfo">

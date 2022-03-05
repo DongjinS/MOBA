@@ -4,8 +4,8 @@ import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
 import styles from './VoteResult.module.css';
 import './VoteResult.css';
-import { RiCloseLine } from 'react-icons/ri';
 import Accordion from '../../Accordion/Accordion';
+import { MdHowToVote } from 'react-icons/md';
 let tmp;
 let mostLikes = [];
 const VoteResult = () => {
@@ -61,13 +61,12 @@ const VoteResult = () => {
       <NormalHeader />
       <div className={styles.resultPage}>
         {isReady ? (
-          <h1>준비안됨</h1>
+          <></>
         ) : (
           <>
             <div className={styles.titles}>
               <div className={styles.title}>
-                <p>투표</p>
-                <p>결과</p>
+                <p>투표결과</p>
               </div>
             </div>
             <div className={styles.votes__container}>
@@ -79,6 +78,7 @@ const VoteResult = () => {
                     content={items}
                     mostLikes={mostLikes}
                     index={index}
+                    handleDelete={handleDelete}
                   />
                 </div>
               ))}
