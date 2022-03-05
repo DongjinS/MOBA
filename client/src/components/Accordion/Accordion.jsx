@@ -13,6 +13,9 @@ const Accordion = ({ title, content, mostLikes, index, handleDelete }) => {
   function handleClick(url) {
     window.open(url);
   }
+  window.onload = () => {
+    document.querySelector('.accordion-title').click();
+  };
   return (
     <div className="accordion-item">
       <div className="accordion-title" onClick={() => setIsActive(!isActive)}>
