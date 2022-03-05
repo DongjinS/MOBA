@@ -30,7 +30,7 @@
   font-size: 100px;
   color: black;
   margin: 0;
-  cursor: pointer;
+  cursor: default;
   -webkit-text-stroke: calc(0.005em + 1px) rgb(0, 0, 0);
 }
 

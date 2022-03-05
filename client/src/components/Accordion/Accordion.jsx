@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Accordion.css';
 import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs';
 import { RiCloseLine } from 'react-icons/ri';
@@ -13,9 +13,9 @@ const Accordion = ({ title, content, mostLikes, index, handleDelete }) => {
   function handleClick(url) {
     window.open(url);
   }
-  window.onload = () => {
+  useEffect(() => {
     document.querySelector('.accordion-title').click();
-  };
+  }, []);
   return (
     <div className="accordion-item">
       <div className="accordion-title" onClick={() => setIsActive(!isActive)}>
