@@ -41,7 +41,7 @@
   background-color: transparent;
   color: #f37423;
   cursor: pointer;
-  margin-right: 10px;
+  /* margin-right: 5x; */
 }
 .buttons:hover {
   padding: 0;

@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { RiLogoutBoxRLine } from 'react-icons/ri';
+
 const Header = (props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState('');
@@ -44,7 +46,7 @@ const Header = (props) => {
       </button>
       {isToken ? (
         <button id="checkout" className={styles.buttons} onClick={logout}>
-          <span>로그아웃</span>
+          <RiLogoutBoxRLine size="40px" />
         </button>
       ) : (
         <></>

@@ -3,6 +3,11 @@ import styles from './PrivateBasket.module.css';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import Header from '../../header/Header';
+import { v1 as uuid } from 'uuid';
+
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { ImCross } from 'react-icons/im';
+import { VscTrash } from 'react-icons/vsc';
 
 const PrivateBasket = (props) => {
   const [products, setProducts] = useState([]);
@@ -28,17 +33,87 @@ const PrivateBasket = (props) => {
       .then(() => {});
   }, []);
 
-  console.log('products: ', products);
-
-  const [voteProducts, setVoteProducts] = useState();
+  const [voteList, setVoteList] = useState([]);
 
   const handleProductClick = (e, item) => {
+    // e.stopPropagation();
     if (!checked) {
       window.open(item.shop_url);
     } else {
-      alert(item.product_name);
-      // alert(e.target.classList);
+      if (voteList.includes(item)) {
+        e.target.classList.remove('clicked');
+        setVoteList(voteList.filter((voteItem) => voteItem !== item));
+      } else {
+        e.target.classList.add('clicked');
+        setVoteList([...voteList, item]);
+      }
     }
+    return false;
+  };
+
+  const [inputs, setInputs] = useState({
+    text: '',
+  });
+
+  const onChangeVoteMessage = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
+
+  const HandleSubmitVote = () => {
+    function getCookie(name) {
+      const cookies = new Cookies();
+      return cookies.get(name);
+    }
+    const token = getCookie('x_auth');
+
+    const id = uuid();
+
+    const shareKakao = () => {
+      window.Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '모바',
+          description: inputs.text,
+          imageUrl: '#',
+          link: {
+            webUrl: `http://localhost:3000/vote/${id}`,
+          },
+        },
+        buttons: [
+          {
+            title: '투표하기로 이동',
+            link: {
+              webUrl: `http://localhost:3000/vote/${id}`,
+            },
+          },
+        ],
+      });
+    };
+
+    const sendCheckedProduct = () => {
+      axios.post('/vote', {
+        token: token,
+        products: voteList,
+        room_info: id,
+        room_message: inputs.text,
+      });
+    };
+
+    sendCheckedProduct();
+    shareKakao();
+  };
+
+  const HandleDeleteProductBtn = (shop_url) => {
+    axios
+      .delete(`/privatebasket/product`, { data: { token, shop_url } })
+      .then(function (response) {
+        console.log(response);
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
+      })
+      .catch(function (error) {
+        console.log(error.response);
+      });
   };
 
   return (
@@ -67,44 +142,70 @@ const PrivateBasket = (props) => {
                 <span>투표</span>
               </div>
             </li>
+            {!checked ? (
+              <></>
+            ) : (
+              <div className={styles.voteContainer}>
+                <form style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onSubmit={HandleSubmitVote}>
+                  <textarea
+                    className={styles.voteText}
+                    name="text"
+                    type="text"
+                    onChange={onChangeVoteMessage}
+                    style={{ fontSize: '20px' }}
+                    placeholder="투표 요청시 친구들에게 전달할 내용을 입력해주세요."
+                    value={inputs.text}
+                  ></textarea>
+                  <button className={styles.voteBtn} type="submit">
+                    전송
+                  </button>
+                </form>
+              </div>
+            )}
           </ul>
+
           <div className={styles.experienceGrid}>
             <div className={styles.experienceList}>
               {products.map((item, index) => (
                 // <a href={item.shop_url} target="_blank">
-                <div
-                  className={styles.productContainer}
-                  onClick={(e) => {
-                    handleProductClick(e, item);
-                  }}
-                >
-                  <div className={styles.productImgContainer}>
-                    <img className={styles.itemImg} src={item.removedBgImg} />
+                <div style={{ position: 'relative' }}>
+                  <div
+                    onClick={() => {
+                      HandleDeleteProductBtn(item.shop_url);
+                    }}
+                    className={styles.deleteContainer}
+                  >
 
-                    <div className={!checked ? styles.productInfo : styles.voteInfo}>
-                      <div style={{ margin: '25% 15%' }}>
-                        <span className={styles.shopName}>{item.shop_name}</span>
-                        <div className={styles.productName}>{item.product_name}</div>
+                    <VscTrash className={styles.deleteBtn} size="30px" />
+                  </div>
+                  <div
+                    className={styles.productContainer}
+                    onClick={(e) => {
+                      handleProductClick(e, item);
+                    }}
+                  >
+                    <div className={styles.productImgContainer}>
+                      <img className={styles.itemImg} src={item.removedBgImg} />
+                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
+                        {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
+                        <div className={styles.infoContainer}>
+                          {/* <ImCross size="20px" style={{ position: 'absolute', top: '20px', right: '20px' }} /> */}
+                          <span className={styles.shopName}>{item.shop_name}</span>
+                          <div className={styles.productName}>{item.product_name}</div>
 
-                        {item.price === item.sale_price ? (
-                          <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '800' }}>
-                            {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-                          </div>
-                        ) : (
-                          <>
-                            <div style={{ marginTop: '40px', fontSize: '20px', fontWeight: '600', color: 'grey', textDecoration: 'line-through' }}>
-                              {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+                          {item.price === item.sale_price ? (
+                            <div className={styles.originalPrice}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
+                          ) : (
+                            <div>
+                              <div className={styles.price}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
+                              <div className={styles.salePrice}>{item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
                             </div>
-                            <div style={{ fontSize: '20px', fontWeight: '800', color: '#a02226' }}>
-                              {item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-                            </div>
-                          </>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                // </a>
               ))}
             </div>
           </div>
