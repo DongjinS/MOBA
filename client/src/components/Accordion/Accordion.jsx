@@ -41,6 +41,15 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                           src={result.removedBgImg}
                           alt="img"
                         />
+
+                        <span>
+                          {Math.round(
+                            (result.likes / content.total_likes +
+                              Number.EPSILON) *
+                              100
+                          )}
+                          %
+                        </span>
                         <div className="productInfo">
                           <span className="product_shop">
                             {result.shop_name}
@@ -50,14 +59,6 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                           </span>
                           <span className="price">{result.price}원</span>
                         </div>
-                        <span>
-                          {Math.round(
-                            (result.likes / content.total_likes +
-                              Number.EPSILON) *
-                              100
-                          )}
-                          %
-                        </span>
                       </div>
                     </>
                   ) : (
@@ -69,7 +70,19 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                         className="card"
                         key={index}
                       >
-                        <img className="imgCtrl" src={result.img} alt="img" />
+                        <img
+                          className="imgCtrl"
+                          src={result.removedBgImg}
+                          alt="img"
+                        />
+                        <span>
+                          {Math.round(
+                            (result.likes / content.total_likes +
+                              Number.EPSILON) *
+                              100
+                          )}
+                          %
+                        </span>
                         <div className="productInfo">
                           <span className="product_shop">
                             {result.shop_name}
@@ -79,14 +92,6 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                           </span>
                           <span className="price">{result.price}원</span>
                         </div>
-                        <span>
-                          {Math.round(
-                            (result.likes / content.total_likes +
-                              Number.EPSILON) *
-                              100
-                          )}
-                          %
-                        </span>
                       </div>
                     </>
                   )

@@ -4,6 +4,7 @@ import { loginUser } from '../../../_actions/user_action';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../../../hoc/auth';
 import Header from '../../header/Header';
+import NormalHeader from '../../NormalHeader/NormalHeader';
 import styles from './LoginPage.module.css';
 
 function LoginPage(props) {
@@ -39,7 +40,7 @@ function LoginPage(props) {
 
   return (
     <>
-      <Header />
+      <NormalHeader />
       <div className={styles.container}>
         <div className={styles.loginBox}>
           <div className={styles.loginContents}>
