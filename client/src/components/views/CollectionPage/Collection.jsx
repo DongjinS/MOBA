@@ -69,20 +69,35 @@ const Collection = () => {
       <div>
         <h1> 아래는 콜렉션 이미지 입니다. </h1>
         <ul>
-          {collectionImg.map(
-            (item, index) => (
-              (<img src={item.top}></img>),
-              (<img src={item.bottom}></img>),
-              (<img src={item.shoes}></img>)
-            )
-          )}
+          {collectionImg.map((items, index) => (
+            <div>
+              <img
+                className={styles.collectionImg}
+                key={index}
+                src={items.top.removedBgImg}
+                alt="img"
+              ></img>
+              <img
+                className={styles.collectionImg}
+                key={index}
+                src={items.bottom.removedBgImg}
+                alt="img"
+              ></img>
+              <img
+                className={styles.collectionImg}
+                key={index}
+                src={items.shoes.removedBgImg}
+                alt="img"
+              ></img>
+            </div>
+          ))}
         </ul>
       </div>
 
-      <section>
-        <article>
-          <div>
-            <ul>
+      <section className={styles.sectionImg}>
+        <article className={styles.articleImg}>
+          <div className={styles.imgContainer}>
+            <ul className={styles.imgUl}>
               {productImg.map((item, index) => (
                 <img
                   key={index}
