@@ -148,6 +148,15 @@ const MainPage = (props) => {
             <div className={styles.main}>
               <p
                 onClick={() => {
+                  navigate('/collection');
+                }}
+              >
+                마이 컬렉션
+              </p>
+            </div>
+            <div className={styles.main}>
+              <p
+                onClick={() => {
                   create();
                 }}
               >
