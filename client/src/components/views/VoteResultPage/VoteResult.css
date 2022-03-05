@@ -81,28 +81,6 @@
   justify-content: space-evenly;
   align-items: center;
 }
-.card {
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 18em;
-  height: 23em;
-  flex-direction: column;
-  border-radius: 10px;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
-  border-radius: 10px;
-  opacity: 0.7;
-  cursor: pointer;
-}
-.card img {
-  width: 15em;
-  height: 20em;
-}
-.card span {
-  font-size: 2em;
-  font-weight: 600;
-}
 .winCard {
   opacity: 1;
 }

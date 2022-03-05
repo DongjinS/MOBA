@@ -41,23 +41,24 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                           src={result.removedBgImg}
                           alt="img"
                         />
-
-                        <span>
-                          {Math.round(
-                            (result.likes / content.total_likes +
-                              Number.EPSILON) *
-                              100
-                          )}
-                          %
-                        </span>
                         <div className="productInfo">
-                          <span className="product_shop">
+                          {/* <span className="product_shop">
                             {result.shop_name}
                           </span>
                           <span className="product_name">
                             {result.product_name}
                           </span>
-                          <span className="price">{result.price}원</span>
+                          <span className="price">{result.price}원</span> */}
+                          <span className="percent">
+                            {content.total_likes &&
+                              Math.round(
+                                (result.likes / content.total_likes +
+                                  Number.EPSILON) *
+                                  100
+                              )}
+                            %
+                          </span>
+                          <span className="voteNums">{result.likes}표</span>
                         </div>
                       </div>
                     </>
@@ -75,22 +76,24 @@ const Accordion = ({ title, content, mostLikes, index, voteNum }) => {
                           src={result.removedBgImg}
                           alt="img"
                         />
-                        <span>
-                          {Math.round(
-                            (result.likes / content.total_likes +
-                              Number.EPSILON) *
-                              100
-                          )}
-                          %
-                        </span>
                         <div className="productInfo">
-                          <span className="product_shop">
+                          {/* <span className="product_shop">
                             {result.shop_name}
                           </span>
                           <span className="product_name">
                             {result.product_name}
                           </span>
-                          <span className="price">{result.price}원</span>
+                          <span className="price">{result.price}원</span> */}
+                          <span className="percent">
+                            {content.total_likes &&
+                              Math.round(
+                                (result.likes / content.total_likes +
+                                  Number.EPSILON) *
+                                  100
+                              )}
+                            %
+                          </span>
+                          <span className="voteNums">{result.likes}표</span>
                         </div>
                       </div>
                     </>

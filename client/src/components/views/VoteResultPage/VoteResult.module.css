@@ -10,38 +10,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* flex-direction: column; */
   background-color: #121212;
   height: 100vh;
-  overflow: auto;
-}
-.resultPage::-webkit-scrollbar {
-  visibility: hidden;
-  cursor: pointer;
-  width: 8px;
-  height: 10px;
-  /* display: none; */
 }
 
-.resultPage::-webkit-scrollbar-thumb {
-  visibility: hidden;
-  cursor: pointer;
-  background-color: white; /*스크롤바의 색상*/
-  border: 1px solid white;
-}
-.resultPage:hover::-webkit-scrollbar {
-  visibility: visible;
-  cursor: pointer;
-  width: 8px;
-}
-
-.resultPage:hover::-webkit-scrollbar-thumb {
-  visibility: visible;
-  cursor: pointer;
-  background-color: #9d9d9d; /*스크롤바의 색상*/
-  border: 1px solid grey;
-  border-radius: 10px;
-}
 /*title*/
 .titles {
   display: flex;
@@ -49,7 +21,6 @@
   align-items: center;
   flex: 1;
   width: 100%;
-  /* align-items: flex-start; */
 }
 .title {
   width: max-content;
@@ -72,20 +43,47 @@
 }
 /*votes container*/
 .votes__container {
-  /* background-color: black; */
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   width: 60%;
+  height: 70%;
   padding: 1em;
-  margin-top: 5em;
   flex: 1.7;
+  overflow: auto;
+  /* border: 2px solid white; */
+  padding: 30px;
+}
+.votes__container::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.votes__container::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.votes__container:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.votes__container:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  border-radius: 10px;
 }
 .vote__container {
   display: flex;
   width: 95%;
-  /* border: 3px solid rgb(136, 136, 136); */
   border-radius: 10px;
   align-items: center;
   margin-bottom: 1.2em;
@@ -98,7 +96,6 @@
 .vote__title {
   display: flex;
   width: 100%;
-  /* justify-content: space-between; */
   align-items: center;
   margin-bottom: 0.5em;
   font-weight: 600;
@@ -109,7 +106,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   border-radius: 10px;
   background-color: black;
   padding: 0.5em 1em 0.5em 1em;
@@ -138,7 +134,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   border-radius: 10px;
   background-color: black;
   padding: 0.5em 1em 0.5em 1em;
@@ -163,7 +158,6 @@
   height: 23em;
   flex-direction: column;
   border-radius: 10px;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   border-radius: 10px;
   opacity: 0.7;
   cursor: pointer;

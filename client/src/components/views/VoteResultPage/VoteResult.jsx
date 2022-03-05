@@ -73,7 +73,6 @@ const VoteResult = () => {
             <div className={styles.votes__container}>
               {voteResultList.map((items, index) => (
                 <div className={styles.vote__container} key={index}>
-                  {console.log(items, 'items.products')}
                   <Accordion
                     voteNum={voteResultList.length - index}
                     title={items.room_message}
