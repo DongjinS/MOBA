@@ -170,7 +170,7 @@ const PrivateBasket = (props) => {
                     name="text"
                     type="text"
                     onChange={onChangeVoteMessage}
-                    style={{ fontSize: '20px' }}
+                    style={{ fontSize: '23px' }}
                     placeholder="투표 요청시 친구들에게 전달할 내용을 입력해주세요."
                     value={inputs.text}
                   ></textarea>

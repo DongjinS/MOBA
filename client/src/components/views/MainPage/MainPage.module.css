@@ -53,6 +53,7 @@
 .title {
   transform: scale(0.94);
   font-family: 'InfinitySans-BoldA1';
+	font-weight: 700;
   display: flex;
   flex-direction: column;
   flex: 1;
