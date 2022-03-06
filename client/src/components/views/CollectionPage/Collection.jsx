@@ -150,15 +150,7 @@ const Collection = () => {
             {othersProductImg &&
               othersProductImg.map((items, index) => (
                 <div key={index} className={styles.collection__card}>
-                  {/* <div className={styles.collection__del__box}>
-                    <VscClose
-                      className={styles.i__collection__del}
-                      size={25}
-                      onClick={() => {
-                        deleteCollection(index);
-                      }}
-                    />
-                  </div> */}
+                  <span className={styles.creator}>Created by {items.name}</span>
                   <div className={styles.collectionSet}>
                     <img className={styles.collectionImgTop} src={items.top.removedBgImg} alt='img' />
                     <div className={`${styles.con__tooltip} ${styles.bottom}`}>
