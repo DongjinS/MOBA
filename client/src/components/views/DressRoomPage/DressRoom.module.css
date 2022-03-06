@@ -212,7 +212,7 @@
   align-items: center;
   height: 156px;
   justify-content: center;
-
+  overflow: hidden;
   /* padding: 3px; */
 }
 
@@ -224,6 +224,7 @@
   z-index: 20;
   overflow: auto;
   opacity: 0.7;
+  overflow: hidden;
 }
 .productBox:hover > .addProductIcon {
   visibility: visible;

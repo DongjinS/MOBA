@@ -35,6 +35,7 @@ import { BsFillShareFill } from 'react-icons/bs';
 import { RiMenuLine } from 'react-icons/ri';
 import { BsFillCollectionFillMdFace } from 'react-icons/bs';
 import { MdFace } from 'react-icons/md';
+import Menu from '../../NormalHeader/Menu';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -854,9 +855,11 @@ const DressRoom = (props) => {
   /* ------ */
 
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isMenuOpen, setIsMemuOpen] = useState(false);
 
   return (
     <>
+      {isMenuOpen ? <Menu /> : <></>}
       {isLoading ? (
         <div className={styles.loadingContainer}>
           <ClothesLoading />
@@ -898,7 +901,9 @@ const DressRoom = (props) => {
                   }}
                 />
               </div>
-              <RiMenuLine size='40' style={{ color: '#4c4c4c' }} />
+              <div onClick={() => setIsMemuOpen(!isMenuOpen)}>
+                <RiMenuLine size='40' style={{ color: '#4c4c4c', cursor: 'pointer' }} />
+              </div>
             </div>
           </header>
           <div
