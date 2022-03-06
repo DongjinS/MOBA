@@ -30,13 +30,14 @@ const Collection = () => {
       }
 
       let othersProductImg = [];
-      let othersCollectionSet = {
-        outer: '',
-        top: '',
-        bottom: '',
-        shoes: '',
-      };
+
       for (let othersProducts of productImg) {
+        let othersCollectionSet = {
+          outer: '',
+          top: '',
+          bottom: '',
+          shoes: '',
+        };
         for (let othersProduct of othersProducts) {
           if (othersProduct.category === '아우터') {
             othersCollectionSet.outer = othersProduct;
@@ -49,8 +50,8 @@ const Collection = () => {
           }
         }
         othersProductImg.push(othersCollectionSet);
-        setProductImg(othersProductImg);
       }
+      setProductImg(othersProductImg);
       console.log(othersProductImg, '이거 사용하면 됨 혁주야');
     });
   }, []);
