@@ -124,7 +124,6 @@ const DressRoom = (props) => {
           canvas.getObjects().forEach((obj) => {
             if (obj.id === data.id) {
               obj.doubleSelected = true;
-              // obj.set('doubleSelected', true);
             }
           });
           console.log('double selected!!!', canvas.getObjects());
@@ -134,11 +133,6 @@ const DressRoom = (props) => {
             if (object.id === data.id) {
               object.doubleSelected = false;
               lock(object);
-              // object.hasControls = false;
-              // object.lockMovementX = true;
-              // object.lockMovementY = true;
-              // object.set('stroke', '#f00');
-              // object.set('strokeWidth', 10);
               canvas.renderAll();
             }
           });
@@ -147,11 +141,6 @@ const DressRoom = (props) => {
       case 'deselected':
         canvas.getObjects().forEach((object) => {
           if (object.id === data.id) {
-            // object.hasControls = true;
-            // object.lockMovementX = false;
-            // object.lockMovementY = false;
-            // object.set('stroke', '');
-            // object.set('strokeWidth', 1);
             object.doubleSelected = false;
             unlock(object);
             canvas.renderAll();
@@ -340,11 +329,6 @@ const DressRoom = (props) => {
           opt.deselected.forEach((obj) => {
             if (obj.doubleSelected) {
               obj.doubleSelected = false;
-              // obj.hasControls = false;
-              // obj.lockMovementX = true;
-              // obj.lockMovementY = true;
-              // obj.set('stroke', '#f00');
-              // obj.set('strokeWidth', 10);
               lock(obj);
               canvas.renderAll();
             }
@@ -726,6 +710,12 @@ const DressRoom = (props) => {
                   } else {
                     url = obj.product_info.img;
                   }
+                  const matrix = obj.calcTransformMatrix();
+                  const centerX = matrix[4];
+                  const centerY = matrix[5];
+                  const scale = obj.scaleX;
+                  const left = centerX - (obj.width * scale) / 2;
+                  const top = centerY - (obj.height * scale) / 2;
                   const sendObj = {
                     obj: obj,
                     order: 'add',
@@ -733,6 +723,8 @@ const DressRoom = (props) => {
                     url: url,
                     product_info: obj.product_info,
                     isProfileImg: false,
+                    left: left,
+                    top: top,
                   };
                   if (actives.includes(obj)) {
                     sendObj.selected = true;

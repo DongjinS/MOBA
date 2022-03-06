@@ -132,14 +132,14 @@
 }
 
 .sidebarTop {
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   z-index: 50;
   margin: 10px;
+  width: 50px;
   /* padding: 10px; */
-  /* width: 100px; */
   /* background-color: pink; */
 }
 
