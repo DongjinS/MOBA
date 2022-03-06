@@ -21,6 +21,7 @@ const Collection = () => {
       const users = response.data;
       for (let user of users) {
         for (let collection of user.collections) {
+          collection = Object.assign(collection, { name: user.name });
           productImg.push(collection);
         }
       }
