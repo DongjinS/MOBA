@@ -773,10 +773,12 @@ const DressRoom = (props) => {
   };
 
   const DrawingFalse = () => {
+    setIsDrawing(!isDrawing);
     canvas.isDrawingMode = false;
   };
 
   const HandleDrawing = () => {
+    setIsDrawing(!isDrawing);
     canvas.isDrawingMode = true;
     canvas.freeDrawingBrush.color = 'black';
     canvas.freeDrawingBrush.width = 5;
@@ -820,6 +822,8 @@ const DressRoom = (props) => {
 
   /* ------ */
 
+  const [isDrawing, setIsDrawing] = useState(false);
+
   return (
     <>
       {isLoading ? (
@@ -854,15 +858,14 @@ const DressRoom = (props) => {
                 marginRight: '20px',
               }}
             >
-              <button onClick={copyLink}>
+              <div onClick={copyLink} style={{ cursor: 'pointer' }}>
                 <BsFillShareFill
                   size="32"
                   style={{
-                    color: 'white',
                     marginRight: '20px',
                   }}
                 />
-              </button>
+              </div>
               <RiMenuLine size="40" style={{ color: 'white' }} />
             </div>
           </header>
@@ -923,12 +926,17 @@ const DressRoom = (props) => {
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
                     <MdAddShoppingCart size="30" />
                   </button>
-                  <button className={styles.toolbarBtn} onClick={DrawingFalse}>
-                    <BsHandIndexThumb size="30" />
-                  </button>
-                  <button className={styles.toolbarBtn} onClick={HandleDrawing}>
-                    <BsPencilFill size="30" />
-                  </button>
+
+                  {isDrawing ? (
+                    <button className={styles.toolbarBtn} onClick={DrawingFalse}>
+                      <BsHandIndexThumb size="30" />
+                    </button>
+                  ) : (
+                    <button className={styles.toolbarBtn} onClick={HandleDrawing}>
+                      <BsPencilFill size="30" />
+                    </button>
+                  )}
+
                   {/* 컬렉션 기능 추가 */}
                   <button className={styles.toolbarBtn} onClick={CollectionItems}>
                     <BsFillCollectionFill size="30" />
