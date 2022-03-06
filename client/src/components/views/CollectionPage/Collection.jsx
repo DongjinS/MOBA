@@ -14,9 +14,10 @@ const Collection = () => {
   }
   const token = getCookie('x_auth');
 
-  const [productImg, setProductImg] = useState([]);
+  const [othersProductImg, setProductImg] = useState([]);
   const [collectionImg, setCollectionImg] = useState([]);
   const [myCollection, setMyCollection] = useState(false);
+
   useEffect(async () => {
     let productImg = [];
     await axios.get('/collection').then((response) => {
@@ -27,9 +28,31 @@ const Collection = () => {
           productImg.push(collection);
         }
       }
-      setProductImg(productImg);
+
+      let othersProductImg = [];
+      let othersCollectionSet = {
+        outer: '',
+        top: '',
+        bottom: '',
+        shoes: '',
+      };
+      for (let othersProducts of productImg) {
+        for (let othersProduct of othersProducts) {
+          if (othersProduct.category === '아우터') {
+            othersCollectionSet.outer = othersProduct;
+          } else if (othersProduct.category === '상의') {
+            othersCollectionSet.top = othersProduct;
+          } else if (othersProduct.category === '하의') {
+            othersCollectionSet.bottom = othersProduct;
+          } else {
+            othersCollectionSet.shoes = othersProduct;
+          }
+        }
+        othersProductImg.push(othersCollectionSet);
+        setProductImg(othersProductImg);
+      }
+      console.log(othersProductImg, '이거 사용하면 됨 혁주야');
     });
-    console.log(productImg, 'productImg 얘 맞죠?');
   }, []);
 
   useEffect(async () => {
