@@ -27,7 +27,7 @@ import { IoTrashOutline } from 'react-icons/io';
 import { BsCartPlus } from 'react-icons/bs';
 import { FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { ImCross } from 'react-icons/im';
+import { MdClose } from 'react-icons/md';
 import { BiChevronLeft } from 'react-icons/bi';
 import { CgScreen } from 'react-icons/cg';
 
@@ -875,7 +875,7 @@ const DressRoom = (props) => {
                 style={{
                   fontSize: '30px',
                   margin: '10px',
-                  color: 'white',
+                  color: '#4c4c4c',
                 }}
               >
                 {userId} 님의 코디룸
@@ -891,13 +891,14 @@ const DressRoom = (props) => {
             >
               <div onClick={copyLink} style={{ cursor: 'pointer' }}>
                 <BsFillShareFill
-                  size="32"
+                  size='32'
                   style={{
+                    color: '#4c4c4c',
                     marginRight: '20px',
                   }}
                 />
               </div>
-              <RiMenuLine size="40" style={{ color: 'white' }} />
+              <RiMenuLine size='40' style={{ color: '#4c4c4c' }} />
             </div>
           </header>
           <div
@@ -909,11 +910,11 @@ const DressRoom = (props) => {
           >
             <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
-                <div className={styles.sidebarTop}>
+                {/* <div className={styles.sidebarTop}>
                   <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
-                    <BiChevronLeft className={styles.chevronIcon} size="40" />
+                    <BiChevronLeft className={styles.chevronIcon} size='40' />
                   </div>
-                </div>
+                </div> */}
 
                 <div className={styles.sidebarLinks}>
                   <ul className={styles.productLists}>
@@ -921,14 +922,16 @@ const DressRoom = (props) => {
                       products.map((item, index) => (
                         <div className={styles.tooltipElement} key={index}>
                           <div className={styles.productBox}>
-                            <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
-                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
+                            <div style={{ backgroundColor: 'white' }}>
+                              <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt='상품 이미지' />
+                            </div>
+                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color='orange' size='50' />
                             <div className={styles.hide + ' ' + styles.info}>
-                              <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
+                              <MdClose onClick={(e) => HandleDeleteProductBtn(item.shop_url)} size={20} className={styles.removeProductIcon} />
                               <div>
                                 <span className={styles.shopName}>{item.shop_name}</span>
                                 <div className={styles.productName}>
-                                  <a className={styles.shopLink} href={item.shop_url} target="_blank">
+                                  <a className={styles.shopLink} href={item.shop_url} target='_blank'>
                                     {item.product_name}
                                   </a>
                                 </div>
@@ -940,7 +943,7 @@ const DressRoom = (props) => {
                       ))
                     ) : (
                       <div className={styles.emptyBascket}>
-                        <img className={styles.emptyImg} src="/images/privateBascket2.png" alt="빈장바구니"></img>
+                        <img className={styles.emptyImg} src='/images/privateBascket2.png' alt='빈장바구니'></img>
                         <div className={styles.emptyInfo}>장바구니에 </div>
                         <div className={styles.emptyInfo}>상품이 없어요</div>
                       </div>
@@ -950,35 +953,40 @@ const DressRoom = (props) => {
               </div>
 
               <div ref={canvasRef} className={styles.canvasContainer}>
+                <div className={styles.sidebarTop}>
+                  <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
+                    <BiChevronLeft className={styles.chevronIcon} size='50' />
+                  </div>
+                </div>
                 <div className={styles.toolbar}>
-                  <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
-                    <BsTrash size="30" />
+                  <button className={styles.toolbarBtn} onClick={HandleDeleteCanvasBtn}>
+                    <BsTrash size='30' />
                   </button>
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                    <MdAddShoppingCart size="30" />
+                    <MdAddShoppingCart size='30' />
                   </button>
 
                   {isDrawing ? (
                     <button className={styles.toolbarBtn} onClick={DrawingFalse}>
-                      <BsHandIndexThumb size="30" />
+                      <BsHandIndexThumb size='30' />
                     </button>
                   ) : (
                     <button className={styles.toolbarBtn} onClick={HandleDrawing}>
-                      <BsPencilFill size="30" />
+                      <BsPencilFill size='30' />
                     </button>
                   )}
 
                   {/* 컬렉션 기능 추가 */}
                   <button className={styles.toolbarBtn} onClick={CollectionItems}>
-                    <BsFillCollectionFill size="30" />
+                    <BsFillCollectionFill size='30' />
                   </button>
                   <button className={styles.toolbarBtn} onClick={(e) => HandleAddProfileImgBtn(e, userImg, canvas)}>
-                    <MdFace size="30" />
+                    <MdFace size='30' />
                   </button>
                   {/* 컬렉션 기능 추가 */}
                 </div>
                 <ToastContainer
-                  position="bottom-center"
+                  position='bottom-center'
                   autoClose={3000}
                   hideProgressBar={false}
                   newestOnTop={false}
@@ -988,8 +996,8 @@ const DressRoom = (props) => {
                   draggable
                   pauseOnHover
                 />
-                <div id="pointers" className={styles.pointers}></div>
-                <canvas className={styles.canvas} id="canvas"></canvas>
+                <div id='pointers' className={styles.pointers}></div>
+                <canvas className={styles.canvas} id='canvas'></canvas>
               </div>
             </div>
           </div>
@@ -997,7 +1005,7 @@ const DressRoom = (props) => {
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video id="UserMuteCtrl" autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
+                <video id='UserMuteCtrl' autoPlay ref={userVideo} className={styles.video} muted='muted' poster='/images/user1.png'>
                   video 1
                 </video>
                 <div className={styles.control_box1}>
@@ -1015,7 +1023,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video id="partnerMuteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
+              <video id='partnerMuteCtrl' autoPlay ref={partnerVideo} className={styles.video} poster='/images/user1.png'>
                 video 2
               </video>
             </div>
