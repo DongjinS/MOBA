@@ -18,9 +18,7 @@ userRouter.post('/register', (req, res) => {
 userRouter.post('/info', async (req, res) => {
   const user = await User.findOne({ token: req.body.token });
   console.log(user.username);
-  return res.json({
-    username: user.username,
-  });
+  return res.send(user);
 });
 
 userRouter.post('/login', (req, res) => {
