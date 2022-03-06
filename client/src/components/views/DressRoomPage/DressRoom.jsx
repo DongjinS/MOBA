@@ -854,21 +854,18 @@ const DressRoom = (props) => {
                 marginRight: '20px',
               }}
             >
-              <BsFillShareFill
-                size="32"
-                style={{
-                  color: 'white',
-                  marginRight: '20px',
-                }}
-              />
+              <button onClick={copyLink}>
+                <BsFillShareFill
+                  size="32"
+                  style={{
+                    color: 'white',
+                    marginRight: '20px',
+                  }}
+                />
+              </button>
               <RiMenuLine size="40" style={{ color: 'white' }} />
             </div>
-            {/* <button className={styles.copyBtn} onClick={copyLink}>
-                            링크복사
-                        </button> */}
-            {/* <div>공유하기 혹은 추출하기가 들어갈 자리</div> */}
           </header>
-
           <div
             style={{
               display: 'flex',
