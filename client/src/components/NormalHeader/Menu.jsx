@@ -1,11 +1,10 @@
 import React from 'react';
 import { v1 as uuid } from 'uuid';
-import styles from './MainPage.module.css';
-import Auth from '../../../hoc/auth';
+import styles from './Menu.module.css';
+import Auth from '../../hoc/auth';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../header/Header';
 
-const MainPage = (props) => {
+const Menu = (props) => {
   const navigate = useNavigate();
 
   const navigateDressroom = () => {
@@ -40,9 +39,10 @@ const MainPage = (props) => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className={styles.mainPage}>
-        <img src='./images/mainpage.jpg' className={styles.img}></img>
+        {/* <img src='./images/mainpage.jpg' className={styles.img}></img> */}
+        <div className={styles.background}></div>
         <div className={styles.titles}>
           <div className={styles.title}>
             <div className={styles.main}>
@@ -61,11 +61,10 @@ const MainPage = (props) => {
               <p onClick={navigateShopTogether}>쇼핑시작</p>
             </div>
           </div>
-          {/* <div className={styles.subtitle}></div> */}
         </div>
       </div>
     </>
   );
 };
 
-export default Auth(MainPage, true);
+export default Auth(Menu, true);

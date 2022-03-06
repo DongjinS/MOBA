@@ -6,6 +6,9 @@ import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { RiLogoutBoxRLine, RiMenuLine } from 'react-icons/ri';
+import { MdClose } from 'react-icons/md';
+
+import Menu from './Menu';
 
 const NormalHeader = (props) => {
   const navigate = useNavigate();
@@ -42,23 +45,32 @@ const NormalHeader = (props) => {
     });
   }
 
-  return (
-    <header className={styles.header}>
-      <button onClick={mobaOnClickHandler} className={styles.title}>
-        MOBA
-      </button>
+  const [isOpen, setIsOpen] = useState(false);
 
-      {isToken ? (
-        <>
-          {/* <button id="checkout" className={styles.buttons} onClick={logout}>
-          <RiLogoutBoxRLine size={40} />
-        </button> */}
-          <RiMenuLine className={styles.hamburger} size={40} />
-        </>
-      ) : (
-        <></>
-      )}
-    </header>
+  return (
+    <div>
+      <div style={{ height: '70px' }}>
+        <header className={styles.header}>
+          <button onClick={mobaOnClickHandler} className={styles.title}>
+            MOBA
+          </button>
+
+          {isToken ? (
+            <div>
+              {/* <button id="checkout" className={styles.buttons} onClick={logout}>
+                    <RiLogoutBoxRLine size={40} />
+                  </button> */}
+              <div onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? <MdClose className={styles.closeBtn} size={40} /> : <RiMenuLine className={styles.menuBtn} size={40} />}
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </header>
+      </div>
+      <div>{isOpen ? <Menu /> : <></>}</div>
+    </div>
   );
 };
 
