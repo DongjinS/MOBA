@@ -65,13 +65,7 @@ const Collection = () => {
   }, []);
 
   async function deleteCollection(index) {
-    console.log('콜렉션 삭제입니다.');
-    console.log(index);
-    await axios
-      .delete('collection/items', { data: { token, index } })
-      .then(function (response) {
-        console.log(response);
-      });
+    await axios.delete('collection/items', { data: { token, index } });
   }
 
   return (
