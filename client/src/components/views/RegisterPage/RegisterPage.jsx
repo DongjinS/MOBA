@@ -99,69 +99,27 @@ function RegisterPage(props) {
             <div className={styles.loginText}>
               <span>회원가입</span>
             </div>
-            <form
-              className={styles.loginForm}
-              encType="multipart/form-data"
-              onSubmit={onSubmitHandler}
-            >
+
+            <form className={styles.loginForm} encType="multipart/form-data" onSubmit={onSubmitHandler}>
               {/* 프로필 이미지 업로드 : 시작 */}
-              <input
-                style={{ display: 'none' }}
-                type="file"
-                ref={imgRef}
-                onChange={onChangeImage}
-              />
-              <div
-                className={styles.inputs}
-                onClick={() => {
-                  onClickFileBtn();
-                }}
-              >
-                <img
-                  className={styles.uploadImage}
-                  src={ImageUrl ? ImageUrl : ''}
-                />
-                프로필 이미지를 업로드해주세요.
+              <div className={styles.imgContainer}>
+                <div>
+                  <img className={styles.uploadImage} src={ImageUrl ? ImageUrl : '/images/user1.png'} alt="프로필 이미지" />
+                </div>
+                <div className={styles.userInfo}>
+                  <input className={styles.infoInputs} type="text" value={Name} onChange={onNameHandler} placeholder="이름" />
+                  <input className={styles.infoInputs} type="email" value={Email} onChange={onEmailHandler} placeholder="이메일 주소" />
+                  <input style={{ display: 'none' }} type="file" ref={imgRef} onChange={onChangeImage} />
+                  <div className={styles.uploadBtn} onClick={onClickFileBtn}>
+                    이미지 업로드
+                  </div>
+                </div>
               </div>
               {/* 프로필 이미지 업로드 : 끝 */}
-
-              <input
-                autoFocus
-                className={styles.inputs}
-                type="text"
-                value={Username}
-                onChange={onUsernameHandler}
-                placeholder="아이디"
-              />
-              <input
-                className={styles.inputs}
-                type="password"
-                value={Password}
-                onChange={onPasswordHandler}
-                placeholder="비밀번호(5글자 이상)"
-              />
-              <input
-                className={styles.inputs}
-                type="password"
-                value={ConfirmPassword}
-                onChange={onConfirmPasswordHandler}
-                placeholder="비밀번호 확인"
-              />
-              <input
-                className={styles.inputs}
-                type="text"
-                value={Name}
-                onChange={onNameHandler}
-                placeholder="이름"
-              />
-              <input
-                className={styles.inputs}
-                type="email"
-                value={Email}
-                onChange={onEmailHandler}
-                placeholder="이메일 주소"
-              />
-              <button className={styles.buttons} type="submit">
+              <input autoFocus className={styles.inputs} type="text" value={Username} onChange={onUsernameHandler} placeholder="아이디" />
+              <input className={styles.inputs} type="password" value={Password} onChange={onPasswordHandler} placeholder="비밀번호(5글자 이상)" />
+              <input className={styles.inputs} type="password" value={ConfirmPassword} onChange={onConfirmPasswordHandler} placeholder="비밀번호 확인" />
+              <button className={styles.registerBtn} type="submit">
                 회원가입
               </button>
             </form>

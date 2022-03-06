@@ -26,6 +26,7 @@ collectionRouter.delete('/items', async (req, res) => {
   console.log(collector.collections[req.body.index])
   collector.collections.splice(req.body.index, 1)
   collector.save()
+  res.send(collector.collections);
 })
 
 collectionRouter.post('/', async (req, res) => {

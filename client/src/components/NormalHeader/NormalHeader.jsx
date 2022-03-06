@@ -7,11 +7,13 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { RiLogoutBoxRLine, RiMenuLine } from 'react-icons/ri';
 
-
 const NormalHeader = (props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState('');
   const [isToken, setIsToken] = useState(false);
+  const [hamburger, setHamburger] = useState(false);
+  const showMenu = () => setHamburger(!hamburger);
+
   useEffect(() => {
     function getCookie(name) {
       const cookies = new Cookies();
@@ -47,13 +49,15 @@ const NormalHeader = (props) => {
       </button>
 
       {isToken ? (
-				<>
-
-        {/* <button id="checkout" className={styles.buttons} onClick={logout}>
+        <>
+          {/* <button id="checkout" className={styles.buttons} onClick={logout}>
           <RiLogoutBoxRLine size={40} />
         </button> */}
-				<RiMenuLine className={styles.hamburger}  size={40} />
-				</>
+          <button onClick={showMenu}>
+            <RiMenuLine className={styles.hamburger} size={40} />
+          </button>
+          {hamburger ? <div>hi</div> : <div>bye</div>}
+        </>
       ) : (
         <></>
       )}

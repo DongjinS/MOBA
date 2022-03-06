@@ -8,7 +8,7 @@ let pointers = {};
 
 // listeners
 export const addImg = (canvas, data) => {
-  const { obj, id, url, product_info, selected } = data;
+  const { obj, id, url, product_info, isProfileImg, selected } = data;
   console.log(obj.type);
 
   if (obj.type === 'image') {
@@ -17,12 +17,15 @@ export const addImg = (canvas, data) => {
       img.set({
         id: id,
         product_info: product_info,
-        borderColor: 'orange',
+        // borderColor: "rgb(90,83,83)",
+        borderColor: "orange",
         borderScaleFactor: 5,
         cornerColor: "orange",
         cornerSize: 6,
         cornerStyle: "rect",
         transparentCorners: false,
+        isProfileImg: isProfileImg,
+        profileUrl: url,
       });
       console.log('received img: ', img);
       img.set(obj);
@@ -33,7 +36,11 @@ export const addImg = (canvas, data) => {
         img.set('stroke', '#f00');
         img.set('strokeWidth', 10);
       }
-      img.scale(0.4);
+      if (isProfileImg){
+        img.scale(0.2);
+      } else{
+        img.scale(0.4);
+      }
       console.log('received img after set(obj): ', img);
       img.setCoords();
       canvas.add(img);
