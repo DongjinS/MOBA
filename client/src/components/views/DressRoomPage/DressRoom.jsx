@@ -910,12 +910,6 @@ const DressRoom = (props) => {
           >
             <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
-                {/* <div className={styles.sidebarTop}>
-                  <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
-                    <BiChevronLeft className={styles.chevronIcon} size='40' />
-                  </div>
-                </div> */}
-
                 <div className={styles.sidebarLinks}>
                   <ul className={styles.productLists}>
                     {products.length > 0 ? (
