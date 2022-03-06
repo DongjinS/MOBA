@@ -38,6 +38,7 @@ const Collection = () => {
           bottom: '',
           shoes: '',
         };
+
         for (let othersProduct of othersProducts) {
           if (othersProduct.category === '아우터') {
             othersCollectionSet.outer = othersProduct;
@@ -49,6 +50,7 @@ const Collection = () => {
             othersCollectionSet.shoes = othersProduct;
           }
         }
+        othersCollectionSet = Object.assign(othersCollectionSet, { name: othersProducts.name });
         othersProductImg.push(othersCollectionSet);
       }
       setProductImg(othersProductImg);
