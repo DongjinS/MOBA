@@ -4,7 +4,9 @@ import styles from './Collection.module.css';
 import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
 import SimpleSlider from '../../SimpleSlider/SimpleSlider';
-
+import { AiFillPlusCircle } from 'react-icons/ai';
+import { FiChevronRight } from 'react-icons/fi';
+import { VscClose } from 'react-icons/vsc';
 const Collection = () => {
   function getCookie(name) {
     const cookies = new Cookies();
@@ -14,7 +16,7 @@ const Collection = () => {
 
   const [productImg, setProductImg] = useState([]);
   const [collectionImg, setCollectionImg] = useState([]);
-
+  const [myCollection, setMyCollection] = useState(false);
   useEffect(async () => {
     let productImg = [];
     await axios.get('/collection').then((response) => {
@@ -27,7 +29,7 @@ const Collection = () => {
       }
       setProductImg(productImg);
     });
-    console.log(productImg);
+    console.log(productImg, 'productImg 얘 맞죠?');
   }, []);
 
   useEffect(async () => {
@@ -60,6 +62,7 @@ const Collection = () => {
           collectionImg.push(collectionSet);
         }
         setCollectionImg(collectionImg);
+        console.log(collectionImg, 'collection Img');
       });
   }, []);
 
@@ -95,10 +98,109 @@ const Collection = () => {
       <NormalHeader />
       <div className={styles.flexBox}>
         <div className={styles.title}>
-          <p>내 컬렉션</p>
-          <p>남 컬렉션</p>
+          <p
+            onClick={() => {
+              setMyCollection(false);
+            }}
+          >
+            내 컬렉션
+          </p>
+          <p
+            onClick={() => {
+              setMyCollection(true);
+            }}
+          >
+            남 컬렉션
+          </p>
         </div>
-        <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
+        {!myCollection ? (
+          <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
+        ) : (
+          <div className={styles.otherContainer}>
+            {collectionImg &&
+              collectionImg.map((items, index) => (
+                <div key={index} className={styles.collection__card}>
+                  <div className={styles.collection__del__box}>
+                    <VscClose
+                      className={styles.i__collection__del}
+                      size={25}
+                      onClick={() => {
+                        deleteCollection(index);
+                      }}
+                    />
+                  </div>
+                  <div className={styles.collectionSet}>
+                    <img className={styles.collectionImgTop} src={items.top.removedBgImg} alt='img' />
+                    <div className='con-tooltip bottom'>
+                      <AiFillPlusCircle className={styles.i__plus} />
+                      <div
+                        onClick={() => {
+                          window.open(items.top.shop_url);
+                        }}
+                        className={styles.tooltip}
+                      >
+                        <div className={styles.tooltip__img}>
+                          <img width={70} height={70} src={items.top.img} />
+                        </div>
+                        <div className={styles.tooltip__description}>
+                          <span>{items.top.shop_name}</span>
+                          <span>{items.top.product_name}</span>
+                          <span>{items.top.sale_price && items.top.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                        </div>
+                        <div className={styles.tooltip__icon}>
+                          <FiChevronRight className={styles.i__right} />
+                        </div>
+                      </div>
+                    </div>
+                    <img className={styles.collectionImgBottom} src={items.bottom.removedBgImg} alt='img'></img>
+                    <div className='con-tooltip bottom con-bottom'>
+                      <AiFillPlusCircle className={styles.i__plus} />
+                      <div
+                        onClick={() => {
+                          window.open(items.bottom.shop_url);
+                        }}
+                        className={styles.tooltip}
+                      >
+                        <div className={styles.tooltip__img}>
+                          <img width={70} height={70} src={items.bottom.img} />
+                        </div>
+                        <div className={styles.tooltip__description}>
+                          <span>{items.bottom.shop_name}</span>
+                          <span>{items.bottom.product_name}</span>
+                          <span>{items.bottom.sale_price && items.bottom.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                        </div>
+                        <div className={styles.tooltip__icon}>
+                          <FiChevronRight className={styles.i__right} />
+                        </div>
+                      </div>
+                    </div>
+                    <img className={styles.collectionImgShoes} src={items.shoes.removedBgImg} alt='img'></img>
+                    <div className='con-tooltip con-shoes'>
+                      <AiFillPlusCircle className={styles.i__plus} />
+                      <div
+                        onClick={() => {
+                          window.open(items.shoes.shop_url);
+                        }}
+                        className={styles.tooltip}
+                      >
+                        <div className={styles.tooltip__img}>
+                          <img width={70} height={70} src={items.shoes.img} />
+                        </div>
+                        <div className={styles.tooltip__description}>
+                          <span>{items.shoes.shop_name}</span>
+                          <span>{items.shoes.product_name}</span>
+                          <span>{items.shoes.sale_price && items.shoes.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                        </div>
+                        <div className={styles.tooltip__icon}>
+                          <FiChevronRight className={styles.i__right} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </>
   );
