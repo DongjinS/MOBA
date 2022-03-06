@@ -64,11 +64,38 @@ const Collection = () => {
       });
     console.log(collectionImg);
   }, []);
-
+  async function deleteCollection(index) {
+    let collectionImg = [];
+    await axios.delete('collection/items', { data: { token, index } }).then((response) => {
+      const collectionLists = response.data;
+      for (let collectionlist of collectionLists) {
+        let collectionSet = {
+          outer: '',
+          top: '',
+          bottom: '',
+          shoes: '',
+        };
+        for (let collection of collectionlist) {
+          if (collection.category === '아우터') {
+            collectionSet.outer = collection;
+          } else if (collection.category === '상의') {
+            collectionSet.top = collection;
+          } else if (collection.category === '하의') {
+            collectionSet.bottom = collection;
+          } else {
+            collectionSet.shoes = collection;
+          }
+        }
+        collectionImg.push(collectionSet);
+      }
+      console.log(collectionImg);
+      setCollectionImg(collectionImg);
+    });
+  }
   return (
     <>
       <NormalHeader />
-      <SimpleSlider collectionImg={collectionImg} />
+      <SimpleSlider collectionImg={collectionImg} handleDelete={deleteCollection} />
 
       {/* <section className={styles.sectionImg}>
         <article className={styles.articleImg}>

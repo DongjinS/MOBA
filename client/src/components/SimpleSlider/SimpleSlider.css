@@ -34,6 +34,11 @@
 .activeSlide:hover .con-tooltip {
   visibility: visible;
 }
+.activeSlide:hover .i__collection__del {
+  visibility: visible;
+  cursor: pointer;
+}
+
 .arrow {
   background-color: none;
   position: absolute;
@@ -44,8 +49,13 @@
 }
 .arrow svg {
   transition: color 300ms;
-  color: rgb(248, 135, 29);
+  color: rgb(177, 177, 177);
 }
+.arrow svg:hover {
+  /* transition: color 300ms; */
+  color: rgb(238, 146, 61);
+}
+
 .arrow__i {
   font-size: 35px;
   font-weight: 600;
@@ -108,7 +118,7 @@
   visibility: hidden;
   z-index: 10;
   position: absolute;
-  top: 40px;
+  top: 90px;
   /* background: #f2d1c9; */
 
   border-radius: 9px;
@@ -238,4 +248,26 @@
   z-index: 10;
   position: absolute;
   top: 520px;
+}
+.collection__del__box {
+  position: absolute;
+  left: 310px;
+  /* visibility: hidden; */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  cursor: pointer;
+  z-index: 4;
+  /* border: 1px solid black; */
+}
+.i__collection__del {
+  visibility: hidden;
+  position: absolute;
+  z-index: 3;
+  transition: all 0.3s ease-in-out;
+}
+.i__collection__del:hover {
+  color: red;
 }
