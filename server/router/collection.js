@@ -21,6 +21,13 @@ collectionRouter.post('/items', async (req, res) => {
   collector.save()
 });
 
+collectionRouter.delete('/items', async (req, res) => {
+  const collector = await User.findOne({ token: req.body.token });
+  console.log(collector.collections[req.body.index])
+  collector.collections.splice(req.body.index, 1)
+  collector.save()
+})
+
 collectionRouter.post('/', async (req, res) => {
   console.log('콜렉션 리스트 요청입니다.')
   const collector = await User.findOne({ token: req.body.token });

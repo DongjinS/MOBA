@@ -64,6 +64,16 @@ const Collection = () => {
     console.log(collectionImg);
   }, []);
 
+  async function deleteCollection(index) {
+    console.log('콜렉션 삭제입니다.');
+    console.log(index);
+    await axios
+      .delete('collection/items', { data: { token, index } })
+      .then(function (response) {
+        console.log(response);
+      });
+  }
+
   return (
     <>
       <NormalHeader />
@@ -111,6 +121,10 @@ const Collection = () => {
                   alt="img"
                 ></img>
               </div>
+              <button onClick={() => deleteCollection(index)}>
+                {' '}
+                삭제하기{' '}
+              </button>
             </div>
           ))}
         </div>
