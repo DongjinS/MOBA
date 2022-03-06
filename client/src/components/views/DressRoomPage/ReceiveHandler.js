@@ -8,7 +8,7 @@ let pointers = {};
 
 // listeners
 export const addImg = (canvas, data) => {
-  const { obj, id, url, product_info } = data;
+  const { obj, id, url, product_info, selected } = data;
   console.log(obj.type);
 
   if (obj.type === 'image') {
@@ -18,14 +18,22 @@ export const addImg = (canvas, data) => {
         id: id,
         product_info: product_info,
         borderColor: 'orange',
-        borderScaleFactor: 9,
-        cornerColor: 'black',
-        cornerSize: 12,
+        borderScaleFactor: 5,
+        cornerColor: "orange",
+        cornerSize: 6,
+        cornerStyle: "rect",
         transparentCorners: false,
       });
       console.log('received img: ', img);
       img.set(obj);
-      // img.scale(0.5);
+      if (selected){
+        img.hasControls = false;
+        img.lockMovementX = true;
+        img.lockMovementY = true;
+        img.set('stroke', '#f00');
+        img.set('strokeWidth', 10);
+      }
+      img.scale(0.4);
       console.log('received img after set(obj): ', img);
       img.setCoords();
       canvas.add(img);
@@ -39,6 +47,8 @@ export const modifyObj = (canvas, data) => {
   canvas.getObjects().forEach((object) => {
     if (object.id === id) {
       object.set(obj);
+      object.set('stroke', '#f00');
+      object.set('strokeWidth', 10);
       object.setCoords();
       canvas.renderAll();
     }
