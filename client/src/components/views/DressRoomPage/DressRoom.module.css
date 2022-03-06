@@ -1,450 +1,450 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap');
 
 :root {
-    --main-color: #f0f0f0;
-    --main-color-dark: grey;
-    --main-color-light: grey;
-    --text-color: black;
+  --main-color: #f0f0f0;
+  --main-color-dark: grey;
+  --main-color-light: grey;
+  --text-color: black;
 }
 
 .title {
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 700;
-    font-size: 40px;
-    margin-left: 0.5em;
-    padding: 0.3em;
-    color: #f37423;
-    background-color: #2c2c2c;
-    border: 0;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  margin-left: 0.5em;
+  padding: 0.3em;
+  color: #f37423;
+  background-color: #2c2c2c;
+  border: 0;
 }
 .title:hover {
-    text-decoration: none;
-    color: #f37423;
-    cursor: pointer;
+  text-decoration: none;
+  color: #f37423;
+  cursor: pointer;
 }
 
 .loadingContainer {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
-    display: grid;
-    grid-template-columns: auto 15vw;
-    grid-template-rows: 70px auto;
-    height: 100vh;
-    grid-template-areas:
-        "header  header"
-        "main     b   ";
+  display: grid;
+  grid-template-columns: auto 15vw;
+  grid-template-rows: 70px auto;
+  height: 100vh;
+  grid-template-areas:
+    'header  header'
+    'main     b   ';
 }
 
 .header {
-    grid-area: header;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* padding: 15px 10px 15px 10px;
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 15px 10px 15px 10px;
   font-size: 20px; */
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 700;
-    background-color: #2c2c2c;
-    color: white;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
+  background-color: #2c2c2c;
+  color: white;
 }
 
 .logo {
-    display: flex;
+  display: flex;
 }
 
 .copyBtn {
-    border: 0;
-    font-size: 20px;
-    color: orange;
-    background-color: #2c2c2c;
-    cursor: pointer;
-    margin-right: 20px;
+  border: 0;
+  font-size: 20px;
+  color: orange;
+  background-color: #2c2c2c;
+  cursor: pointer;
+  margin-right: 20px;
 }
 
 .copyBtn:hover {
-    color: #f37423;
+  color: #f37423;
 }
 
 .body {
-    /* flex: 1; */
-    flex-grow: 1;
-    flex-basis: 0;
-    overflow: hidden;
-    /* background-color: #e4e2f5; */
-    /* background-color: black; */
-    display: flex;
-    position: relative;
+  /* flex: 1; */
+  flex-grow: 1;
+  flex-basis: 0;
+  overflow: hidden;
+  /* background-color: #e4e2f5; */
+  /* background-color: black; */
+  display: flex;
+  position: relative;
 }
 
 .shrink .ProductSidebar {
-    width: 11.2rem;
+  width: 11.2rem;
 }
 
 .shrink .hide {
-    /* opacity: 0; */
-    display: none;
-    pointer-events: none;
-    transition-delay: 0s;
+  /* opacity: 0; */
+  display: none;
+  pointer-events: none;
+  transition-delay: 0s;
 }
 
 .shrink .chevronIcon {
-    transform: rotate(-180deg);
+  transform: rotate(-180deg);
 }
 
 .ProductSidebar {
-    /* overflow-x: hidden; */
-    position: sticky;
-    top: 0;
-    left: 0;
-    min-height: 0px;
-    height: 100%;
-    background-color: var(--main-color);
-    width: 26.5rem;
-    padding: 0.5rem 0rem 1rem 0.5rem;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    transition: width 0.2s ease-in-out;
+  /* overflow-x: hidden; */
+  position: sticky;
+  top: 0;
+  left: 0;
+  min-height: 0px;
+  height: 100%;
+  background-color: var(--main-color);
+  width: 26.5rem;
+  padding: 0.5rem 0rem 1rem 0.5rem;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease-in-out;
 }
 
 .ProductSidebar::before {
-    content: "";
-    position: absolute;
-    width: 3rem;
-    height: 100%;
-    top: 0;
-    left: 100%;
+  content: '';
+  position: absolute;
+  width: 3rem;
+  height: 100%;
+  top: 0;
+  left: 100%;
 }
 
 .ProductSidebar:hover .shrinkBtn,
 .shrinkBtn.hovered {
-    transform: translateY(-50%) translateX(0px);
-    opacity: 1;
-    pointer-events: all;
-    z-index: 50;
+  transform: translateY(-50%) translateX(0px);
+  opacity: 1;
+  pointer-events: all;
+  z-index: 50;
 }
 
 .sidebarTop {
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    z-index: 50;
-    padding-right: 10px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 50;
+  padding-right: 10px;
 }
 
 .chevronIcon {
-    line-height: 40px;
-    /* size: 10; */
-    transition: 0.3s;
-    z-index: 50;
-    cursor: pointer;
+  line-height: 40px;
+  /* size: 10; */
+  transition: 0.3s;
+  z-index: 50;
+  cursor: pointer;
 }
 
 .sidebarLinks {
-    overflow: auto;
+  overflow: auto;
 }
 
 .sidebarLinks::-webkit-scrollbar {
-    visibility: hidden;
-    cursor: pointer;
-    width: 8px;
-    height: 10px;
-    /* display: none; */
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+  /* display: none; */
 }
 
 .sidebarLinks::-webkit-scrollbar-thumb {
-    visibility: hidden;
-    cursor: pointer;
-    background-color: white; /*스크롤바의 색상*/
-    border: 1px solid white;
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
 }
 .sidebarLinks:hover::-webkit-scrollbar {
-    visibility: visible;
-    cursor: pointer;
-    width: 8px;
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
 }
 
 .sidebarLinks:hover::-webkit-scrollbar-thumb {
-    visibility: visible;
-    cursor: pointer;
-    background-color: #9d9d9d; /*스크롤바의 색상*/
-    border: 1px solid grey;
-    /* border-radius: 10px; */
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  /* border-radius: 10px; */
 }
 
 .productLists {
-    list-style: none;
+  list-style: none;
 }
 
 .productLists {
-    position: relative;
-    /* margin-right: 0.6rem; */
-    /* margin-right: 20px; */
+  position: relative;
+  /* margin-right: 0.6rem; */
+  /* margin-right: 20px; */
 }
 
 .tooltipElement {
-    position: relative;
-    padding: 5px 0;
-    /* margin: 10px; */
+  position: relative;
+  padding: 5px 0;
+  /* margin: 10px; */
 }
 
 .productBox {
-    color: var(--text-color);
-    /* font-weight: 400;
+  color: var(--text-color);
+  /* font-weight: 400;
   font-size: 0.9rem; */
-    display: flex;
-    align-items: center;
-    height: 156px;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 156px;
+  justify-content: center;
 
-    /* padding: 3px; */
+  /* padding: 3px; */
 }
 
 .productBox:hover {
-    border: 3px solid orange;
-    /* border-radius: 10px; */
-    /* box-sizing: border-box; */
-    /* box-shadow: 0 0 0 3px #000 inset; */
-    z-index: 20;
-    overflow: auto;
-    opacity: 0.7;
+  border: 3px solid orange;
+  /* border-radius: 10px; */
+  /* box-sizing: border-box; */
+  /* box-shadow: 0 0 0 3px #000 inset; */
+  z-index: 20;
+  overflow: auto;
+  opacity: 0.7;
 }
 .productBox:hover > .addProductIcon {
-    visibility: visible;
-    opacity: 1;
-    z-index: 10;
+  visibility: visible;
+  opacity: 1;
+  z-index: 10;
 }
 
 .newProductImg {
-    /* font-size: 1.3rem; */
-    text-align: center;
-    min-width: 150px;
-    width: 150px;
-    height: 150px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    /* border-radius: 10px; */
-    /* width: 5rem; */
-    cursor: pointer;
+  /* font-size: 1.3rem; */
+  text-align: center;
+  min-width: 150px;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  /* border-radius: 10px; */
+  /* width: 5rem; */
+  cursor: pointer;
 }
 
 .addProductIcon {
-    position: absolute;
-    visibility: hidden;
-    /* margin: 0 auto; */
-    left: 55px;
-    cursor: pointer;
+  position: absolute;
+  visibility: hidden;
+  /* margin: 0 auto; */
+  left: 55px;
+  cursor: pointer;
 }
 
 .hide {
-    background-color: #e0e0e0;
-    width: 250px;
-    transition: opacity 0.3s 0.2s;
-    /* border-radius: 0 10px 10px 0; */
+  background-color: #e0e0e0;
+  width: 250px;
+  transition: opacity 0.3s 0.2s;
+  /* border-radius: 0 10px 10px 0; */
 }
 
 .info {
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 15px 15px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px 15px;
 }
 
 .removeProductIcon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    z-index: 50;
-    cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  z-index: 50;
+  cursor: pointer;
 }
 
 .shopName {
-    color: white;
-    background-color: black;
-    padding: 2px 8px;
-    font-size: 15px;
-    margin-top: 15px;
-    /* border-radius: 5px; */
+  color: white;
+  background-color: black;
+  padding: 2px 8px;
+  font-size: 15px;
+  margin-top: 15px;
+  /* border-radius: 5px; */
 }
 
 .shopLink:link {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 .shopLink:visited {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 .shopLink:hover {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 
 .productName {
-    margin-top: 18px;
-    font-size: 18px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  margin-top: 18px;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .price {
-    font-size: 20px;
-    font-weight: 600;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .emptyBascket {
-    margin-top: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .emptyImg {
-    width: 100px;
-    margin-bottom: 20px;
+  width: 100px;
+  margin-bottom: 20px;
 }
 
 .emptyInfo {
-    text-align: center;
-    color: grey;
-    font-size: 21px;
-    width: 130px;
+  text-align: center;
+  color: grey;
+  font-size: 21px;
+  width: 130px;
 }
 
 .canvasContainer {
-    flex: 1;
-    color: #1f2027;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: width 0.2s ease-in-out;
+  flex: 1;
+  color: #1f2027;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: width 0.2s ease-in-out;
 }
 
 .toolbar {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    z-index: 20;
-    top: 20px;
-    right: 20px;
-    height: 350px;
-    /* border: 1px solid #456125; */
-    transition: width 0.2s ease-in-out;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  top: 20px;
+  right: 20px;
+  height: 350px;
+  /* border: 1px solid #456125; */
+  transition: width 0.2s ease-in-out;
 
-    justify-content: space-between;
-    /* border-radius: 50px; */
+  justify-content: space-between;
+  /* border-radius: 50px; */
 }
 
 .toolbarBtn {
-    background-color: orange;
-    border-radius: 30px;
-    padding: 15px;
-    color: white;
-    border: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 1px 1px 1px 1px #b0b0b0;
+  background-color: orange;
+  border-radius: 30px;
+  padding: 15px;
+  color: white;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px 1px #b0b0b0;
 }
 
 .toolbarBtn:hover {
-    background-color: #f37423;
-    box-shadow: 1px 1px 1px 1px #b0b0b0;
+  background-color: #f37423;
+  box-shadow: 1px 1px 1px 1px #b0b0b0;
 }
 
 .pointers {
-    width: inherit;
-    height: inherit;
-    position: relative;
+  width: inherit;
+  height: inherit;
+  position: relative;
 }
 
 .canvas {
-    grid-area: main;
-    /* background-color: white; */
-    display: flex;
-    justify-content: center;
-    /* border: 1px solid black; */
-    width: inherit;
-    height: inherit;
-    z-index: 10;
-    transition: width 0.2s ease-in-out;
+  grid-area: main;
+  /* background-color: white; */
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid black; */
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  transition: width 0.2s ease-in-out;
 
-    /* border: 3px solid black; */
+  /* border: 3px solid black; */
 }
 
 .sidebarB {
-    /* width: 300px; */
-    grid-area: b;
-    transition: width 0.2s ease-in-out;
+  /* width: 300px; */
+  grid-area: b;
+  transition: width 0.2s ease-in-out;
 }
 
 .video_container {
-    display: flex;
-    flex-direction: column;
-    /* margin-right: 10px; */
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 10px; */
+  height: 100%;
 }
 
 .user1 {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
 }
 
 .video {
-    /* border-radius: 5px; */
-    /* border: 3px solid #000; */
-    height: 100%;
-    object-fit: cover;
-    /* 좌우 반전 해제 */
-    /* transform: rotateY(180deg); */
-    /* -webkit-transform: rotateY(180deg); Safari and Chrome */
-    /* -moz-transform: rotateY(180deg); Firefox  */
+  /* border-radius: 5px; */
+  /* border: 3px solid #000; */
+  height: 100%;
+  object-fit: cover;
+  /* 좌우 반전 해제 */
+  /* transform: rotateY(180deg); */
+  /* -webkit-transform: rotateY(180deg); Safari and Chrome */
+  /* -moz-transform: rotateY(180deg); Firefox  */
 }
 
 .control_box1 {
-    position: absolute;
-    bottom: 1%;
-    left: 50%;
-    width: 200px;
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
-    justify-content: space-around;
-    display: flex;
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  width: 200px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  justify-content: space-around;
+  display: flex;
 }
 
 .controlBtn {
-    font-size: 20px;
-    background-color: grey;
-    color: white;
-    opacity: 0.7;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 30px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  font-size: 20px;
+  background-color: grey;
+  color: white;
+  opacity: 0.7;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .controlBtn:hover {
-    background-color: white;
-    color: grey;
-    border: 1px solid grey;
+  background-color: white;
+  color: grey;
+  border: 1px solid grey;
 }
 
 /* @keyframes slideDetail {

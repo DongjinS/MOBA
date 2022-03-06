@@ -9,15 +9,9 @@ import ClothesLoading from '../../loading/ClothesLoading';
 // import hark from 'hark';
 
 // Fabric JS
-import { fabric } from "fabric";
-import { v1 as uuid } from "uuid";
-import {
-  modifyObj,
-  modifyMouse,
-  getPointer,
-  deleteMouse,
-  addImg,
-} from "./ReceiveHandler";
+import { fabric } from 'fabric';
+import { v1 as uuid } from 'uuid';
+import { modifyObj, modifyMouse, getPointer, deleteMouse, addImg } from './ReceiveHandler';
 
 // Styles
 import styles from './DressRoom.module.css';
@@ -94,44 +88,44 @@ const DressRoom = (props) => {
          * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
          */
         canvas.getObjects().forEach((object) => {
-          console.log("data : ", data);
+          console.log('data : ', data);
           if (object.id === data.id) {
-            console.log("obj : ", object);
+            console.log('obj : ', object);
             canvas.remove(object);
           }
         });
         break;
-      case "drawing":
+      case 'drawing':
         let path = new fabric.Path(data.path.path);
         console.log(path);
         path.set(data.path);
         path.setCoords();
         canvas.add(path);
         break;
-      case "selected":
+      case 'selected':
         if (data.obj.stroke) {
           break;
         }
         canvas.getObjects().forEach((object) => {
-          console.log("data : ", data);
+          console.log('data : ', data);
           if (object.id === data.id) {
-            console.log("obj : ", object);
+            console.log('obj : ', object);
             object.hasControls = false;
             object.lockMovementX = true;
             object.lockMovementY = true;
-            
+
             object.set('stroke', '#f00');
             object.set('strokeWidth', 10);
             canvas.renderAll();
-            console.log("stroke", object);
+            console.log('stroke', object);
           }
         });
         break;
-      case "deselected":
+      case 'deselected':
         canvas.getObjects().forEach((object) => {
-          console.log("data : ", data);
+          console.log('data : ', data);
           if (object.id === data.id) {
-            console.log("obj : ", object);
+            console.log('obj : ', object);
             object.hasControls = true;
             object.lockMovementX = false;
             object.lockMovementY = false;
@@ -158,19 +152,19 @@ const DressRoom = (props) => {
     const cookies = new Cookies();
     return cookies.get(name);
   };
-  const token = getCookie("x_auth");
+  const token = getCookie('x_auth');
 
   const initCanvas = (width, height) =>
-    new fabric.Canvas("canvas", {
+    new fabric.Canvas('canvas', {
       width: width,
       height: height,
-      backgroundColor: "white",
+      backgroundColor: 'white',
       isDrawingMode: false,
     });
 
   useEffect(async () => {
     getUserInfo();
-    console.log("useEffect []");
+    console.log('useEffect []');
 
     const canvasHeight = canvasRef.current.offsetHeight - 1;
     const canvasWidth = canvasRef.current.offsetWidth - 1;
@@ -182,38 +176,36 @@ const DressRoom = (props) => {
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
-        console.log("rtc socket");
+        console.log('rtc socket');
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        socketRef.current = io.connect("/");
-        socketRef.current.emit("join room", roomID); // roomID를 join room을 통해 server로 전달함
+        socketRef.current = io.connect('/');
+        socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
 
-        socketRef.current.on("other user", async (userID) => {
+        socketRef.current.on('other user', async (userID) => {
           callUser(userID);
 
-          mouseChannel.current = await peerRef.current.createDataChannel(
-            "mouse"
-          );
-          mouseChannel.current.addEventListener("message", (event) => {
+          mouseChannel.current = await peerRef.current.createDataChannel('mouse');
+          mouseChannel.current.addEventListener('message', (event) => {
             handleRecievedMouse(event.data);
           });
 
-          itemChannel.current = await peerRef.current.createDataChannel("item");
-          itemChannel.current.addEventListener("message", (event) => {
+          itemChannel.current = await peerRef.current.createDataChannel('item');
+          itemChannel.current.addEventListener('message', (event) => {
             handleRecievedItem(event.data);
           });
 
           otherUser.current = userID;
         });
-        socketRef.current.on("user joined", (userID) => {
+        socketRef.current.on('user joined', (userID) => {
           otherUser.current = userID;
         });
-        socketRef.current.on("offer", handleRecieveCall);
-        socketRef.current.on("answer", handleAnswer);
-        socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
-        socketRef.current.on("peer-leaving", function (id) {
+        socketRef.current.on('offer', handleRecieveCall);
+        socketRef.current.on('answer', handleAnswer);
+        socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
+        socketRef.current.on('peer-leaving', function (id) {
           deleteMouse(id);
-          otherUser.current = "";
+          otherUser.current = '';
           try {
             partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
               track.stop();
@@ -231,8 +223,8 @@ const DressRoom = (props) => {
       .then((Response) => {
         console.log(Response);
         setProducts(Response.data.reverse());
-        console.log("axios get products :", products);
-        console.log("axios get Response :", Response.data);
+        console.log('axios get products :', products);
+        console.log('axios get Response :', Response.data);
 
         let shops = Response.data.reduce((acc, cv) => {
           acc = acc.concat(cv.shop_name);
@@ -245,15 +237,15 @@ const DressRoom = (props) => {
       })
       .then(() => {
         setIsLoading(false);
-        console.log("products : ", products);
-        console.log("uniqueShops : ", uniqueShops);
+        console.log('products : ', products);
+        console.log('uniqueShops : ', uniqueShops);
       });
   }, []);
 
   useEffect(() => {
-    console.log("useEffect canvas");
+    console.log('useEffect canvas');
     if (canvas) {
-      canvas.on("selection:cleared", (opt) => {
+      canvas.on('selection:cleared', (opt) => {
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
             try {
@@ -261,7 +253,7 @@ const DressRoom = (props) => {
                 JSON.stringify({
                   obj: obj,
                   id: obj.id,
-                  order: "deselected",
+                  order: 'deselected',
                 })
               );
             } catch (error) {
@@ -270,17 +262,17 @@ const DressRoom = (props) => {
           });
         }
       });
-      canvas.on("selection:created", (opt) => {
+      canvas.on('selection:created', (opt) => {
         opt.selected.forEach((obj) => {
           try {
-            if (opt.selected.length >= 2 && obj.stroke == '#f00'){
+            if (opt.selected.length >= 2 && obj.stroke == '#f00') {
               canvas.discardActiveObject();
             }
             itemChannel.current.send(
               JSON.stringify({
                 obj: obj,
                 id: obj.id,
-                order: "selected",
+                order: 'selected',
               })
             );
           } catch (error) {
@@ -288,12 +280,12 @@ const DressRoom = (props) => {
           }
         });
       });
-      canvas.on("selection:updated", (opt) => {
-        const actives = canvas.getActiveObjects()
+      canvas.on('selection:updated', (opt) => {
+        const actives = canvas.getActiveObjects();
         opt.selected.forEach((obj) => {
           try {
-            if (actives.length >= 2){
-              if (actives.filter(active => active.stroke !== '#f00') || obj.stroke == '#f00'){
+            if (actives.length >= 2) {
+              if (actives.filter((active) => active.stroke !== '#f00') || obj.stroke == '#f00') {
                 canvas.discardActiveObject();
               }
             }
@@ -301,7 +293,7 @@ const DressRoom = (props) => {
               JSON.stringify({
                 obj: obj,
                 id: obj.id,
-                order: "selected",
+                order: 'selected',
               })
             );
           } catch (error) {
@@ -315,7 +307,7 @@ const DressRoom = (props) => {
                 JSON.stringify({
                   obj: obj,
                   id: obj.id,
-                  order: "deselected",
+                  order: 'deselected',
                 })
               );
             } catch (error) {
@@ -325,13 +317,13 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on("before:path:created", (options) => {
-        console.log("before path created", options);
+      canvas.on('before:path:created', (options) => {
+        console.log('before path created', options);
       });
-      canvas.on("path:created", (options) => {
-        console.log("path created", options);
+      canvas.on('path:created', (options) => {
+        console.log('path created', options);
         const data = {
-          order: "drawing",
+          order: 'drawing',
           path: options.path,
         };
         try {
@@ -340,12 +332,12 @@ const DressRoom = (props) => {
           // 상대 없을 때 send 시 에러
         }
       });
-      canvas.on("object:modified", (options) => {
+      canvas.on('object:modified', (options) => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
-            order: "modify",
+            order: 'modify',
           };
           try {
             itemChannel.current.send(JSON.stringify(modifiedObj));
@@ -355,12 +347,12 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on("object:moving", (options) => {
+      canvas.on('object:moving', (options) => {
         if (options.target) {
           const modifiedObj = {
             obj: options.target,
             id: options.target.id,
-            order: "modify",
+            order: 'modify',
           };
           try {
             itemChannel.current.send(JSON.stringify(modifiedObj));
@@ -370,7 +362,7 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on("mouse:move", (options) => {
+      canvas.on('mouse:move', (options) => {
         const mouseobj = {
           clientX: options.e.offsetX,
           clientY: options.e.offsetY,
@@ -406,7 +398,7 @@ const DressRoom = (props) => {
     e.preventDefault();
     let url;
 
-    console.log("add image", item);
+    console.log('add image', item);
 
     if (item.removedBgImg) {
       url = item.removedBgImg;
@@ -420,11 +412,11 @@ const DressRoom = (props) => {
       img.set({
         id: uuid(),
         product_info: item,
-        borderColor: "orange",
+        borderColor: 'orange',
         borderScaleFactor: 5,
-        cornerColor: "orange",
+        cornerColor: 'orange',
         cornerSize: 6,
-        cornerStyle: "rect",
+        cornerStyle: 'rect',
         transparentCorners: false,
         isProfileImg: false,
       });
@@ -463,11 +455,11 @@ const DressRoom = (props) => {
       console.log('sender', img._element.currentSrc);
       img.set({
         id: uuid(),
-        borderColor: "orange",
+        borderColor: 'orange',
         borderScaleFactor: 5,
-        cornerColor: "orange",
+        cornerColor: 'orange',
         cornerSize: 6,
-        cornerStyle: "rect",
+        cornerStyle: 'rect',
         transparentCorners: false,
         isProfileImg: true,
         product_info: '',
@@ -629,17 +621,17 @@ const DressRoom = (props) => {
                     product_info: obj.product_info,
                     isProfileImg: false,
                   };
-                  if (actives.includes(obj)){
+                  if (actives.includes(obj)) {
                     sendObj.selected = true;
                   }
-                  if (obj.isProfileImg){
+                  if (obj.isProfileImg) {
                     sendObj.url = obj.profileUrl;
                     sendObj.isProfileImg = true;
                   }
                   itemChannel.current.send(JSON.stringify(sendObj));
                 } else {
                   const data = {
-                    order: "drawing",
+                    order: 'drawing',
                     path: obj,
                   };
                   itemChannel.current.send(JSON.stringify(data));
@@ -657,13 +649,7 @@ const DressRoom = (props) => {
     await peerRef.current
       .setRemoteDescription(desc)
       .then(() => {
-        userStream.current
-          .getTracks()
-          .forEach((track) =>
-            senders.current.push(
-              peerRef.current.addTrack(track, userStream.current)
-            )
-          );
+        userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
       })
       .then(() => {
         return peerRef.current.createAnswer();
@@ -677,7 +663,7 @@ const DressRoom = (props) => {
           caller: socketRef.current.id,
           sdp: peerRef.current.localDescription,
         };
-        socketRef.current.emit("answer", payload);
+        socketRef.current.emit('answer', payload);
       });
   };
 
@@ -692,7 +678,7 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      socketRef.current.emit("ice-candidate", payload);
+      socketRef.current.emit('ice-candidate', payload);
     }
   };
 
