@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './Collection.module.css';
 import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
+import SimpleSlider from '../../SimpleSlider/SimpleSlider';
 
 const Collection = () => {
   function getCookie(name) {
@@ -67,56 +68,9 @@ const Collection = () => {
   return (
     <>
       <NormalHeader />
-      <div>
-        <div className={styles.collectionSets}>
-          {collectionImg.map((items, index) => (
-            <div>
-              <div className={styles.collectionSet}>
-                <img
-                  className={styles.collectionImgTop}
-                  key={index}
-                  src={items.top.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionImgBottom}
-                  key={index}
-                  src={items.bottom.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionImgShoes}
-                  key={index}
-                  src={items.shoes.removedBgImg}
-                  alt="img"
-                ></img>
-              </div>
-              <div>
-                <img
-                  className={styles.collectionSmallImgTop}
-                  key={index}
-                  src={items.top.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionSmallImgBottom}
-                  key={index}
-                  src={items.bottom.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionSmallImgShoes}
-                  key={index}
-                  src={items.shoes.removedBgImg}
-                  alt="img"
-                ></img>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <SimpleSlider collectionImg={collectionImg} />
 
-      <section className={styles.sectionImg}>
+      {/* <section className={styles.sectionImg}>
         <article className={styles.articleImg}>
           <div className={styles.imgContainer}>
             <ul className={styles.imgUl}>
@@ -131,7 +85,7 @@ const Collection = () => {
             </ul>
           </div>
         </article>
-      </section>
+      </section> */}
     </>
   );
 };
