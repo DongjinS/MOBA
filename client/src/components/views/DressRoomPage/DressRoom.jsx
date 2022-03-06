@@ -65,11 +65,26 @@ const DressRoom = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    console.log(canvasRef.current.offsetWidth, data.clientX);
     if (canvasRef.current.offsetWidth - 25 > data.clientX) {
       modifyMouse(data);
     }
   };
+
+  const lock = (object) => {
+    object.hasControls = false;
+    object.lockMovementX = true;
+    object.lockMovementY = true;
+    object.set('stroke', '#f00');
+    object.set('strokeWidth', 10);
+  };
+
+  const unlock = (object) => {
+    object.hasControls = true;
+    object.lockMovementX = false;
+    object.lockMovementY = false;
+    object.set('stroke', '');
+    object.set('strokeWidth', 1);
+  }
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
@@ -103,34 +118,41 @@ const DressRoom = (props) => {
         canvas.add(path);
         break;
       case 'selected':
-        if (data.obj.stroke) {
-          break;
+        if (data.obj.stroke === '#f00') {
+          // 이미 내가 선택하고 있는 상품이면
+          canvas.getObjects().forEach((obj) => {
+            if (obj.id === data.id) {
+              obj.doubleSelected = true;
+              // obj.set('doubleSelected', true);
+            }
+          });
+          console.log('double selected!!!', canvas.getObjects());
+          canvas.renderAll();
+        } else {
+          canvas.getObjects().forEach((object) => {
+            if (object.id === data.id) {
+              object.doubleSelected = false;
+              lock(object);
+              // object.hasControls = false;
+              // object.lockMovementX = true;
+              // object.lockMovementY = true;
+              // object.set('stroke', '#f00');
+              // object.set('strokeWidth', 10);
+              canvas.renderAll();
+            }
+          });
         }
-        canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
-          if (object.id === data.id) {
-            console.log('obj : ', object);
-            object.hasControls = false;
-            object.lockMovementX = true;
-            object.lockMovementY = true;
-
-            object.set('stroke', '#f00');
-            object.set('strokeWidth', 10);
-            canvas.renderAll();
-            console.log('stroke', object);
-          }
-        });
         break;
       case 'deselected':
         canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
           if (object.id === data.id) {
-            console.log('obj : ', object);
-            object.hasControls = true;
-            object.lockMovementX = false;
-            object.lockMovementY = false;
-            object.set('stroke', '');
-            object.set('strokeWidth', 1);
+            // object.hasControls = true;
+            // object.lockMovementX = false;
+            // object.lockMovementY = false;
+            // object.set('stroke', '');
+            // object.set('strokeWidth', 1);
+            object.doubleSelected = false;
+            unlock(object);
             canvas.renderAll();
           }
         });
@@ -248,6 +270,16 @@ const DressRoom = (props) => {
       canvas.on('selection:cleared', (opt) => {
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
+            if (obj.doubleSelected) {
+              obj.doubleSelected = false;
+              // obj.hasControls = false;
+              // obj.lockMovementX = true;
+              // obj.lockMovementY = true;
+              // obj.set('stroke', '#f00');
+              // obj.set('strokeWidth', 10);
+              lock(obj);
+              canvas.renderAll();
+            }
             try {
               itemChannel.current.send(
                 JSON.stringify({
@@ -263,45 +295,60 @@ const DressRoom = (props) => {
         }
       });
       canvas.on('selection:created', (opt) => {
-        opt.selected.forEach((obj) => {
-          try {
-            if (opt.selected.length >= 2 && obj.stroke == '#f00') {
-              canvas.discardActiveObject();
+        if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#f00').length > 0) {
+          console.log('lock items cannot be group', opt);
+          canvas.discardActiveObject().renderAll();
+        } else {
+          opt.selected.forEach((obj) => {
+            try {
+              itemChannel.current.send(
+                JSON.stringify({
+                  obj: obj,
+                  id: obj.id,
+                  order: 'selected',
+                })
+              );
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
             }
-            itemChannel.current.send(
-              JSON.stringify({
-                obj: obj,
-                id: obj.id,
-                order: 'selected',
-              })
-            );
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
-          }
-        });
+          });
+        }
       });
       canvas.on('selection:updated', (opt) => {
         const actives = canvas.getActiveObjects();
-        opt.selected.forEach((obj) => {
-          try {
-            if (actives.length >= 2) {
-              if (actives.filter((active) => active.stroke !== '#f00') || obj.stroke == '#f00') {
-                canvas.discardActiveObject();
+        if (actives.length >= 2) {
+          if (opt.selected.filter((obj) => obj.stroke === '#f00').length > 0 || actives.filter((obj) => obj.stroke === '#f00').length > 0){
+            console.log('lock items cannot be group', opt);
+            canvas.discardActiveObject().renderAll();
+          } else {
+            opt.selected.forEach((obj) => {
+              try {
+                itemChannel.current.send(
+                  JSON.stringify({
+                    obj: obj,
+                    id: obj.id,
+                    order: 'selected',
+                  })
+                );
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
               }
-            }
-            itemChannel.current.send(
-              JSON.stringify({
-                obj: obj,
-                id: obj.id,
-                order: 'selected',
-              })
-            );
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+            });
           }
-        });
+        } 
+
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
+            if (obj.doubleSelected) {
+              obj.doubleSelected = false;
+              // obj.hasControls = false;
+              // obj.lockMovementX = true;
+              // obj.lockMovementY = true;
+              // obj.set('stroke', '#f00');
+              // obj.set('strokeWidth', 10);
+              lock(obj);
+              canvas.renderAll();
+            }
             try {
               itemChannel.current.send(
                 JSON.stringify({
@@ -334,30 +381,92 @@ const DressRoom = (props) => {
       });
       canvas.on('object:modified', (options) => {
         if (options.target) {
-          const modifiedObj = {
-            obj: options.target,
-            id: options.target.id,
-            order: 'modify',
-          };
-          try {
-            itemChannel.current.send(JSON.stringify(modifiedObj));
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+          if (options.target._objects) {
+            // 그룹으로 움직임
+            options.target._objects.forEach((object) => {
+              const matrix = object.calcTransformMatrix();
+              console.log(matrix);
+              console.log(object);
+              const centerX = matrix[4];
+              const centerY = matrix[5];
+              const scale = object.scaleX;
+              const left = centerX - (object.width * scale) / 2;
+              const top = centerY - (object.height * scale) / 2;
+              const modifiedObj = {
+                obj: object,
+                id: object.id,
+                left: left,
+                top: top,
+                order: 'modify',
+              };
+              try {
+                itemChannel.current.send(JSON.stringify(modifiedObj));
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
+              }
+            });
+          } else {
+            // 낱개로 움직임
+            console.log(options.target.calcTransformMatrix());
+            console.log(options.target);
+            const modifiedObj = {
+              obj: options.target,
+              id: options.target.id,
+              left: options.target.left,
+              top: options.target.top,
+              order: 'modify',
+            };
+            try {
+              itemChannel.current.send(JSON.stringify(modifiedObj));
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
           }
         }
       });
 
       canvas.on('object:moving', (options) => {
         if (options.target) {
-          const modifiedObj = {
-            obj: options.target,
-            id: options.target.id,
-            order: 'modify',
-          };
-          try {
-            itemChannel.current.send(JSON.stringify(modifiedObj));
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+          if (options.target._objects) {
+            // 그룹으로 움직임
+            options.target._objects.forEach((object) => {
+              const matrix = object.calcTransformMatrix();
+              console.log(matrix);
+              console.log(object);
+              const centerX = matrix[4];
+              const centerY = matrix[5];
+              const scale = object.scaleX;
+              const left = centerX - (object.width * scale) / 2;
+              const top = centerY - (object.height * scale) / 2;
+              const modifiedObj = {
+                obj: object,
+                id: object.id,
+                left: left,
+                top: top,
+                order: 'modify',
+              };
+              try {
+                itemChannel.current.send(JSON.stringify(modifiedObj));
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
+              }
+            });
+          } else {
+            // 낱개로 움직임
+            console.log(options.target.calcTransformMatrix());
+            console.log(options.target);
+            const modifiedObj = {
+              obj: options.target,
+              id: options.target.id,
+              left: options.target.left,
+              top: options.target.top,
+              order: 'modify',
+            };
+            try {
+              itemChannel.current.send(JSON.stringify(modifiedObj));
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
           }
         }
       });
@@ -492,11 +601,16 @@ const DressRoom = (props) => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
+        if (obj.stroke !== '#f00'){
+          // 락 걸린 상품이 아니면
+          itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
+        }
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
-      canvas.remove(obj);
+      if (obj.stroke !== '#f00'){
+        canvas.remove(obj);
+      }
     });
     canvas.discardActiveObject().renderAll();
   };
@@ -875,7 +989,7 @@ const DressRoom = (props) => {
                 style={{
                   fontSize: '30px',
                   margin: '10px',
-                  color: 'white',
+                  color: 'black',
                 }}
               >
                 {userId} 님의 코디룸
@@ -891,15 +1005,16 @@ const DressRoom = (props) => {
             >
               <div onClick={copyLink} style={{ cursor: 'pointer' }}>
                 <BsFillShareFill
-                  size="32"
+                  size='32'
                   style={{
                     marginRight: '20px',
                   }}
                 />
               </div>
-              <RiMenuLine size="40" style={{ color: 'white' }} />
+              <RiMenuLine size='40' style={{ color: 'white' }} />
             </div>
           </header>
+            {/* <div style={{height:'3px', width: '100%', backgroundColor: 'black'}}></div> */}
           <div
             style={{
               display: 'flex',
@@ -911,7 +1026,7 @@ const DressRoom = (props) => {
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
                 <div className={styles.sidebarTop}>
                   <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
-                    <BiChevronLeft className={styles.chevronIcon} size="40" />
+                    <BiChevronLeft className={styles.chevronIcon} size='40' />
                   </div>
                 </div>
 
@@ -921,14 +1036,14 @@ const DressRoom = (props) => {
                       products.map((item, index) => (
                         <div className={styles.tooltipElement} key={index}>
                           <div className={styles.productBox}>
-                            <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt="상품 이미지" />
-                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color="orange" size="50" />
+                            <img onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.newProductImg} src={item.img} alt='상품 이미지' />
+                            <AiFillPlusCircle onClick={(e) => HandleAddImgBtn(e, item, canvas)} className={styles.addProductIcon} color='orange' size='50' />
                             <div className={styles.hide + ' ' + styles.info}>
                               <ImCross onClick={(e) => HandleDeleteProductBtn(item.shop_url)} className={styles.removeProductIcon} />
                               <div>
                                 <span className={styles.shopName}>{item.shop_name}</span>
                                 <div className={styles.productName}>
-                                  <a className={styles.shopLink} href={item.shop_url} target="_blank">
+                                  <a className={styles.shopLink} href={item.shop_url} target='_blank'>
                                     {item.product_name}
                                   </a>
                                 </div>
@@ -940,7 +1055,7 @@ const DressRoom = (props) => {
                       ))
                     ) : (
                       <div className={styles.emptyBascket}>
-                        <img className={styles.emptyImg} src="/images/privateBascket2.png" alt="빈장바구니"></img>
+                        <img className={styles.emptyImg} src='/images/privateBascket2.png' alt='빈장바구니'></img>
                         <div className={styles.emptyInfo}>장바구니에 </div>
                         <div className={styles.emptyInfo}>상품이 없어요</div>
                       </div>
@@ -951,34 +1066,34 @@ const DressRoom = (props) => {
 
               <div ref={canvasRef} className={styles.canvasContainer}>
                 <div className={styles.toolbar}>
-                  <button type="button" className={styles.toolbarBtn} name="delete" onClick={HandleDeleteCanvasBtn}>
-                    <BsTrash size="30" />
+                  <button type='button' className={styles.toolbarBtn} name='delete' onClick={HandleDeleteCanvasBtn}>
+                    <BsTrash size='30' />
                   </button>
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
-                    <MdAddShoppingCart size="30" />
+                    <MdAddShoppingCart size='30' />
                   </button>
 
                   {isDrawing ? (
                     <button className={styles.toolbarBtn} onClick={DrawingFalse}>
-                      <BsHandIndexThumb size="30" />
+                      <BsHandIndexThumb size='30' />
                     </button>
                   ) : (
                     <button className={styles.toolbarBtn} onClick={HandleDrawing}>
-                      <BsPencilFill size="30" />
+                      <BsPencilFill size='30' />
                     </button>
                   )}
 
                   {/* 컬렉션 기능 추가 */}
                   <button className={styles.toolbarBtn} onClick={CollectionItems}>
-                    <BsFillCollectionFill size="30" />
+                    <BsFillCollectionFill size='30' />
                   </button>
                   <button className={styles.toolbarBtn} onClick={(e) => HandleAddProfileImgBtn(e, userImg, canvas)}>
-                    <MdFace size="30" />
+                    <MdFace size='30' />
                   </button>
                   {/* 컬렉션 기능 추가 */}
                 </div>
                 <ToastContainer
-                  position="bottom-center"
+                  position='bottom-center'
                   autoClose={3000}
                   hideProgressBar={false}
                   newestOnTop={false}
@@ -988,8 +1103,8 @@ const DressRoom = (props) => {
                   draggable
                   pauseOnHover
                 />
-                <div id="pointers" className={styles.pointers}></div>
-                <canvas className={styles.canvas} id="canvas"></canvas>
+                <div id='pointers' className={styles.pointers}></div>
+                <canvas className={styles.canvas} id='canvas'></canvas>
               </div>
             </div>
           </div>
@@ -997,7 +1112,7 @@ const DressRoom = (props) => {
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
               <div className={styles.user1}>
-                <video id="UserMuteCtrl" autoPlay ref={userVideo} className={styles.video} muted="muted" poster="/images/user1.png">
+                <video id='UserMuteCtrl' autoPlay ref={userVideo} className={styles.video} muted='muted' poster='/images/user1.png'>
                   video 1
                 </video>
                 <div className={styles.control_box1}>
@@ -1015,7 +1130,7 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video id="partnerMuteCtrl" autoPlay ref={partnerVideo} className={styles.video} poster="/images/user1.png">
+              <video id='partnerMuteCtrl' autoPlay ref={partnerVideo} className={styles.video} poster='/images/user1.png'>
                 video 2
               </video>
             </div>

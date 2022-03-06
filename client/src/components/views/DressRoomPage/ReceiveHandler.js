@@ -18,27 +18,27 @@ export const addImg = (canvas, data) => {
         id: id,
         product_info: product_info,
         // borderColor: "rgb(90,83,83)",
-        borderColor: "orange",
+        borderColor: 'orange',
         borderScaleFactor: 5,
-        cornerColor: "orange",
+        cornerColor: 'orange',
         cornerSize: 6,
-        cornerStyle: "rect",
+        cornerStyle: 'rect',
         transparentCorners: false,
         isProfileImg: isProfileImg,
         profileUrl: url,
       });
       console.log('received img: ', img);
       img.set(obj);
-      if (selected){
+      if (selected) {
         img.hasControls = false;
         img.lockMovementX = true;
         img.lockMovementY = true;
         img.set('stroke', '#f00');
         img.set('strokeWidth', 10);
       }
-      if (isProfileImg){
+      if (isProfileImg) {
         img.scale(0.2);
-      } else{
+      } else {
         img.scale(0.4);
       }
       console.log('received img after set(obj): ', img);
@@ -50,10 +50,12 @@ export const addImg = (canvas, data) => {
 };
 
 export const modifyObj = (canvas, data) => {
-  const { obj, id } = data;
+  const { obj, id, left, top } = data;
   canvas.getObjects().forEach((object) => {
     if (object.id === id) {
       object.set(obj);
+      object.set('left', left);
+      object.set('top', top);
       object.set('stroke', '#f00');
       object.set('strokeWidth', 10);
       object.setCoords();
