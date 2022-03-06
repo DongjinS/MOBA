@@ -11,15 +11,24 @@
 } */
 .flexBox {
   display: flex;
+  width: 100%;
 }
 .title {
   display: flex;
   flex-direction: column;
-  flex: 0.5;
+  justify-content: center;
+  flex: 1;
+}
+.title p {
+  font-size: 100px;
+  color: black;
+  margin: 0;
+  cursor: default;
+  -webkit-text-stroke: calc(0.005em + 1px) rgb(0, 0, 0);
 }
 .slider {
   display: flex;
-  flex: 6;
+  flex: 5;
 }
 .collectionSets {
   display: flex;
