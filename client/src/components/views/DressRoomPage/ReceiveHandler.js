@@ -8,7 +8,7 @@ let pointers = {};
 
 // listeners
 export const addImg = (canvas, data) => {
-  const { obj, id, url, product_info, isProfileImg, selected } = data;
+  const { obj, id, url, product_info, isProfileImg, selected, left, top } = data;
   console.log(obj.type);
 
   if (obj.type === 'image') {
@@ -29,6 +29,8 @@ export const addImg = (canvas, data) => {
       });
       console.log('received img: ', img);
       img.set(obj);
+      img.set('left', left);
+      img.set('top', top);
       if (selected) {
         img.hasControls = false;
         img.lockMovementX = true;
