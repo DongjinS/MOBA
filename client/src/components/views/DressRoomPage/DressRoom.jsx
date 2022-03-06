@@ -66,11 +66,26 @@ const DressRoom = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    console.log(canvasRef.current.offsetWidth, data.clientX);
     if (canvasRef.current.offsetWidth - 25 > data.clientX) {
       modifyMouse(data);
     }
   };
+
+  const lock = (object) => {
+    object.hasControls = false;
+    object.lockMovementX = true;
+    object.lockMovementY = true;
+    object.set('stroke', '#f00');
+    object.set('strokeWidth', 10);
+  };
+
+  const unlock = (object) => {
+    object.hasControls = true;
+    object.lockMovementX = false;
+    object.lockMovementY = false;
+    object.set('stroke', '');
+    object.set('strokeWidth', 1);
+  }
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
@@ -104,34 +119,41 @@ const DressRoom = (props) => {
         canvas.add(path);
         break;
       case 'selected':
-        if (data.obj.stroke) {
-          break;
+        if (data.obj.stroke === '#f00') {
+          // 이미 내가 선택하고 있는 상품이면
+          canvas.getObjects().forEach((obj) => {
+            if (obj.id === data.id) {
+              obj.doubleSelected = true;
+              // obj.set('doubleSelected', true);
+            }
+          });
+          console.log('double selected!!!', canvas.getObjects());
+          canvas.renderAll();
+        } else {
+          canvas.getObjects().forEach((object) => {
+            if (object.id === data.id) {
+              object.doubleSelected = false;
+              lock(object);
+              // object.hasControls = false;
+              // object.lockMovementX = true;
+              // object.lockMovementY = true;
+              // object.set('stroke', '#f00');
+              // object.set('strokeWidth', 10);
+              canvas.renderAll();
+            }
+          });
         }
-        canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
-          if (object.id === data.id) {
-            console.log('obj : ', object);
-            object.hasControls = false;
-            object.lockMovementX = true;
-            object.lockMovementY = true;
-
-            object.set('stroke', '#f00');
-            object.set('strokeWidth', 10);
-            canvas.renderAll();
-            console.log('stroke', object);
-          }
-        });
         break;
       case 'deselected':
         canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
           if (object.id === data.id) {
-            console.log('obj : ', object);
-            object.hasControls = true;
-            object.lockMovementX = false;
-            object.lockMovementY = false;
-            object.set('stroke', '');
-            object.set('strokeWidth', 1);
+            // object.hasControls = true;
+            // object.lockMovementX = false;
+            // object.lockMovementY = false;
+            // object.set('stroke', '');
+            // object.set('strokeWidth', 1);
+            object.doubleSelected = false;
+            unlock(object);
             canvas.renderAll();
           }
         });
@@ -249,6 +271,16 @@ const DressRoom = (props) => {
       canvas.on('selection:cleared', (opt) => {
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
+            if (obj.doubleSelected) {
+              obj.doubleSelected = false;
+              // obj.hasControls = false;
+              // obj.lockMovementX = true;
+              // obj.lockMovementY = true;
+              // obj.set('stroke', '#f00');
+              // obj.set('strokeWidth', 10);
+              lock(obj);
+              canvas.renderAll();
+            }
             try {
               itemChannel.current.send(
                 JSON.stringify({
@@ -264,45 +296,60 @@ const DressRoom = (props) => {
         }
       });
       canvas.on('selection:created', (opt) => {
-        opt.selected.forEach((obj) => {
-          try {
-            if (opt.selected.length >= 2 && obj.stroke == '#f00') {
-              canvas.discardActiveObject();
+        if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#f00').length > 0) {
+          console.log('lock items cannot be group', opt);
+          canvas.discardActiveObject().renderAll();
+        } else {
+          opt.selected.forEach((obj) => {
+            try {
+              itemChannel.current.send(
+                JSON.stringify({
+                  obj: obj,
+                  id: obj.id,
+                  order: 'selected',
+                })
+              );
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
             }
-            itemChannel.current.send(
-              JSON.stringify({
-                obj: obj,
-                id: obj.id,
-                order: 'selected',
-              })
-            );
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
-          }
-        });
+          });
+        }
       });
       canvas.on('selection:updated', (opt) => {
         const actives = canvas.getActiveObjects();
-        opt.selected.forEach((obj) => {
-          try {
-            if (actives.length >= 2) {
-              if (actives.filter((active) => active.stroke !== '#f00') || obj.stroke == '#f00') {
-                canvas.discardActiveObject();
+        if (actives.length >= 2) {
+          if (opt.selected.filter((obj) => obj.stroke === '#f00').length > 0 || actives.filter((obj) => obj.stroke === '#f00').length > 0){
+            console.log('lock items cannot be group', opt);
+            canvas.discardActiveObject().renderAll();
+          } else {
+            opt.selected.forEach((obj) => {
+              try {
+                itemChannel.current.send(
+                  JSON.stringify({
+                    obj: obj,
+                    id: obj.id,
+                    order: 'selected',
+                  })
+                );
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
               }
-            }
-            itemChannel.current.send(
-              JSON.stringify({
-                obj: obj,
-                id: obj.id,
-                order: 'selected',
-              })
-            );
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+            });
           }
-        });
+        } 
+
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
+            if (obj.doubleSelected) {
+              obj.doubleSelected = false;
+              // obj.hasControls = false;
+              // obj.lockMovementX = true;
+              // obj.lockMovementY = true;
+              // obj.set('stroke', '#f00');
+              // obj.set('strokeWidth', 10);
+              lock(obj);
+              canvas.renderAll();
+            }
             try {
               itemChannel.current.send(
                 JSON.stringify({
@@ -335,30 +382,92 @@ const DressRoom = (props) => {
       });
       canvas.on('object:modified', (options) => {
         if (options.target) {
-          const modifiedObj = {
-            obj: options.target,
-            id: options.target.id,
-            order: 'modify',
-          };
-          try {
-            itemChannel.current.send(JSON.stringify(modifiedObj));
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+          if (options.target._objects) {
+            // 그룹으로 움직임
+            options.target._objects.forEach((object) => {
+              const matrix = object.calcTransformMatrix();
+              console.log(matrix);
+              console.log(object);
+              const centerX = matrix[4];
+              const centerY = matrix[5];
+              const scale = object.scaleX;
+              const left = centerX - (object.width * scale) / 2;
+              const top = centerY - (object.height * scale) / 2;
+              const modifiedObj = {
+                obj: object,
+                id: object.id,
+                left: left,
+                top: top,
+                order: 'modify',
+              };
+              try {
+                itemChannel.current.send(JSON.stringify(modifiedObj));
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
+              }
+            });
+          } else {
+            // 낱개로 움직임
+            console.log(options.target.calcTransformMatrix());
+            console.log(options.target);
+            const modifiedObj = {
+              obj: options.target,
+              id: options.target.id,
+              left: options.target.left,
+              top: options.target.top,
+              order: 'modify',
+            };
+            try {
+              itemChannel.current.send(JSON.stringify(modifiedObj));
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
           }
         }
       });
 
       canvas.on('object:moving', (options) => {
         if (options.target) {
-          const modifiedObj = {
-            obj: options.target,
-            id: options.target.id,
-            order: 'modify',
-          };
-          try {
-            itemChannel.current.send(JSON.stringify(modifiedObj));
-          } catch (error) {
-            // 상대 없을 때 send 시 에러
+          if (options.target._objects) {
+            // 그룹으로 움직임
+            options.target._objects.forEach((object) => {
+              const matrix = object.calcTransformMatrix();
+              console.log(matrix);
+              console.log(object);
+              const centerX = matrix[4];
+              const centerY = matrix[5];
+              const scale = object.scaleX;
+              const left = centerX - (object.width * scale) / 2;
+              const top = centerY - (object.height * scale) / 2;
+              const modifiedObj = {
+                obj: object,
+                id: object.id,
+                left: left,
+                top: top,
+                order: 'modify',
+              };
+              try {
+                itemChannel.current.send(JSON.stringify(modifiedObj));
+              } catch (error) {
+                // 상대 없을 때 send 시 에러
+              }
+            });
+          } else {
+            // 낱개로 움직임
+            console.log(options.target.calcTransformMatrix());
+            console.log(options.target);
+            const modifiedObj = {
+              obj: options.target,
+              id: options.target.id,
+              left: options.target.left,
+              top: options.target.top,
+              order: 'modify',
+            };
+            try {
+              itemChannel.current.send(JSON.stringify(modifiedObj));
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
           }
         }
       });
@@ -493,11 +602,16 @@ const DressRoom = (props) => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
+        if (obj.stroke !== '#f00'){
+          // 락 걸린 상품이 아니면
+          itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
+        }
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
-      canvas.remove(obj);
+      if (obj.stroke !== '#f00'){
+        canvas.remove(obj);
+      }
     });
     canvas.discardActiveObject().renderAll();
   };
@@ -906,6 +1020,7 @@ const DressRoom = (props) => {
               </div>
             </div>
           </header>
+            {/* <div style={{height:'3px', width: '100%', backgroundColor: 'black'}}></div> */}
           <div
             style={{
               display: 'flex',
