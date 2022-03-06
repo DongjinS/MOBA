@@ -19,14 +19,14 @@ const Collection = () => {
     let productImg = [];
     await axios.get('/collection').then((response) => {
       const users = response.data;
-
       for (let user of users) {
-        for (let product of user.products) {
-          productImg.push(product.img);
+        for (let collection of user.collections) {
+          productImg.push(collection);
         }
       }
       setProductImg(productImg);
     });
+    console.log(productImg);
   }, []);
 
   useEffect(async () => {
@@ -39,7 +39,6 @@ const Collection = () => {
         const collectionLists = response.data;
 
         for (let collectionlist of collectionLists) {
-          console.log('------------------셋트 시작------------------');
           let collectionSet = {
             outer: '',
             top: '',
@@ -59,11 +58,10 @@ const Collection = () => {
           }
           collectionImg.push(collectionSet);
         }
-        console.log(collectionImg);
         setCollectionImg(collectionImg);
       });
-    console.log(collectionImg);
   }, []);
+
   async function deleteCollection(index) {
     let collectionImg = [];
     await axios.delete('collection/items', { data: { token, index } }).then((response) => {
@@ -88,7 +86,6 @@ const Collection = () => {
         }
         collectionImg.push(collectionSet);
       }
-      console.log(collectionImg);
       setCollectionImg(collectionImg);
     });
   }
@@ -102,23 +99,6 @@ const Collection = () => {
         </div>
         <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
       </div>
-
-      {/* <section className={styles.sectionImg}>
-        <article className={styles.articleImg}>
-          <div className={styles.imgContainer}>
-            <ul className={styles.imgUl}>
-              {productImg.map((item, index) => (
-                <img
-                  key={index}
-                  className={styles.itemImg}
-                  src={item}
-                  alt="img"
-                ></img>
-              ))}
-            </ul>
-          </div>
-        </article>
-      </section> */}
     </>
   );
 };
