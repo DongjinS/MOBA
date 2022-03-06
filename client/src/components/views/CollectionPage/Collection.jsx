@@ -95,7 +95,13 @@ const Collection = () => {
   return (
     <>
       <NormalHeader />
-      <SimpleSlider collectionImg={collectionImg} handleDelete={deleteCollection} />
+      <div className={styles.flexBox}>
+        <div className={styles.title}>
+          <p>내 컬렉션</p>
+          <p>남 컬렉션</p>
+        </div>
+        <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
+      </div>
 
       {/* <section className={styles.sectionImg}>
         <article className={styles.articleImg}>
