@@ -4,6 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap');
 .flexBox {
   font-family: 'InfinitySans-BoldA1';
   display: flex;
@@ -11,7 +12,9 @@
   height: 100%;
 }
 .title {
-  display: flex;
+  position: fixed;
+  top: 25%;
+  left: 20px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -19,7 +22,7 @@
 }
 .title p {
   font-size: 100px;
-  color: black;
+
   margin: 0;
   cursor: default;
   -webkit-text-stroke: calc(0.005em + 1px) rgb(0, 0, 0);
@@ -29,9 +32,18 @@
 .title p:hover {
   transform: scale(0.95);
 }
-.slider {
-  display: flex;
-  flex: 2.5;
+.normal {
+  color: white;
+}
+.selected {
+  color: black;
+  /* border-radius: 10px; */
+  opacity: 1;
+}
+.sliderBox {
+  width: 100%;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
 }
 
 .itemImg {
@@ -77,9 +89,12 @@
   }
 }
 .otherContainer {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
   display: flex;
   flex: 2.33;
   flex-wrap: wrap;
+  margin: 64px 50px 0px 470px;
 }
 .collection__card {
   display: flex;
@@ -91,6 +106,17 @@
   height: 330px;
   width: auto;
   padding: 1em;
+  position: relative;
+}
+.collection__card:hover .con__tooltip {
+  visibility: visible;
+}
+.collection__card:hover .i__collection__del {
+  visibility: visible;
+  cursor: pointer;
+}
+.collection__card:hover .collectionSet {
+  transform: scale(0.95);
 }
 .collectionSets {
   display: flex;
@@ -106,10 +132,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: all 0.3s ease-in-out;
 }
-/* .activeSlide:hover {
-  background-color: black;
-} */
 .collectionImgTop {
   position: absolute;
   height: 150px;
@@ -137,11 +161,11 @@
 }
 
 /*tooltip Box*/
-.con-tooltip {
+.con__tooltip {
   visibility: hidden;
   z-index: 10;
   position: absolute;
-  top: 90px;
+  top: 50px;
   /* background: #f2d1c9; */
 
   border-radius: 9px;
@@ -161,23 +185,25 @@
   justify-content: space-between;
   align-items: center;
   visibility: hidden;
-  z-index: 10;
+  z-index: 14;
   opacity: 0.4;
 
-  width: 280px;
-  height: 120px;
+  width: 240px;
+  height: 100px;
   background-color: rgba(255, 255, 255, 0.9);
   position: absolute;
-  top: -140%;
-  left: -55px;
+  top: -20%;
+  left: 115%;
 
-  font: 18px;
+  font: 12px;
 
-  transform: translateY(9px);
+  transform: translateY(-5px);
   transition: all 0.3s ease-in-out;
 
   box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
   cursor: pointer;
+  box-sizing: border-box;
+  padding: 2px;
 }
 .tooltip__img {
   display: flex;
@@ -185,6 +211,7 @@
   justify-content: center;
 }
 .tooltip__description {
+  padding-left: 6px;
   display: flex;
   flex: 6;
   flex-direction: column;
@@ -193,11 +220,11 @@
   align-items: flex-start;
 }
 .tooltip__description span:first-child {
-  font-size: 14px;
+  font-size: 10px;
   color: rgb(82, 82, 82);
 }
 .tooltip__description span:last-child {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 600;
 }
 .tooltip__icon {
@@ -222,12 +249,12 @@
   left: -55px;
 } */
 
-.con-tooltip:hover .tooltip {
+.con__tooltip:hover .tooltip {
   visibility: visible;
   transform: translateY(-5px);
   opacity: 1;
   transition: 0.3s linear;
-  left: -110px;
+  left: -85px;
   /* animation: odsoky 1s ease-in-out infinite alternate; */
 }
 /* @keyframes odsoky {
@@ -253,28 +280,29 @@
 /*bottom*/
 
 .bottom .tooltip {
-  top: 115%;
-  left: -110px;
+  top: -80px;
+  left: -85px;
 }
 
 .bottom .tooltip::after {
-  top: -10%;
-  left: 40%;
-  transform: rotate(180deg);
+  top: -80px;
+  left: -85px;
+  /* transform: rotate(180deg); */
 }
-.con-bottom {
+.con__bottom {
   z-index: 10;
   position: absolute;
-  top: 300px;
+  top: 150px;
 }
-.con-shoes {
+.con__shoes {
   z-index: 10;
   position: absolute;
-  top: 520px;
+  top: 250px;
 }
 .collection__del__box {
   position: absolute;
-  left: 310px;
+  left: 195px;
+  top: 0px;
   /* visibility: hidden; */
   width: 40px;
   height: 40px;

@@ -126,23 +126,27 @@ const Collection = () => {
             onClick={() => {
               setMyCollection(false);
             }}
+            className={myCollection ? styles.normal : styles.selected}
           >
             내 컬렉션
           </p>
           <p
+            className={!myCollection ? styles.normal : styles.selected}
             onClick={() => {
               setMyCollection(true);
             }}
           >
-            남 컬렉션
+            전체 컬렉션
           </p>
         </div>
         {!myCollection ? (
-          <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
+          <div className={styles.sliderBox}>
+            <SimpleSlider collectionImg={collectionImg} handleDelete={deleteCollection} />
+          </div>
         ) : (
           <div className={styles.otherContainer}>
-            {collectionImg &&
-              collectionImg.map((items, index) => (
+            {othersProductImg &&
+              othersProductImg.map((items, index) => (
                 <div key={index} className={styles.collection__card}>
                   <div className={styles.collection__del__box}>
                     <VscClose
@@ -155,7 +159,7 @@ const Collection = () => {
                   </div>
                   <div className={styles.collectionSet}>
                     <img className={styles.collectionImgTop} src={items.top.removedBgImg} alt='img' />
-                    <div className='con-tooltip bottom'>
+                    <div className={`${styles.con__tooltip} ${styles.bottom}`}>
                       <AiFillPlusCircle className={styles.i__plus} />
                       <div
                         onClick={() => {
@@ -177,7 +181,7 @@ const Collection = () => {
                       </div>
                     </div>
                     <img className={styles.collectionImgBottom} src={items.bottom.removedBgImg} alt='img'></img>
-                    <div className='con-tooltip bottom con-bottom'>
+                    <div className={`${styles.con__tooltip} ${styles.bottom} ${styles.con__bottom}`}>
                       <AiFillPlusCircle className={styles.i__plus} />
                       <div
                         onClick={() => {
@@ -199,7 +203,7 @@ const Collection = () => {
                       </div>
                     </div>
                     <img className={styles.collectionImgShoes} src={items.shoes.removedBgImg} alt='img'></img>
-                    <div className='con-tooltip con-shoes'>
+                    <div className={`${styles.con__tooltip} ${styles.bottom} ${styles.con__shoes}`}>
                       <AiFillPlusCircle className={styles.i__plus} />
                       <div
                         onClick={() => {

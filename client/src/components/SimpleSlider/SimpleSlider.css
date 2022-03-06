@@ -1,9 +1,8 @@
 @import '~slick-carousel/slick/slick.css';
 @import '~slick-carousel/slick/slick-theme.css';
 .slider__container {
-  width: 70%;
-  margin: auto;
-  margin-top: 50px;
+  width: 65%;
+  margin: 50px 50px 0px 530px;
   padding-right: 30px;
 }
 
