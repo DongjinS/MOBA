@@ -85,7 +85,7 @@ const DressRoom = (props) => {
     object.lockMovementY = false;
     object.set('stroke', '');
     object.set('strokeWidth', 1);
-  }
+  };
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
@@ -317,26 +317,24 @@ const DressRoom = (props) => {
       });
       canvas.on('selection:updated', (opt) => {
         const actives = canvas.getActiveObjects();
-        if (actives.length >= 2) {
-          if (opt.selected.filter((obj) => obj.stroke === '#f00').length > 0 || actives.filter((obj) => obj.stroke === '#f00').length > 0){
-            console.log('lock items cannot be group', opt);
-            canvas.discardActiveObject().renderAll();
-          } else {
-            opt.selected.forEach((obj) => {
-              try {
-                itemChannel.current.send(
-                  JSON.stringify({
-                    obj: obj,
-                    id: obj.id,
-                    order: 'selected',
-                  })
-                );
-              } catch (error) {
-                // 상대 없을 때 send 시 에러
-              }
-            });
-          }
-        } 
+        if (actives.length >= 2 && actives.filter((obj) => obj.stroke === '#f00').length > 0) {
+          console.log('lock items cannot be group', opt);
+          canvas.discardActiveObject().renderAll();
+        } else {
+          opt.selected.forEach((obj) => {
+            try {
+              itemChannel.current.send(
+                JSON.stringify({
+                  obj: obj,
+                  id: obj.id,
+                  order: 'selected',
+                })
+              );
+            } catch (error) {
+              // 상대 없을 때 send 시 에러
+            }
+          });
+        }
 
         if (opt.deselected) {
           opt.deselected.forEach((obj) => {
@@ -602,14 +600,14 @@ const DressRoom = (props) => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        if (obj.stroke !== '#f00'){
+        if (obj.stroke !== '#f00') {
           // 락 걸린 상품이 아니면
           itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
         }
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
-      if (obj.stroke !== '#f00'){
+      if (obj.stroke !== '#f00') {
         canvas.remove(obj);
       }
     });
@@ -1020,7 +1018,7 @@ const DressRoom = (props) => {
               </div>
             </div>
           </header>
-            {/* <div style={{height:'3px', width: '100%', backgroundColor: 'black'}}></div> */}
+          {/* <div style={{height:'3px', width: '100%', backgroundColor: 'black'}}></div> */}
           <div
             style={{
               display: 'flex',
