@@ -289,6 +289,9 @@ const DressRoom = (props) => {
         console.log("selection:created", canvas.getActiveObjects(), opt);
         opt.selected.forEach((obj) => {
           try {
+            if (opt.selected.length >= 2 && obj.stroke == '#f00'){
+              canvas.discardActiveObject();
+            }
             itemChannel.current.send(
               JSON.stringify({
                 obj: obj,
@@ -303,8 +306,14 @@ const DressRoom = (props) => {
       });
       canvas.on("selection:updated", (opt) => {
         console.log("selection:updated", canvas.getActiveObjects(), opt);
+        const actives = canvas.getActiveObjects()
         opt.selected.forEach((obj) => {
           try {
+            if (actives.length >= 2){
+              if (actives.filter(active => active.stroke !== '#f00') || obj.stroke == '#f00'){
+                canvas.discardActiveObject();
+              }
+            }
             itemChannel.current.send(
               JSON.stringify({
                 obj: obj,
