@@ -8,7 +8,7 @@ let pointers = {};
 
 // listeners
 export const addImg = (canvas, data) => {
-  const { obj, id, url, product_info } = data;
+  const { obj, id, url, product_info, isProfileImg } = data;
   console.log(obj.type);
 
   if (obj.type === 'image') {
@@ -22,6 +22,7 @@ export const addImg = (canvas, data) => {
         cornerColor: 'black',
         cornerSize: 12,
         transparentCorners: false,
+        isProfileImg: isProfileImg,
       });
       console.log('received img: ', img);
       img.set(obj);
