@@ -15,7 +15,8 @@
   color: black;
   font-size: 25px;
   cursor: pointer;
-  border: 1px solid black;
+  /* border: 1px solid #aaaaaa; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .accordion-title span {
   margin-left: 10px;
@@ -33,9 +34,11 @@
   background-color: #f4f4f4;
   background-color: #c4c4c4;
   background-color: #f0f0f0;
-  background: linear-gradient(45deg, #f0f0f0, #c4c4c4);
+  background: linear-gradient(45deg, #fff0e3, #f7d2c3);
+  background: linear-gradient(45deg, #f0f0f0, #b9b9b9);
   padding: 50px 5px;
-  border: 1px solid black;
+  /* border: 1px solid #aaaaaa; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   border-top: 0;
   animation: ssr 0.5s ease;
 }

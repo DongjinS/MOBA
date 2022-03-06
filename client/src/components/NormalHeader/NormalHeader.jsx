@@ -53,10 +53,7 @@ const NormalHeader = (props) => {
           {/* <button id="checkout" className={styles.buttons} onClick={logout}>
           <RiLogoutBoxRLine size={40} />
         </button> */}
-          <button onClick={showMenu}>
-            <RiMenuLine className={styles.hamburger} size={40} />
-          </button>
-          {hamburger ? <div>hi</div> : <div>bye</div>}
+          <RiMenuLine className={styles.hamburger} size={40} />
         </>
       ) : (
         <></>

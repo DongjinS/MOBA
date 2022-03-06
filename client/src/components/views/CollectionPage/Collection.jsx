@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './Collection.module.css';
 import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
+import SimpleSlider from '../../SimpleSlider/SimpleSlider';
 
 const Collection = () => {
   function getCookie(name) {
@@ -63,95 +64,46 @@ const Collection = () => {
       });
     console.log(collectionImg);
   }, []);
-
   async function deleteCollection(index) {
     let collectionImg = [];
-    await axios
-      .delete('collection/items', { data: { token, index } })
-      .then((response) => {
-        const collectionLists = response.data;
-        for (let collectionlist of collectionLists) {
-          let collectionSet = {
-            outer: '',
-            top: '',
-            bottom: '',
-            shoes: '',
-          };
-          for (let collection of collectionlist) {
-            if (collection.category === '아우터') {
-              collectionSet.outer = collection;
-            } else if (collection.category === '상의') {
-              collectionSet.top = collection;
-            } else if (collection.category === '하의') {
-              collectionSet.bottom = collection;
-            } else {
-              collectionSet.shoes = collection;
-            }
+    await axios.delete('collection/items', { data: { token, index } }).then((response) => {
+      const collectionLists = response.data;
+      for (let collectionlist of collectionLists) {
+        let collectionSet = {
+          outer: '',
+          top: '',
+          bottom: '',
+          shoes: '',
+        };
+        for (let collection of collectionlist) {
+          if (collection.category === '아우터') {
+            collectionSet.outer = collection;
+          } else if (collection.category === '상의') {
+            collectionSet.top = collection;
+          } else if (collection.category === '하의') {
+            collectionSet.bottom = collection;
+          } else {
+            collectionSet.shoes = collection;
           }
-          collectionImg.push(collectionSet);
         }
-        console.log(collectionImg);
-        setCollectionImg(collectionImg);
-      });
+        collectionImg.push(collectionSet);
+      }
+      console.log(collectionImg);
+      setCollectionImg(collectionImg);
+    });
   }
-
   return (
     <>
       <NormalHeader />
-      <div>
-        <div className={styles.collectionSets}>
-          {collectionImg.map((items, index) => (
-            <div>
-              <div className={styles.collectionSet}>
-                <img
-                  className={styles.collectionImgTop}
-                  key={index}
-                  src={items.top.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionImgBottom}
-                  key={index}
-                  src={items.bottom.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionImgShoes}
-                  key={index}
-                  src={items.shoes.removedBgImg}
-                  alt="img"
-                ></img>
-              </div>
-              <div>
-                <img
-                  className={styles.collectionSmallImgTop}
-                  key={index}
-                  src={items.top.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionSmallImgBottom}
-                  key={index}
-                  src={items.bottom.removedBgImg}
-                  alt="img"
-                ></img>
-                <img
-                  className={styles.collectionSmallImgShoes}
-                  key={index}
-                  src={items.shoes.removedBgImg}
-                  alt="img"
-                ></img>
-              </div>
-              <button onClick={() => deleteCollection(index)}>
-                {' '}
-                삭제하기{' '}
-              </button>
-            </div>
-          ))}
+      <div className={styles.flexBox}>
+        <div className={styles.title}>
+          <p>내 컬렉션</p>
+          <p>남 컬렉션</p>
         </div>
+        <SimpleSlider className={styles.slider} collectionImg={collectionImg} handleDelete={deleteCollection} />
       </div>
 
-      <section className={styles.sectionImg}>
+      {/* <section className={styles.sectionImg}>
         <article className={styles.articleImg}>
           <div className={styles.imgContainer}>
             <ul className={styles.imgUl}>
@@ -166,7 +118,7 @@ const Collection = () => {
             </ul>
           </div>
         </article>
-      </section>
+      </section> */}
     </>
   );
 };
