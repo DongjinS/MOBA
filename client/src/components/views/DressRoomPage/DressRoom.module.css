@@ -57,6 +57,7 @@
 
 .logo {
   display: flex;
+  z-index: 103;
 }
 
 .copyBtn {
@@ -70,6 +71,18 @@
 
 .copyBtn:hover {
   color: #f37423;
+}
+
+.menuBtn {
+  /* z-index: 103; */
+  cursor: pointer;
+  color: #4c4c4c;
+}
+
+.closeBtn {
+  /* z-index: 104; */
+  color: white;
+  cursor: pointer;
 }
 
 .body {
@@ -422,6 +435,13 @@
   flex-direction: column;
   position: relative;
   height: 100%;
+}
+
+.userSpeaking {
+  border: 5px solid orange;
+}
+.partnerSpeaking {
+  border: 5px solid black;
 }
 
 .video {

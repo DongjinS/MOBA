@@ -10,7 +10,7 @@
   background: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05)); */
   position: fixed;
   top: 0px;
-  z-index: 21;
+  z-index: 102;
   transition: 0.5s ease-in-out;
 }
 .header:hover {
@@ -57,6 +57,7 @@
   margin-right: 15px;
   cursor: pointer;
   color: white;
+  z-index: 103;
 }
 
 .black {

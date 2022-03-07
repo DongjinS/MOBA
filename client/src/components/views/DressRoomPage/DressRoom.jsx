@@ -36,6 +36,7 @@ import { RiMenuLine } from 'react-icons/ri';
 import { BsFillCollectionFillMdFace } from 'react-icons/bs';
 import { MdFace } from 'react-icons/md';
 import Menu from '../../NormalHeader/Menu';
+import hark from 'hark';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -48,6 +49,8 @@ const DressRoom = (props) => {
   const [uniqueShops, setUniqueShops] = useState([]);
   const [initialWidth, setInitialWidth] = useState(0);
   const [userImg, setUserImg] = useState('');
+  const [isUserSpeaking, setIsUserSpeaking] = useState(false);
+  const [isPartnerSpeaking, setIsPartnerSpeaking] = useState(false);
 
   const canvasRef = useRef();
   const videoContainerRef = useRef();
@@ -188,6 +191,18 @@ const DressRoom = (props) => {
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
+        const options = {};
+        const userSpeechEvents = hark(stream, options);
+        userSpeechEvents.on('speaking', () => {
+          console.log('speaking');
+          setIsUserSpeaking(true);
+        });
+
+        userSpeechEvents.on('stopped_speaking', () => {
+          console.log('stopped speaking');
+          setIsUserSpeaking(false);
+        });
+
         console.log('rtc socket');
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
@@ -795,6 +810,18 @@ const DressRoom = (props) => {
 
   const handleTrackEvent = (e) => {
     partnerVideo.current.srcObject = e.streams[0];
+
+    const options = {};
+    const partnerSpeechEvents = hark(partnerVideo.current.srcObject, options);
+    partnerSpeechEvents.on('speaking', () => {
+      console.log('partner speaking');
+      setIsPartnerSpeaking(true);
+    });
+
+    partnerSpeechEvents.on('stopped_speaking', () => {
+      console.log('partner stopped speaking');
+      setIsPartnerSpeaking(false);
+    });
   };
 
   const HandleCameraBtnClick = () => {
@@ -963,7 +990,6 @@ const DressRoom = (props) => {
 
   return (
     <>
-      {isMenuOpen ? <Menu /> : <></>}
       {isLoading ? (
         <div className={styles.loadingContainer}>
           <ClothesLoading />
@@ -1005,8 +1031,9 @@ const DressRoom = (props) => {
                   }}
                 />
               </div>
-              <div onClick={() => setIsMemuOpen(!isMenuOpen)}>
-                <RiMenuLine size='40' style={{ color: '#4c4c4c', cursor: 'pointer' }} />
+              <div style={{ zIndex: '103' }} onClick={() => setIsMemuOpen(!isMenuOpen)}>
+                {/* <RiMenuLine size='40' style={{ color: '#4c4c4c', cursor: 'pointer' }} /> */}
+                {isMenuOpen ? <MdClose className={styles.closeBtn} size={40} /> : <RiMenuLine className={styles.menuBtn} size={40} />}
               </div>
             </div>
           </header>
@@ -1018,6 +1045,7 @@ const DressRoom = (props) => {
               alignItems: 'stretch',
             }}
           >
+            {isMenuOpen ? <Menu /> : <></>}
             <div className={isActive ? styles.shrink + ' ' + styles.body : styles.body}>
               <div ref={productSidebarRef} className={styles.ProductSidebar}>
                 <div className={styles.sidebarLinks}>
@@ -1108,7 +1136,7 @@ const DressRoom = (props) => {
 
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
-              <div className={styles.user1}>
+              <div className={isUserSpeaking ? styles.user1 + ' ' + styles.userSpeaking : styles.user1}>
                 <video id='UserMuteCtrl' autoPlay ref={userVideo} className={styles.video} muted='muted' poster='/images/user1.png'>
                   video 1
                 </video>
@@ -1127,9 +1155,11 @@ const DressRoom = (props) => {
                   </button>
                 </div>
               </div>
-              <video id='partnerMuteCtrl' autoPlay ref={partnerVideo} className={styles.video} poster='/images/user1.png'>
-                video 2
-              </video>
+              <div className={isPartnerSpeaking ? styles.user1 + ' ' + styles.partnerSpeaking : styles.user1}>
+                <video id='partnerMuteCtrl' autoPlay ref={partnerVideo} className={styles.video} poster='/images/user1.png'>
+                  video 2
+                </video>
+              </div>
             </div>
           </div>
         </div>
