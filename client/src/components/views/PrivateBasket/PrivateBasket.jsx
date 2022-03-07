@@ -109,9 +109,7 @@ const PrivateBasket = (props) => {
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
-        setProducts(
-          products?.filter((product) => product.shop_url !== shop_url)
-        );
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
         console.log(error.response);
@@ -126,11 +124,7 @@ const PrivateBasket = (props) => {
           <ul className={styles.experienceCategory}>
             <li className={styles.categoryName}>
               <div
-                className={
-                  checked
-                    ? styles.maskText
-                    : styles.maskText + ' ' + styles.selected
-                }
+                className={checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
                 onClick={() => {
                   setChecked(false);
                 }}
@@ -140,11 +134,7 @@ const PrivateBasket = (props) => {
             </li>
             <li className={styles.categoryName}>
               <div
-                className={
-                  !checked
-                    ? styles.maskText
-                    : styles.maskText + ' ' + styles.selected
-                }
+                className={!checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
                 onClick={() => {
                   setChecked(true);
                 }}
@@ -167,14 +157,14 @@ const PrivateBasket = (props) => {
                 >
                   <textarea
                     className={styles.voteText}
-                    name="text"
-                    type="text"
+                    name='text'
+                    type='text'
                     onChange={onChangeVoteMessage}
                     style={{ fontSize: '23px' }}
-                    placeholder="투표 요청시 친구들에게 전달할 내용을 입력해주세요."
+                    placeholder='투표 요청시 친구들에게 전달할 내용을 입력해주세요.'
                     value={inputs.text}
                   ></textarea>
-                  <button className={styles.voteBtn} type="submit">
+                  <button className={styles.voteBtn} type='submit'>
                     전송
                   </button>
                 </form>
@@ -193,7 +183,7 @@ const PrivateBasket = (props) => {
                     }}
                     className={styles.deleteContainer}
                   >
-                    <VscTrash className={styles.deleteBtn} size="30px" />
+                    <VscTrash className={styles.deleteBtn} size='30px' />
                   </div>
                   <div
                     className={styles.productContainer}
@@ -203,42 +193,19 @@ const PrivateBasket = (props) => {
                   >
                     <div className={styles.productImgContainer}>
                       <img className={styles.itemImg} src={item.removedBgImg} />
-                      <div
-                        className={
-                          !checked ? styles.productInfo : styles.voteInfo
-                        }
-                      >
+                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
                         {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
                         <div className={styles.infoContainer}>
                           {/* <ImCross size="20px" style={{ position: 'absolute', top: '20px', right: '20px' }} /> */}
-                          <span className={styles.shopName}>
-                            {item.shop_name}
-                          </span>
-                          <div className={styles.productName}>
-                            {item.product_name}
-                          </div>
+                          <span className={styles.shopName}>{item.shop_name}</span>
+                          <div className={styles.productName}>{item.product_name}</div>
 
                           {item.price === item.sale_price ? (
-                            <div className={styles.originalPrice}>
-                              {item.price
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                              원
-                            </div>
+                            <div className={styles.originalPrice}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
                           ) : (
                             <div>
-                              <div className={styles.price}>
-                                {item.price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                원
-                              </div>
-                              <div className={styles.salePrice}>
-                                {item.sale_price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                원
-                              </div>
+                              <div className={styles.price}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
+                              <div className={styles.salePrice}>{item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
                             </div>
                           )}
                         </div>

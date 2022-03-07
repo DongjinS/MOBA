@@ -52,8 +52,27 @@
   height: 100%;
   font-family: 'IBM Plex Sans KR', sans-serif;
   font-weight: 700;
+  animation: smoothAppear 0.8s;
 }
-
+@keyframes slide {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+    /* transform: translateY(200%); */
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
 .itemImg {
   display: block;
   height: 30vh;
@@ -102,6 +121,7 @@
   flex: 2.33;
   flex-wrap: wrap;
   margin: 0px 50px 0px 470px;
+  animation: slide 0.6s;
 }
 .collection__card {
   display: flex;

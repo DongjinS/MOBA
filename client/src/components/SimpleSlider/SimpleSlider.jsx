@@ -112,7 +112,7 @@ function SimpleSlider(props) {
                     </div>
                   </div>
                   <img className='collectionImgShoes' src={items.shoes.removedBgImg} alt='img'></img>
-                  <div className='con-tooltip con-shoes'>
+                  <div className='con-tooltip con-shoes bottom'>
                     <AiFillPlusCircle className='i__plus' />
                     <div
                       onClick={() => {

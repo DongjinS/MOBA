@@ -232,7 +232,7 @@
 /*bottom*/
 
 .bottom .tooltip {
-  top: 115%;
+  top: -40px;
   left: -110px;
 }
 
@@ -244,7 +244,7 @@
 .con-bottom {
   z-index: 10;
   position: absolute;
-  top: 300px;
+  top: 340px;
 }
 .con-shoes {
   z-index: 10;
