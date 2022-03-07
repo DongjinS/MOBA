@@ -6,8 +6,6 @@ const User = require('../models/User');
 collectionRouter.get('/', (req, res) => {
   console.log('콜렉션 페이지 요청입니다.');
   User.find()
-    .select('products')
-    .where('product_name')
     .then((users) => {
       const result = users;
       res.send(result);

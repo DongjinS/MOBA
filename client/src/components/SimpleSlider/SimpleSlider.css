@@ -2,8 +2,8 @@
 @import '~slick-carousel/slick/slick-theme.css';
 .slider__container {
   width: 65%;
-  margin: auto;
-  margin-top: 50px;
+  margin: 50px 50px 0px 530px;
+  padding-right: 30px;
 }
 
 .slide {
@@ -250,7 +250,7 @@
 }
 .collection__del__box {
   position: absolute;
-  left: 310px;
+  left: 290px;
   /* visibility: hidden; */
   width: 40px;
   height: 40px;
