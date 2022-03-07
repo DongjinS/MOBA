@@ -10,7 +10,7 @@
   height: 100%;
   /* min-height: 101vh !important; */
   position: relative;
-  z-index: auto;
+  /* z-index: auto; */
   -webkit-overflow-scrolling: touch;
   padding-top: 100px;
 }
@@ -165,33 +165,26 @@
   position: absolute;
 }
 
-.dummyWrap {
-  background-color: transparent;
-  height: 100%;
-  width: 100%;
-  z-index: 99;
-  /* opacity: 0; */
-  position: absolute;
-}
 .deleteContainer {
-  background-color: transparent;
+  /* background-color: transparent; */
   /* height: 100%;
   width: 100%; */
-  z-index: 99;
+  z-index: 102;
+  /* width: 30px;
+  height: 30px; */
+  /* background-color: #a02226; */
+  /* position: absolute; */
+  bottom: 40px;
+  right: 40px;
   /* opacity: 0; */
   /* position: absolute; */
 }
 
-.productWrap :hover ~ .productContainer > .productInfo {
+/* .productWrap :hover ~ .productContainer > .productInfo {
   opacity: 0.85;
   background-color: #f0f0f0;
   color: black;
-}
-.productWrap :hover ~ .productContainer > .productInfo {
-  opacity: 0.85;
-  background-color: #f0f0f0;
-  color: black;
-}
+} */
 
 /* .productWrap :hover > .checkedIcon {
   opacity: 0.5;
@@ -211,6 +204,7 @@
 .productContainer :hover > .productInfo {
   opacity: 0.85;
   background-color: #f0f0f0;
+  /* background-color: pink; */
   color: black;
 }
 /* .productContainer :hover > .deleteBtn {
@@ -261,9 +255,10 @@
 
 .deleteBtn {
   cursor: pointer;
-  z-index: 100;
+  z-index: 200;
   position: absolute;
   bottom: 20px;
+  /* right: 20px; */
   right: 20px;
   opacity: 1;
 }
@@ -299,11 +294,11 @@
 }
 
 .infoContainer {
-  margin: 15% 20%;
+  margin: 10% 10%;
 }
 
 .shopName {
-  font-size: 20px;
+  font-size: 16px;
   background-color: black;
   color: white;
   padding: 2px 8px;

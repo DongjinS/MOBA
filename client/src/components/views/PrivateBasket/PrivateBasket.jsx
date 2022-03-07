@@ -61,51 +61,54 @@ const PrivateBasket = (props) => {
     setInputs({ ...inputs, [name]: value });
   };
 
-  const HandleSubmitVote = () => {
-    function getCookie(name) {
-      const cookies = new Cookies();
-      return cookies.get(name);
-    }
-    const token = getCookie('x_auth');
-
-    const id = uuid();
-
-    const shareKakao = () => {
-      window.Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: '모바',
-          description: inputs.text,
-          imageUrl: '#',
+  const shareKakao = (inputs, id) => {
+    window.Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '모바',
+        description: inputs.text,
+        imageUrl: '#',
+        link: {
+          webUrl: `http://localhost:3000/vote/${id}`,
+        },
+      },
+      buttons: [
+        {
+          title: '투표하기로 이동',
           link: {
             webUrl: `http://localhost:3000/vote/${id}`,
           },
         },
-        buttons: [
-          {
-            title: '투표하기로 이동',
-            link: {
-              webUrl: `http://localhost:3000/vote/${id}`,
-            },
-          },
-        ],
-      });
-    };
+      ],
+    });
+  };
 
-    const sendCheckedProduct = () => {
-      axios.post('/vote', {
-        token: token,
-        products: voteList,
-        room_info: id,
-        room_message: inputs.text,
-      });
-    };
+  const sendCheckedProduct = (token, voteList, id, inputs) => {
+    axios.post('/vote', {
+      token: token,
+      products: voteList,
+      room_info: id,
+      room_message: inputs.text,
+    });
+  };
 
-    sendCheckedProduct();
-    shareKakao();
+  const HandleSubmitVote = (e) => {
+    if (voteList.length < 2 || voteList.length > 4) {
+      e.preventDefault();
+      alert('투표할 상품을 다시 확인해주세요.');
+      return;
+    }
+
+    const token = getCookie('x_auth');
+
+    const id = uuid();
+
+    sendCheckedProduct(token, voteList, id, inputs);
+    shareKakao(inputs, id);
   };
 
   const HandleDeleteProductBtn = (shop_url) => {
+    console.log('delelte');
     axios
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
@@ -154,7 +157,7 @@ const PrivateBasket = (props) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
-                  onSubmit={HandleSubmitVote}
+                  onSubmit={(e) => HandleSubmitVote(e)}
                 >
                   <textarea
                     className={styles.voteText}
@@ -185,14 +188,10 @@ const PrivateBasket = (props) => {
                 <div key={index} style={{ position: 'relative' }}>
                   <div className={styles.productContainer}>
                     <div className={styles.productImgContainer}>
-                      {checked ? (
-                        <div
-                          className={styles.productWrap}
-                          onClick={(e) => {
-                            handleProductClick(e, item);
-                          }}
-                        ></div>
-                      ) : (
+                      <img className={styles.itemImg} src={item.removedBgImg} />
+                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
+                        {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
+
                         <div
                           onClick={() => {
                             HandleDeleteProductBtn(item.shop_url);
@@ -201,10 +200,13 @@ const PrivateBasket = (props) => {
                         >
                           <VscTrash className={styles.deleteBtn} size='30px' />
                         </div>
-                      )}
-                      <img className={styles.itemImg} src={item.removedBgImg} />
-                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
-                        {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
+                        <div
+                          className={styles.productWrap}
+                          onClick={(e) => {
+                            handleProductClick(e, item);
+                          }}
+                        ></div>
+
                         <div className={styles.infoContainer}>
                           {/* <ImCross size="20px" style={{ position: 'absolute', top: '20px', right: '20px' }} /> */}
                           <span className={styles.shopName}>{item.shop_name}</span>
