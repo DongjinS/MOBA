@@ -440,6 +440,9 @@
 .userSpeaking {
   border: 5px solid orange;
 }
+.partnerSpeaking {
+  border: 5px solid black;
+}
 
 .video {
   /* border-radius: 5px; */
