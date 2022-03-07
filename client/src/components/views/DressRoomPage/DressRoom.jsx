@@ -637,45 +637,46 @@ const DressRoom = (props) => {
     e.preventDefault();
 
     const url = profileImg;
+    if (url) {
+      new fabric.Image.fromURL(url, (img) => {
+        console.log(img);
+        console.log('sender', img._element.currentSrc);
+        img.set({
+          id: uuid(),
+          borderColor: 'orange',
+          borderScaleFactor: 5,
+          cornerColor: 'orange',
+          cornerSize: 6,
+          cornerStyle: 'rect',
+          transparentCorners: false,
+          isProfileImg: true,
+          product_info: '',
+          profileUrl: url,
+        });
+        img.scale(0.2);
 
-    new fabric.Image.fromURL(url, (img) => {
-      console.log(img);
-      console.log('sender', img._element.currentSrc);
-      img.set({
-        id: uuid(),
-        borderColor: 'orange',
-        borderScaleFactor: 5,
-        cornerColor: 'orange',
-        cornerSize: 6,
-        cornerStyle: 'rect',
-        transparentCorners: false,
-        isProfileImg: true,
-        product_info: '',
-        profileUrl: url,
+        console.log('new_img', img);
+        const sendObj = {
+          obj: img,
+          order: 'add',
+          id: img.id,
+          url: url,
+          isProfileImg: true,
+          product_info: '',
+          left: 0,
+          top: 0,
+        };
+
+        try {
+          itemChannel.current.send(JSON.stringify(sendObj));
+        } catch (error) {
+          console.log(error);
+        }
+
+        canvi.add(img);
+        canvi.renderAll();
       });
-      img.scale(0.2);
-
-      console.log('new_img', img);
-      const sendObj = {
-        obj: img,
-        order: 'add',
-        id: img.id,
-        url: url,
-        isProfileImg: true,
-        product_info: '',
-        left: 0,
-        top: 0,
-      };
-
-      try {
-        itemChannel.current.send(JSON.stringify(sendObj));
-      } catch (error) {
-        console.log(error);
-      }
-
-      canvi.add(img);
-      canvi.renderAll();
-    });
+    }
   };
 
   const HandleDeleteCanvasBtn = () => {
@@ -1059,7 +1060,7 @@ const DressRoom = (props) => {
   function getUserInfo() {
     let token = getCookie('x_auth');
     axios.post('/api/users/info', { token }).then(function (response) {
-      console.log(response.data, 'getUserInfo');
+      console.log('getUserInfo', response.data);
       setUserId(response.data.username);
       setUserImg(response.data.profileImage);
     });

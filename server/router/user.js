@@ -15,9 +15,12 @@ userRouter.post('/register', (req, res) => {
 });
 
 userRouter.post('/info', async (req, res) => {
-  const user = await User.findOne({ token: req.body.token });
-  console.log(user.username);
-  return res.send(user);
+  if (req.body.token) {
+    const user = await User.findOne({ token: req.body.token });
+    console.log(user.username);
+    return res.send(user);
+  }
+  return res.send();
 });
 
 userRouter.post('/login', (req, res) => {
