@@ -972,19 +972,48 @@ const DressRoom = (props) => {
   /// 콜렉션 추가 ///
   const CollectionItems = () => {
     console.log('CollectionItems');
-    const items = [];
+    let items = [];
+    let dupCheck = [];
+    let flag = true;
+    if (canvas.getActiveObjects().length === 0) {
+      flag = false;
+      alert('상품을 선택해주세요.');
+      return;
+    }
     canvas.getActiveObjects().forEach((obj) => {
+      if (dupCheck.includes(obj.product_info.category)) {
+        alert('중복된 카테고리의 상품은 추가할 수 없습니다.');
+        flag = false;
+        items = [];
+        dupCheck = [];
+        return;
+      } else if (obj.product_info.category === '미지정') {
+        alert('지원하지 않는 카테고리의 상품이 포함되어 있습니다.');
+        flag = false;
+        items = [];
+        dupCheck = [];
+        return;
+      }
       console.log('add to my collection : ', obj);
       items.push(obj.product_info);
+      dupCheck.push(obj.product_info.category);
     });
-    axios
-      .post(`/collection/items`, {
-        token: token,
-        products: items,
-      })
-      .then((response) => {
-        console.log('아이템 들어왔습니다.', response);
-      });
+
+    if ((flag && items.length < 3) || items > 3) {
+      alert('상의, 하의, 신발 하나 씩을 선택해주세요.');
+      flag = false;
+    }
+
+    if (flag && items.length === 3) {
+      axios
+        .post(`/collection/items`, {
+          token: token,
+          products: items,
+        })
+        .then((response) => {
+          console.log('아이템 들어왔습니다.', response);
+        });
+    }
   };
   /// 콜렉션 추가 ///
 

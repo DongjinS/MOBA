@@ -4,6 +4,7 @@ import styles from './Collection.module.css';
 import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
 import SimpleSlider from '../../SimpleSlider/SimpleSlider';
+import Auth from '../../../hoc/auth';
 
 const Collection = () => {
   function getCookie(name) {
@@ -123,4 +124,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default Auth(Collection, true);
