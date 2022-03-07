@@ -7,6 +7,8 @@ import SimpleSlider from '../../SimpleSlider/SimpleSlider';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscClose } from 'react-icons/vsc';
+import Auth from '../../../hoc/auth';
+
 const Collection = () => {
   function getCookie(name) {
     const cookies = new Cookies();
@@ -54,7 +56,6 @@ const Collection = () => {
         othersProductImg.push(othersCollectionSet);
       }
       setProductImg(othersProductImg);
-      console.log(othersProductImg, '이거 사용하면 됨 혁주야');
     });
   }, []);
 
@@ -88,7 +89,6 @@ const Collection = () => {
           collectionImg.push(collectionSet);
         }
         setCollectionImg(collectionImg);
-        console.log(collectionImg, 'collection Img');
       });
   }, []);
 
@@ -150,7 +150,10 @@ const Collection = () => {
             {othersProductImg &&
               othersProductImg.map((items, index) => (
                 <div key={index} className={styles.collection__card}>
-                  <span className={styles.creator}>Created by {items.name}</span>
+                  <div className={styles.created}>
+                    <span>Created by</span>
+                    <span>{items.name}</span>
+                  </div>
                   <div className={styles.collectionSet}>
                     <img className={styles.collectionImgTop} src={items.top.removedBgImg} alt='img' />
                     <div className={`${styles.con__tooltip} ${styles.bottom}`}>
@@ -228,4 +231,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default Auth(Collection, true);

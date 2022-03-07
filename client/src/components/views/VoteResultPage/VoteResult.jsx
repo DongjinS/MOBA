@@ -6,6 +6,8 @@ import styles from './VoteResult.module.css';
 import './VoteResult.css';
 import Accordion from '../../Accordion/Accordion';
 import { MdHowToVote } from 'react-icons/md';
+import Auth from '../../../hoc/auth';
+
 let tmp;
 let mostLikes = [];
 const VoteResult = () => {
@@ -90,4 +92,4 @@ const VoteResult = () => {
   );
 };
 
-export default VoteResult;
+export default Auth(VoteResult, true);

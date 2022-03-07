@@ -87,6 +87,7 @@ io.on('connection', (socket) => {
       socket.to(otherUser).emit('user joined', socket.id);
     } else {
       // 두명 이상 출입 금지
+      socket.emit('exceedRoom');
     }
   });
 
@@ -100,6 +101,15 @@ io.on('connection', (socket) => {
 
   socket.on('ice-candidate', (incoming) => {
     io.to(incoming.target).emit('ice-candidate', incoming.candidate);
+  });
+
+  // 'leave-room': When one user left the room
+  socket.on('leave-room', (roomID, done) => {
+    // Notify other peer that current user is leaving the room
+    socket.to(roomID).emit('peer-leaving', socket.id);
+    // Leave the room
+    socket.leave(roomID);
+    done();
   });
 
   socket.on('disconnecting', () => {

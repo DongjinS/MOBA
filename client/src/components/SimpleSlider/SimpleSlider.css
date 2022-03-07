@@ -2,7 +2,7 @@
 @import '~slick-carousel/slick/slick-theme.css';
 .slider__container {
   width: 65%;
-  margin: 50px 50px 0px 530px;
+  margin: 0px 50px 0px 530px;
   padding-right: 30px;
 }
 
@@ -16,7 +16,6 @@
   transition: transform 300ms;
   opacity: 0.5;
   height: 650px;
-  width: auto;
   padding: 1em;
   /* width: 100px; */
   /* border-image: linear-gradient(45deg, rgb(255, 182, 182), rgb(255, 160, 19)) 1; */
@@ -36,6 +35,9 @@
 .activeSlide:hover .i__collection__del {
   visibility: visible;
   cursor: pointer;
+}
+.activeSlide:hover .collectionSet {
+  transform: scale(0.95);
 }
 
 .arrow {
@@ -82,6 +84,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: all 0.3s ease-in-out;
 }
 /* .activeSlide:hover {
   background-color: black;
@@ -229,7 +232,7 @@
 /*bottom*/
 
 .bottom .tooltip {
-  top: 115%;
+  top: -40px;
   left: -110px;
 }
 
@@ -241,30 +244,19 @@
 .con-bottom {
   z-index: 10;
   position: absolute;
-  top: 300px;
+  top: 340px;
 }
 .con-shoes {
   z-index: 10;
   position: absolute;
   top: 520px;
 }
-.collection__del__box {
-  position: absolute;
-  left: 290px;
-  /* visibility: hidden; */
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  cursor: pointer;
-  z-index: 4;
-  /* border: 1px solid black; */
-}
+
 .i__collection__del {
   visibility: hidden;
   position: absolute;
-  z-index: 3;
+  right: 10px;
+  z-index: 5;
   transition: all 0.3s ease-in-out;
 }
 .i__collection__del:hover {
