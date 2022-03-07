@@ -61,6 +61,7 @@ const DressRoom = (props) => {
   const roomID = useParams().roomID;
   const mouseChannel = useRef();
   const itemChannel = useRef();
+  const hangUpFlag = useRef();
 
   const navigate = useNavigate();
 
@@ -86,6 +87,40 @@ const DressRoom = (props) => {
     object.set('stroke', '');
     object.set('strokeWidth', 1);
   };
+
+  function hangUp() {
+    console.log('hangUp!!');
+    // Disconnect peer connection (WebRTC)
+    try {
+      peerRef.current.close();
+      peerRef.current = null;
+      mouseChannel.current = null;
+      itemChannel.current = null;
+    } catch (error) {}
+
+    // Stop Video
+    if (userStream.current) {
+      userStream.current.getTracks().forEach((track) => {
+        // Clearly indicates that the stream no longer uses the source
+        console.log('stop my video!!!');
+        track.stop();
+      });
+    }
+    // Stop PeerVideo
+    if (partnerVideo.current?.srcObject) {
+      partnerVideo.current.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+      partnerVideo.srcObject = null;
+    }
+
+    // Leave room and notify to the peer
+    if (socketRef.current) {
+      socketRef.current.emit('leave-room', roomID, () => {
+        socketRef.current.disconnect();
+      });
+    }
+  }
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
@@ -139,6 +174,7 @@ const DressRoom = (props) => {
         }
         break;
       case 'deselected':
+        console.log('get deselected message');
         canvas.getObjects().forEach((object) => {
           if (object.id === data.id) {
             object.doubleSelected = false;
@@ -174,7 +210,25 @@ const DressRoom = (props) => {
       isDrawingMode: false,
     });
 
+  const lastDeselectedEvent = (canvas) => {
+    canvas.getActiveObjects().forEach((obj) => {
+      try {
+        console.log('send end event');
+        itemChannel.current.send(
+          JSON.stringify({
+            obj: obj,
+            id: obj.id,
+            order: 'deselected',
+          })
+        );
+      } catch (error) {
+        // 상대 없을 때 send 시 에러
+      }
+    });
+  };
+
   useEffect(async () => {
+    hangUpFlag.current = true;
     getUserInfo();
     console.log('useEffect []');
 
@@ -189,10 +243,17 @@ const DressRoom = (props) => {
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
         console.log('rtc socket');
-        userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
-        userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        if (userVideo.current){
+          userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
+          userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        }
         socketRef.current = io.connect('/');
         socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
+
+        socketRef.current.on('exceedRoom', () => {
+          alert("이미 꽉 찬 방입니다!");
+          navigate('/mainpage');
+        });
 
         socketRef.current.on('other user', async (userID) => {
           callUser(userID);
@@ -216,15 +277,17 @@ const DressRoom = (props) => {
         socketRef.current.on('answer', handleAnswer);
         socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
         socketRef.current.on('peer-leaving', function (id) {
-          deleteMouse(id);
-          otherUser.current = '';
-          try {
-            partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
-              track.stop();
-            });
-            partnerVideo.current.srcObject = null;
-          } catch (error) {}
-          peerRef.current.close();
+          if (otherUser.current === id) {
+            deleteMouse(id);
+            otherUser.current = '';
+            try {
+              partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
+                track.stop();
+              });
+              partnerVideo.current.srcObject = null;
+            } catch (error) {}
+            peerRef.current.close();
+          }
         });
       });
 
@@ -484,7 +547,29 @@ const DressRoom = (props) => {
 
       // console.log("canvas socket:", socketRef.current);
     }
+
+    return () => {
+      if (canvas) {
+        lastDeselectedEvent(canvas);
+
+        if (hangUpFlag.current) {
+          hangUp();
+          hangUpFlag.current = false;
+        }
+      }
+    };
   }, [canvas]);
+
+  window.addEventListener('beforeunload', (event) => {
+    if (canvas) {
+      lastDeselectedEvent(canvas);
+
+      if (hangUpFlag.current) {
+        hangUp();
+        hangUpFlag.current = false;
+      }
+    }
+  });
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
@@ -522,6 +607,8 @@ const DressRoom = (props) => {
         url: url,
         product_info: item,
         isProfileImg: false,
+        left: 0,
+        top: 0,
       };
 
       try {
@@ -567,6 +654,8 @@ const DressRoom = (props) => {
         url: url,
         isProfileImg: true,
         product_info: '',
+        left: 0,
+        top: 0,
       };
 
       try {
@@ -751,30 +840,38 @@ const DressRoom = (props) => {
       }
     });
     const desc = new RTCSessionDescription(incoming.sdp);
-    await peerRef.current
-      .setRemoteDescription(desc)
-      .then(() => {
-        userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
-      })
-      .then(() => {
-        return peerRef.current.createAnswer();
-      })
-      .then((answer) => {
-        return peerRef.current.setLocalDescription(answer);
-      })
-      .then(() => {
-        const payload = {
-          target: incoming.caller,
-          caller: socketRef.current.id,
-          sdp: peerRef.current.localDescription,
-        };
-        socketRef.current.emit('answer', payload);
-      });
+    if (peerRef.current){
+      await peerRef.current
+        .setRemoteDescription(desc)
+        .then(() => {
+          if (userStream.current){
+            userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+          }
+        })
+        .then(() => {
+          return peerRef.current.createAnswer();
+        })
+        .then((answer) => {
+          return peerRef.current.setLocalDescription(answer);
+        })
+        .then(() => {
+          if (socketRef.current){
+            const payload = {
+              target: incoming.caller,
+              caller: socketRef.current.id,
+              sdp: peerRef.current.localDescription,
+            };
+            socketRef.current.emit('answer', payload);
+          }
+        });
+    }
   };
 
   const handleAnswer = (message) => {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
+    if (peerRef.current){
+      peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
+    }
   };
 
   const handleICECandidateEvent = (e) => {
@@ -783,18 +880,23 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      socketRef.current.emit('ice-candidate', payload);
+      if (socketRef.current){
+        socketRef.current.emit('ice-candidate', payload);
+      }
     }
   };
 
   const handleNewICECandidateMsg = (incoming) => {
     const candidate = new RTCIceCandidate(incoming);
-
-    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
+    if (peerRef.current){
+      peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
+    }
   };
 
   const handleTrackEvent = (e) => {
-    partnerVideo.current.srcObject = e.streams[0];
+    if (partnerVideo.current){
+      partnerVideo.current.srcObject = e.streams[0];
+    }
   };
 
   const HandleCameraBtnClick = () => {

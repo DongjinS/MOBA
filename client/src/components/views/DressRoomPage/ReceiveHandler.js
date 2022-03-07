@@ -29,6 +29,8 @@ export const addImg = (canvas, data) => {
       });
       console.log('received img: ', img);
       img.set(obj);
+      img.set('stroke', '');
+      img.set('strokeWidth', 1);
       img.set('left', left);
       img.set('top', top);
       if (selected) {
