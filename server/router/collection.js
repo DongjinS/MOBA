@@ -20,6 +20,7 @@ collectionRouter.post('/items', async (req, res) => {
   });
   collector.collections = new_items;
   collector.save();
+  res.send('success');
 });
 collectionRouter.delete('/items', async (req, res) => {
   const collector = await User.findOne({ token: req.body.token });

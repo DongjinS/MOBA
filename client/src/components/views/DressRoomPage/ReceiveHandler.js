@@ -29,13 +29,15 @@ export const addImg = (canvas, data) => {
       });
       console.log('received img: ', img);
       img.set(obj);
+      img.set('stroke', '');
+      img.set('strokeWidth', 1);
       img.set('left', left);
       img.set('top', top);
       if (selected) {
         img.hasControls = false;
         img.lockMovementX = true;
         img.lockMovementY = true;
-        img.set('stroke', '#f00');
+        img.set('stroke', '#b33030');
         img.set('strokeWidth', 10);
       }
       if (isProfileImg) {
@@ -58,7 +60,7 @@ export const modifyObj = (canvas, data) => {
       object.set(obj);
       object.set('left', left);
       object.set('top', top);
-      object.set('stroke', '#f00');
+      object.set('stroke', '#b33030');
       object.set('strokeWidth', 10);
       object.setCoords();
       canvas.renderAll();

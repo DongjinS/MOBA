@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 import NormalHeader from '../../NormalHeader/NormalHeader';
 import { v1 as uuid } from 'uuid';
-
+import Auth from '../../../hoc/auth';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { VscTrash } from 'react-icons/vsc';
@@ -224,4 +224,4 @@ const PrivateBasket = (props) => {
   );
 };
 
-export default PrivateBasket;
+export default Auth(PrivateBasket, true);

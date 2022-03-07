@@ -7,6 +7,8 @@ import SimpleSlider from '../../SimpleSlider/SimpleSlider';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscClose } from 'react-icons/vsc';
+import Auth from '../../../hoc/auth';
+
 const Collection = () => {
   function getCookie(name) {
     const cookies = new Cookies();
@@ -229,4 +231,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default Auth(Collection, true);

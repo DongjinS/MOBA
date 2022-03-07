@@ -5,7 +5,6 @@ import io from 'socket.io-client';
 import Cookies from 'universal-cookie';
 import ClothesLoading from '../../loading/ClothesLoading';
 
-// 발화자 표시 -> 후명이랑 해야지
 // import hark from 'hark';
 
 // Fabric JS
@@ -64,6 +63,7 @@ const DressRoom = (props) => {
   const roomID = useParams().roomID;
   const mouseChannel = useRef();
   const itemChannel = useRef();
+  const hangUpFlag = useRef();
 
   const navigate = useNavigate();
 
@@ -78,7 +78,7 @@ const DressRoom = (props) => {
     object.hasControls = false;
     object.lockMovementX = true;
     object.lockMovementY = true;
-    object.set('stroke', '#f00');
+    object.set('stroke', '#b33030');
     object.set('strokeWidth', 10);
   };
 
@@ -89,6 +89,40 @@ const DressRoom = (props) => {
     object.set('stroke', '');
     object.set('strokeWidth', 1);
   };
+
+  function hangUp() {
+    console.log('hangUp!!');
+    // Disconnect peer connection (WebRTC)
+    try {
+      peerRef.current.close();
+      peerRef.current = null;
+      mouseChannel.current = null;
+      itemChannel.current = null;
+    } catch (error) {}
+
+    // Stop Video
+    if (userStream.current) {
+      userStream.current.getTracks().forEach((track) => {
+        // Clearly indicates that the stream no longer uses the source
+        console.log('stop my video!!!');
+        track.stop();
+      });
+    }
+    // Stop PeerVideo
+    if (partnerVideo.current?.srcObject) {
+      partnerVideo.current.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+      partnerVideo.srcObject = null;
+    }
+
+    // Leave room and notify to the peer
+    if (socketRef.current) {
+      socketRef.current.emit('leave-room', roomID, () => {
+        socketRef.current.disconnect();
+      });
+    }
+  }
 
   const needCanvas = (canvas, data) => {
     switch (data.order) {
@@ -118,11 +152,15 @@ const DressRoom = (props) => {
         let path = new fabric.Path(data.path.path);
         console.log(path);
         path.set(data.path);
+        path.selectable = data.selectable;
         path.setCoords();
         canvas.add(path);
+        setTimeout(() => {
+          canvas.remove(path);
+        }, 3000);
         break;
       case 'selected':
-        if (data.obj.stroke === '#f00') {
+        if (data.obj.stroke === '#b33030') {
           // 이미 내가 선택하고 있는 상품이면
           canvas.getObjects().forEach((obj) => {
             if (obj.id === data.id) {
@@ -142,6 +180,7 @@ const DressRoom = (props) => {
         }
         break;
       case 'deselected':
+        console.log('get deselected message');
         canvas.getObjects().forEach((object) => {
           if (object.id === data.id) {
             object.doubleSelected = false;
@@ -177,7 +216,25 @@ const DressRoom = (props) => {
       isDrawingMode: false,
     });
 
+  const lastDeselectedEvent = (canvas) => {
+    canvas.getActiveObjects().forEach((obj) => {
+      try {
+        console.log('send end event');
+        itemChannel.current.send(
+          JSON.stringify({
+            obj: obj,
+            id: obj.id,
+            order: 'deselected',
+          })
+        );
+      } catch (error) {
+        // 상대 없을 때 send 시 에러
+      }
+    });
+  };
+
   useEffect(async () => {
+    hangUpFlag.current = true;
     getUserInfo();
     console.log('useEffect []');
 
@@ -204,10 +261,17 @@ const DressRoom = (props) => {
         });
 
         console.log('rtc socket');
-        userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
-        userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        if (userVideo.current) {
+          userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
+          userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        }
         socketRef.current = io.connect('/');
         socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
+
+        socketRef.current.on('exceedRoom', () => {
+          alert('이미 꽉 찬 방입니다!');
+          navigate('/mainpage');
+        });
 
         socketRef.current.on('other user', async (userID) => {
           callUser(userID);
@@ -231,15 +295,17 @@ const DressRoom = (props) => {
         socketRef.current.on('answer', handleAnswer);
         socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
         socketRef.current.on('peer-leaving', function (id) {
-          deleteMouse(id);
-          otherUser.current = '';
-          try {
-            partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
-              track.stop();
-            });
-            partnerVideo.current.srcObject = null;
-          } catch (error) {}
-          peerRef.current.close();
+          if (otherUser.current === id) {
+            deleteMouse(id);
+            otherUser.current = '';
+            try {
+              partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
+                track.stop();
+              });
+              partnerVideo.current.srcObject = null;
+            } catch (error) {}
+            peerRef.current.close();
+          }
         });
       });
 
@@ -277,11 +343,6 @@ const DressRoom = (props) => {
           opt.deselected.forEach((obj) => {
             if (obj.doubleSelected) {
               obj.doubleSelected = false;
-              // obj.hasControls = false;
-              // obj.lockMovementX = true;
-              // obj.lockMovementY = true;
-              // obj.set('stroke', '#f00');
-              // obj.set('strokeWidth', 10);
               lock(obj);
               canvas.renderAll();
             }
@@ -300,7 +361,7 @@ const DressRoom = (props) => {
         }
       });
       canvas.on('selection:created', (opt) => {
-        if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#f00').length > 0) {
+        if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#b33030').length > 0) {
           console.log('lock items cannot be group', opt);
           canvas.discardActiveObject().renderAll();
         } else {
@@ -321,7 +382,7 @@ const DressRoom = (props) => {
       });
       canvas.on('selection:updated', (opt) => {
         const actives = canvas.getActiveObjects();
-        if (actives.length >= 2 && actives.filter((obj) => obj.stroke === '#f00').length > 0) {
+        if (actives.length >= 2 && actives.filter((obj) => obj.stroke === '#b33030').length > 0) {
           console.log('lock items cannot be group', opt);
           canvas.discardActiveObject().renderAll();
         } else {
@@ -367,15 +428,20 @@ const DressRoom = (props) => {
       });
       canvas.on('path:created', (options) => {
         console.log('path created', options);
+        options.path.selectable = false;
         const data = {
           order: 'drawing',
           path: options.path,
+          selectable: false,
         };
         try {
           itemChannel.current.send(JSON.stringify(data));
         } catch (error) {
           // 상대 없을 때 send 시 에러
         }
+        setTimeout(() => {
+          canvas.remove(options.path);
+        }, 3000);
       });
       canvas.on('object:modified', (options) => {
         if (options.target) {
@@ -499,7 +565,29 @@ const DressRoom = (props) => {
 
       // console.log("canvas socket:", socketRef.current);
     }
+
+    return () => {
+      if (canvas) {
+        lastDeselectedEvent(canvas);
+
+        if (hangUpFlag.current) {
+          hangUp();
+          hangUpFlag.current = false;
+        }
+      }
+    };
   }, [canvas]);
+
+  window.addEventListener('beforeunload', (event) => {
+    if (canvas) {
+      lastDeselectedEvent(canvas);
+
+      if (hangUpFlag.current) {
+        hangUp();
+        hangUpFlag.current = false;
+      }
+    }
+  });
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
@@ -537,6 +625,8 @@ const DressRoom = (props) => {
         url: url,
         product_info: item,
         isProfileImg: false,
+        left: 0,
+        top: 0,
       };
 
       try {
@@ -556,57 +646,60 @@ const DressRoom = (props) => {
     e.preventDefault();
 
     const url = profileImg;
+    if (url) {
+      new fabric.Image.fromURL(url, (img) => {
+        console.log(img);
+        console.log('sender', img._element.currentSrc);
+        img.set({
+          id: uuid(),
+          borderColor: 'orange',
+          borderScaleFactor: 5,
+          cornerColor: 'orange',
+          cornerSize: 6,
+          cornerStyle: 'rect',
+          transparentCorners: false,
+          isProfileImg: true,
+          product_info: '',
+          profileUrl: url,
+        });
+        img.scale(0.2);
 
-    new fabric.Image.fromURL(url, (img) => {
-      console.log(img);
-      console.log('sender', img._element.currentSrc);
-      img.set({
-        id: uuid(),
-        borderColor: 'orange',
-        borderScaleFactor: 5,
-        cornerColor: 'orange',
-        cornerSize: 6,
-        cornerStyle: 'rect',
-        transparentCorners: false,
-        isProfileImg: true,
-        product_info: '',
-        profileUrl: url,
+        console.log('new_img', img);
+        const sendObj = {
+          obj: img,
+          order: 'add',
+          id: img.id,
+          url: url,
+          isProfileImg: true,
+          product_info: '',
+          left: 0,
+          top: 0,
+        };
+
+        try {
+          itemChannel.current.send(JSON.stringify(sendObj));
+        } catch (error) {
+          console.log(error);
+        }
+
+        canvi.add(img);
+        canvi.renderAll();
       });
-      img.scale(0.2);
-
-      console.log('new_img', img);
-      const sendObj = {
-        obj: img,
-        order: 'add',
-        id: img.id,
-        url: url,
-        isProfileImg: true,
-        product_info: '',
-      };
-
-      try {
-        itemChannel.current.send(JSON.stringify(sendObj));
-      } catch (error) {
-        console.log(error);
-      }
-
-      canvi.add(img);
-      canvi.renderAll();
-    });
+    }
   };
 
   const HandleDeleteCanvasBtn = () => {
     canvas.getActiveObjects().forEach((obj) => {
       console.log('HandleDeleteBtn : ', obj);
       try {
-        if (obj.stroke !== '#f00') {
+        if (obj.stroke !== '#b33030') {
           // 락 걸린 상품이 아니면
           itemChannel.current.send(JSON.stringify({ obj: obj, id: obj.id, order: 'delete' }));
         }
       } catch (error) {
         // 상대 없을 때 send 시 에러
       }
-      if (obj.stroke !== '#f00') {
+      if (obj.stroke !== '#b33030') {
         canvas.remove(obj);
       }
     });
@@ -766,30 +859,38 @@ const DressRoom = (props) => {
       }
     });
     const desc = new RTCSessionDescription(incoming.sdp);
-    await peerRef.current
-      .setRemoteDescription(desc)
-      .then(() => {
-        userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
-      })
-      .then(() => {
-        return peerRef.current.createAnswer();
-      })
-      .then((answer) => {
-        return peerRef.current.setLocalDescription(answer);
-      })
-      .then(() => {
-        const payload = {
-          target: incoming.caller,
-          caller: socketRef.current.id,
-          sdp: peerRef.current.localDescription,
-        };
-        socketRef.current.emit('answer', payload);
-      });
+    if (peerRef.current) {
+      await peerRef.current
+        .setRemoteDescription(desc)
+        .then(() => {
+          if (userStream.current) {
+            userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
+          }
+        })
+        .then(() => {
+          return peerRef.current.createAnswer();
+        })
+        .then((answer) => {
+          return peerRef.current.setLocalDescription(answer);
+        })
+        .then(() => {
+          if (socketRef.current) {
+            const payload = {
+              target: incoming.caller,
+              caller: socketRef.current.id,
+              sdp: peerRef.current.localDescription,
+            };
+            socketRef.current.emit('answer', payload);
+          }
+        });
+    }
   };
 
   const handleAnswer = (message) => {
     const desc = new RTCSessionDescription(message.sdp);
-    peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
+    if (peerRef.current) {
+      peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
+    }
   };
 
   const handleICECandidateEvent = (e) => {
@@ -798,19 +899,23 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      socketRef.current.emit('ice-candidate', payload);
+      if (socketRef.current) {
+        socketRef.current.emit('ice-candidate', payload);
+      }
     }
   };
 
   const handleNewICECandidateMsg = (incoming) => {
     const candidate = new RTCIceCandidate(incoming);
-
-    peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
+    if (peerRef.current) {
+      peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
+    }
   };
 
   const handleTrackEvent = (e) => {
-    partnerVideo.current.srcObject = e.streams[0];
-
+    if (partnerVideo.current) {
+      partnerVideo.current.srcObject = e.streams[0];
+    }
     const options = {};
     const partnerSpeechEvents = hark(partnerVideo.current.srcObject, options);
     partnerSpeechEvents.on('speaking', () => {
@@ -887,19 +992,89 @@ const DressRoom = (props) => {
   /// 콜렉션 추가 ///
   const CollectionItems = () => {
     console.log('CollectionItems');
-    const items = [];
+    let items = [];
+    let dupCheck = [];
+    let flag = true;
+    if (canvas.getActiveObjects().length === 0) {
+      flag = false;
+      toast.warn('상품을 선택해주세요.', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
     canvas.getActiveObjects().forEach((obj) => {
+      if (dupCheck.includes(obj.product_info.category)) {
+        toast.warn('중복된 카테고리의 상품은 추가할 수 없습니다.', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        flag = false;
+        items = [];
+        dupCheck = [];
+        return;
+      } else if (obj.product_info.category === '미지정') {
+        toast.warn('지원하지 않는 카테고리의 상품이 포함되어 있습니다.', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        flag = false;
+        items = [];
+        dupCheck = [];
+        return;
+      }
       console.log('add to my collection : ', obj);
       items.push(obj.product_info);
+      dupCheck.push(obj.product_info.category);
     });
-    axios
-      .post(`/collection/items`, {
-        token: token,
-        products: items,
-      })
-      .then((response) => {
-        console.log('아이템 들어왔습니다.', response);
+
+    if ((flag && items.length < 3) || items > 3) {
+      toast.warn('상의, 하의, 신발 하나 씩을 선택해주세요.', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
+      flag = false;
+    }
+
+    if (flag && items.length === 3) {
+      axios
+        .post(`/collection/items`, {
+          token: token,
+          products: items,
+        })
+        .then((response) => {
+          toast.success('컬렉션에 추가되었습니다.', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log('아이템 들어왔습니다.', response);
+        });
+    }
   };
   /// 콜렉션 추가 ///
 
@@ -975,7 +1150,7 @@ const DressRoom = (props) => {
   function getUserInfo() {
     let token = getCookie('x_auth');
     axios.post('/api/users/info', { token }).then(function (response) {
-      console.log(response.data, 'getUserInfo');
+      console.log('getUserInfo', response.data);
       setUserId(response.data.username);
       setUserImg(response.data.profileImage);
     });
