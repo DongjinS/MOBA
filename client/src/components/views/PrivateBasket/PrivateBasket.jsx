@@ -45,6 +45,7 @@ const PrivateBasket = (props) => {
         setVoteList(voteList.filter((voteItem) => voteItem !== item));
       } else {
         e.target.classList.add('clicked');
+        console.log('개수 : ', voteList.length);
         setVoteList([...voteList, item]);
       }
     }
@@ -109,9 +110,7 @@ const PrivateBasket = (props) => {
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
         console.log(response);
-        setProducts(
-          products?.filter((product) => product.shop_url !== shop_url)
-        );
+        setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
         console.log(error.response);
@@ -126,11 +125,7 @@ const PrivateBasket = (props) => {
           <ul className={styles.experienceCategory}>
             <li className={styles.categoryName}>
               <div
-                className={
-                  checked
-                    ? styles.maskText
-                    : styles.maskText + ' ' + styles.selected
-                }
+                className={checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
                 onClick={() => {
                   setChecked(false);
                 }}
@@ -140,11 +135,7 @@ const PrivateBasket = (props) => {
             </li>
             <li className={styles.categoryName}>
               <div
-                className={
-                  !checked
-                    ? styles.maskText
-                    : styles.maskText + ' ' + styles.selected
-                }
+                className={!checked ? styles.maskText : styles.maskText + ' ' + styles.selected}
                 onClick={() => {
                   setChecked(true);
                 }}
@@ -167,18 +158,23 @@ const PrivateBasket = (props) => {
                 >
                   <textarea
                     className={styles.voteText}
-                    name="text"
-                    type="text"
+                    name='text'
+                    type='text'
                     onChange={onChangeVoteMessage}
                     style={{ fontSize: '23px' }}
-                    placeholder="투표 요청시 친구들에게 전달할 내용을 입력해주세요."
+                    placeholder='투표 요청시 친구들에게 전달할 내용을 입력해주세요.'
                     value={inputs.text}
                   ></textarea>
-                  <button className={styles.voteBtn} type="submit">
+                  <button className={styles.voteBtn} type='submit'>
                     전송
                   </button>
                 </form>
               </div>
+            )}
+            {checked && voteList.length !== 0 && (voteList.length < 2 || voteList.length > 4) ? (
+              <p className={styles.voteDescription}>투표할 상품을 1개 이상 5개 미만으로 선택해주세요</p>
+            ) : (
+              ''
             )}
           </ul>
 
@@ -186,59 +182,40 @@ const PrivateBasket = (props) => {
             <div className={styles.experienceList}>
               {products.map((item, index) => (
                 // <a href={item.shop_url} target="_blank">
-                <div style={{ position: 'relative' }}>
-                  <div
-                    onClick={() => {
-                      HandleDeleteProductBtn(item.shop_url);
-                    }}
-                    className={styles.deleteContainer}
-                  >
-                    <VscTrash className={styles.deleteBtn} size="30px" />
-                  </div>
-                  <div
-                    className={styles.productContainer}
-                    onClick={(e) => {
-                      handleProductClick(e, item);
-                    }}
-                  >
+                <div key={index} style={{ position: 'relative' }}>
+                  <div className={styles.productContainer}>
                     <div className={styles.productImgContainer}>
+                      {checked ? (
+                        <div
+                          className={styles.productWrap}
+                          onClick={(e) => {
+                            handleProductClick(e, item);
+                          }}
+                        ></div>
+                      ) : (
+                        <div
+                          onClick={() => {
+                            HandleDeleteProductBtn(item.shop_url);
+                          }}
+                          className={styles.deleteContainer}
+                        >
+                          <VscTrash className={styles.deleteBtn} size='30px' />
+                        </div>
+                      )}
                       <img className={styles.itemImg} src={item.removedBgImg} />
-                      <div
-                        className={
-                          !checked ? styles.productInfo : styles.voteInfo
-                        }
-                      >
+                      <div className={!checked ? styles.productInfo : styles.voteInfo}>
                         {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
                         <div className={styles.infoContainer}>
                           {/* <ImCross size="20px" style={{ position: 'absolute', top: '20px', right: '20px' }} /> */}
-                          <span className={styles.shopName}>
-                            {item.shop_name}
-                          </span>
-                          <div className={styles.productName}>
-                            {item.product_name}
-                          </div>
+                          <span className={styles.shopName}>{item.shop_name}</span>
+                          <div className={styles.productName}>{item.product_name}</div>
 
                           {item.price === item.sale_price ? (
-                            <div className={styles.originalPrice}>
-                              {item.price
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                              원
-                            </div>
+                            <div className={styles.originalPrice}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
                           ) : (
                             <div>
-                              <div className={styles.price}>
-                                {item.price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                원
-                              </div>
-                              <div className={styles.salePrice}>
-                                {item.sale_price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                원
-                              </div>
+                              <div className={styles.price}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
+                              <div className={styles.salePrice}>{item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</div>
                             </div>
                           )}
                         </div>
