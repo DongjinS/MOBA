@@ -5,6 +5,14 @@
   font-style: normal;
 }
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+@font-face {
+  font-family: 'Cafe24Oneprettynight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 .flexBox {
   font-family: 'InfinitySans-BoldA1';
   display: flex;
@@ -23,7 +31,6 @@
 }
 .title p {
   font-size: 100px;
-
   margin: 0;
   cursor: default;
   -webkit-text-stroke: calc(0.005em + 1px) rgb(0, 0, 0);
@@ -38,11 +45,11 @@
 }
 .selected {
   color: black;
-  /* border-radius: 10px; */
   opacity: 1;
 }
 .sliderBox {
   width: 100%;
+  height: 100%;
   font-family: 'IBM Plex Sans KR', sans-serif;
   font-weight: 700;
 }
@@ -75,7 +82,6 @@
 
 .imgUl {
   display: flex;
-  /* background: red; */
   list-style-type: none;
   padding-left: 0;
   margin: 0;
@@ -95,7 +101,7 @@
   display: flex;
   flex: 2.33;
   flex-wrap: wrap;
-  margin: 64px 50px 0px 470px;
+  margin: 0px 50px 0px 470px;
 }
 .collection__card {
   display: flex;
@@ -121,17 +127,25 @@
 .collection__card:hover .collectionSet {
   transform: scale(0.95);
 }
-.collection__card:hover .creator {
+
+.collection__card:hover .created {
   visibility: visible;
 }
 
-.creator {
+.created {
+  transition: all 0.3s ease-in-out;
   position: absolute;
+  visibility: hidden;
   z-index: 2;
   left: 15px;
   color: rgb(110, 110, 110);
-  visibility: hidden;
-  transition: all 0.3s ease-in-out;
+  font-family: 'Satisfy', cursive;
+  /* font-family: 'Cafe24Oneprettynight'; */
+}
+.created span:last-child {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-family: 'Cafe24Oneprettynight';
+  margin-left: 3px;
 }
 .collectionSets {
   display: flex;
@@ -204,7 +218,7 @@
   opacity: 0.4;
 
   width: 210px;
-  height: 100px;
+  height: 85px;
   background-color: rgba(255, 255, 255, 0.9);
   position: absolute;
   top: -20%;
@@ -253,19 +267,6 @@
 .i__right {
   font-size: 20px;
 }
-/* tooltip  after*/
-/* .tooltip::after {
-  content: ' ';
-  width: 0;
-  height: 0;
-
-  border-style: solid;
-  border-width: 12px 12.5px 0 12.5px;
-  border-color: rgb(255, 255, 255) transparent transparent transparent;
-
-  position: absolute;
-  left: -55px;
-} */
 
 .con__tooltip:hover .tooltip {
   visibility: visible;
@@ -286,28 +287,15 @@
   }
 } */
 
-/*hover ToolTip*/
-/* .left:hover {
-  transform: translateX(-6px);
-} */
-/* .top:hover {
-  transform: translateY(-6px);
-}
-.bottom:hover {
-  transform: translateY(6px);
-} */
-/*bottom*/
-
 .bottom .tooltip {
-  top: -80px;
+  top: -30px;
   left: -90px;
 }
 
-.bottom .tooltip::after {
+/* .bottom .tooltip::after {
   top: -80px;
   left: -90px;
-  /* transform: rotate(180deg); */
-}
+} */
 .con__bottom {
   z-index: 10;
   position: absolute;
@@ -317,27 +305,4 @@
   z-index: 10;
   position: absolute;
   top: 250px;
-}
-.collection__del__box {
-  position: absolute;
-  left: 195px;
-  top: 0px;
-  /* visibility: hidden; */
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  cursor: pointer;
-  z-index: 4;
-  /* border: 1px solid black; */
-}
-.i__collection__del {
-  visibility: hidden;
-  position: absolute;
-  z-index: 3;
-  transition: all 0.3s ease-in-out;
-}
-.i__collection__del:hover {
-  color: red;
 }
