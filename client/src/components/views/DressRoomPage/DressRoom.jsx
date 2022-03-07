@@ -36,6 +36,7 @@ import { RiMenuLine } from 'react-icons/ri';
 import { BsFillCollectionFillMdFace } from 'react-icons/bs';
 import { MdFace } from 'react-icons/md';
 import Menu from '../../NormalHeader/Menu';
+import hark from 'hark';
 
 const DressRoom = (props) => {
   const [canvas, setCanvas] = useState('');
@@ -48,6 +49,7 @@ const DressRoom = (props) => {
   const [uniqueShops, setUniqueShops] = useState([]);
   const [initialWidth, setInitialWidth] = useState(0);
   const [userImg, setUserImg] = useState('');
+  const [isUserSpeaking, setIsUserSpeaking] = useState(false);
 
   const canvasRef = useRef();
   const videoContainerRef = useRef();
@@ -188,6 +190,18 @@ const DressRoom = (props) => {
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
+        const options = {};
+        const userSpeechEvents = hark(stream, options);
+        userSpeechEvents.on('speaking', () => {
+          console.log('speaking');
+          setIsUserSpeaking(true);
+        });
+
+        userSpeechEvents.on('stopped_speaking', () => {
+          console.log('stopped speaking');
+          setIsUserSpeaking(false);
+        });
+
         console.log('rtc socket');
         userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
@@ -1109,7 +1123,7 @@ const DressRoom = (props) => {
 
           <div ref={videoContainerRef} className={styles.sidebarB}>
             <div className={styles.video_container}>
-              <div className={styles.user1}>
+              <div className={isUserSpeaking? styles.user1 + " " + styles.userSpeaking: styles.user1}>
                 <video id='UserMuteCtrl' autoPlay ref={userVideo} className={styles.video} muted='muted' poster='/images/user1.png'>
                   video 1
                 </video>
