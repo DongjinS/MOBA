@@ -150,8 +150,12 @@ const DressRoom = (props) => {
         let path = new fabric.Path(data.path.path);
         console.log(path);
         path.set(data.path);
+        path.selectable = data.selectable;
         path.setCoords();
         canvas.add(path);
+        setTimeout(() => {
+          canvas.remove(path);
+        }, 5000);
         break;
       case 'selected':
         if (data.obj.stroke === '#f00') {
@@ -243,7 +247,7 @@ const DressRoom = (props) => {
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
         console.log('rtc socket');
-        if (userVideo.current){
+        if (userVideo.current) {
           userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
           userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
         }
@@ -251,7 +255,7 @@ const DressRoom = (props) => {
         socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
 
         socketRef.current.on('exceedRoom', () => {
-          alert("이미 꽉 찬 방입니다!");
+          alert('이미 꽉 찬 방입니다!');
           navigate('/mainpage');
         });
 
@@ -415,15 +419,20 @@ const DressRoom = (props) => {
       });
       canvas.on('path:created', (options) => {
         console.log('path created', options);
+        options.path.selectable = false;
         const data = {
           order: 'drawing',
           path: options.path,
+          selectable: false,
         };
         try {
           itemChannel.current.send(JSON.stringify(data));
         } catch (error) {
           // 상대 없을 때 send 시 에러
         }
+        setTimeout(() => {
+          canvas.remove(options.path);
+        }, 5000);
       });
       canvas.on('object:modified', (options) => {
         if (options.target) {
@@ -840,11 +849,11 @@ const DressRoom = (props) => {
       }
     });
     const desc = new RTCSessionDescription(incoming.sdp);
-    if (peerRef.current){
+    if (peerRef.current) {
       await peerRef.current
         .setRemoteDescription(desc)
         .then(() => {
-          if (userStream.current){
+          if (userStream.current) {
             userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current)));
           }
         })
@@ -855,7 +864,7 @@ const DressRoom = (props) => {
           return peerRef.current.setLocalDescription(answer);
         })
         .then(() => {
-          if (socketRef.current){
+          if (socketRef.current) {
             const payload = {
               target: incoming.caller,
               caller: socketRef.current.id,
@@ -869,7 +878,7 @@ const DressRoom = (props) => {
 
   const handleAnswer = (message) => {
     const desc = new RTCSessionDescription(message.sdp);
-    if (peerRef.current){
+    if (peerRef.current) {
       peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));
     }
   };
@@ -880,7 +889,7 @@ const DressRoom = (props) => {
         target: otherUser.current,
         candidate: e.candidate,
       };
-      if (socketRef.current){
+      if (socketRef.current) {
         socketRef.current.emit('ice-candidate', payload);
       }
     }
@@ -888,13 +897,13 @@ const DressRoom = (props) => {
 
   const handleNewICECandidateMsg = (incoming) => {
     const candidate = new RTCIceCandidate(incoming);
-    if (peerRef.current){
+    if (peerRef.current) {
       peerRef.current.addIceCandidate(candidate).catch((e) => console.log(e));
     }
   };
 
   const handleTrackEvent = (e) => {
-    if (partnerVideo.current){
+    if (partnerVideo.current) {
       partnerVideo.current.srcObject = e.streams[0];
     }
   };
