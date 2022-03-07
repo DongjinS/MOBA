@@ -8,17 +8,17 @@
   justify-content: space-between;
   height: 70px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.05);
+  /* background-color: rgba(0, 0, 0, 0.05); */
   position: fixed;
   top: 0px;
   z-index: 21;
-  opacity: 0;
-  animation: header 0.7s forwards ease-in;
-  animation-delay: 1.5s;
-  transition: 0.5s ease-in-out;
+  opacity: 1;
+  /* animation: header 0.7s forwards ease-in; */
+  /* animation-delay: 1.5s; */
+  /* transition: 0.5s ease-in-out; */
 }
 .header:hover {
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.5); */
 }
 @keyframes header {
   100% {

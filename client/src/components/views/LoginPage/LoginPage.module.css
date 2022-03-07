@@ -1,6 +1,7 @@
 .container {
   /* background-color: #141414; */
-  background-color: black;
+  /* background-color: black; */
+  background-color: #f0f0f0;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -10,14 +11,14 @@
 }
 .loginBox {
   width: 30em;
-  height: 36em;
-  background-color: black;
+  height: 35em;
+  background-color: white;
+  color: black;
   display: flex;
   align-items: center;
   flex-direction: column;
-  border-radius: 10px;
   margin-top: 4em;
-  border: 2px solid white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .kakao {
   margin-top: 1em;
@@ -35,7 +36,6 @@
   width: 15em;
   height: 2.5em;
   border: none;
-  border-radius: 5px;
   font-size: 1.2rem;
   font-weight: 600;
 }
@@ -61,21 +61,25 @@
   width: 15em;
   height: 2.5em;
   border: none;
-  border-radius: 5px;
   font-size: 1.2rem;
   font-weight: 600;
+  transition: 0.5s;
 }
 .buttons:hover {
   cursor: pointer;
+  background-color: black;
 }
 .loginText {
-  color: white;
+  color: black;
   font-size: 34px;
   font-weight: 600;
   width: 100%;
   text-align: left;
   margin-bottom: 1em;
   margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .loginForm {
@@ -88,11 +92,11 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-color: #141414;
-  border: none;
-  border-radius: 5px;
+  /* background-color: #141414; */
+  border: 1px solid #c4c4c4;
   padding: 14px;
-  color: antiquewhite;
+  /* color: antiquewhite; */
+  color: black;
   margin-bottom: 1em;
   font-weight: 600;
   font-size: 1.1em;

@@ -34,18 +34,20 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <div className={styles.container}>
-        <div className={styles.description}>
-          <p>모바</p>
-          <span>함께 쇼핑하는 즐거움</span>
+      <div className={styles.wrap}>
+        <div className={styles.container}>
+          <div className={styles.description}>
+            <p>모바</p>
+            <span className={styles.detail}>함께 쇼핑하는 즐거움</span>
+          </div>
+          <button className={styles.buttons} onClick={signin}>
+            <span>시작하기</span>
+          </button>
+          <button className={styles.buttons} id={styles.loginBtn} onClick={login}>
+            {' '}
+            이미 계정을 가지고 있어요{' '}
+          </button>
         </div>
-        <button className={styles.buttons} onClick={signin}>
-          <span>시작하기</span>
-        </button>
-        <button className={styles.buttons} id={styles.loginBtn} onClick={login}>
-          {' '}
-          이미 계정을 가지고 있어요{' '}
-        </button>
       </div>
     </>
   );
