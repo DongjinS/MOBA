@@ -9,6 +9,9 @@ import { AiOutlineCheckCircle } from 'react-icons/ai';
 import { ImCross } from 'react-icons/im';
 import { VscTrash } from 'react-icons/vsc';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const PrivateBasket = (props) => {
   const [products, setProducts] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -95,7 +98,15 @@ const PrivateBasket = (props) => {
   const HandleSubmitVote = (e) => {
     if (voteList.length < 2 || voteList.length > 4) {
       e.preventDefault();
-      alert('투표할 상품을 다시 확인해주세요.');
+      toast.warn('상품 개수를 다시 확인해주세요!', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return;
     }
 
@@ -192,14 +203,19 @@ const PrivateBasket = (props) => {
                       <div className={!checked ? styles.productInfo : styles.voteInfo}>
                         {/* <AiOutlineCheckCircle size="150" className={styles.checkedIcon} /> */}
 
-                        <div
-                          onClick={() => {
-                            HandleDeleteProductBtn(item.shop_url);
-                          }}
-                          className={styles.deleteContainer}
-                        >
-                          <VscTrash className={styles.deleteBtn} size='30px' />
-                        </div>
+                        {!checked ? (
+                          <div
+                            onClick={() => {
+                              HandleDeleteProductBtn(item.shop_url);
+                            }}
+                            className={styles.deleteContainer}
+                          >
+                            <VscTrash className={styles.deleteBtn} size='30px' />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+
                         <div
                           className={styles.productWrap}
                           onClick={(e) => {
@@ -229,7 +245,19 @@ const PrivateBasket = (props) => {
             </div>
           </div>
 
-          <div className={styles.experienceLoading}></div>
+          <div className={styles.experienceLoading}>
+            <ToastContainer
+              position='bottom-center'
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </div>
         </div>
       </div>
     </div>
