@@ -1005,8 +1005,9 @@ const DressRoom = (props) => {
                   }}
                 />
               </div>
-              <div onClick={() => setIsMemuOpen(!isMenuOpen)}>
-                <RiMenuLine size='40' style={{ color: '#4c4c4c', cursor: 'pointer' }} />
+              <div style={{ zIndex: '103' }} onClick={() => setIsMemuOpen(!isMenuOpen)}>
+                {/* <RiMenuLine size='40' style={{ color: '#4c4c4c', cursor: 'pointer' }} /> */}
+                {isMenuOpen ? <MdClose className={styles.closeBtn} size={40} /> : <RiMenuLine className={styles.menuBtn} size={40} />}
               </div>
             </div>
           </header>

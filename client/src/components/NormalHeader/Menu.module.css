@@ -11,10 +11,10 @@
   align-items: center;
   justify-content: center;
   height: 90%;
-  width: 100vw;
+  width: 90vw;
   opacity: 0.9;
   position: absolute;
-  z-index: 20;
+  z-index: 100;
 }
 
 .background {
@@ -31,12 +31,12 @@
   /* transform: scale(1);
   animation: scale 1.5s forwards ease-in; */
   opacity: 1;
-  z-index: 22;
+  z-index: 101;
   animation: bg1_slideIn 0.5s;
 }
 
 .titles {
-  z-index: 23;
+  z-index: 102;
   opacity: 1;
   width: 73%;
   display: flex;
