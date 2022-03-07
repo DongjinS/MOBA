@@ -20,7 +20,10 @@ userRouter.post('/info', async (req, res) => {
     console.log(user.username);
     return res.send(user);
   }
-  return res.send();
+  const user = {
+    username: 'Guest',
+  };
+  return res.send(user);
 });
 
 userRouter.post('/login', (req, res) => {
