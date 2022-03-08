@@ -63,7 +63,7 @@ const PrivateBasket = (props) => {
         imageUrl: '#',
         link: {
           mobileWebUrl :`https://moba-shop.net/vote/${id}`,
-          webUrl: `http://moba-shop.net/vote/${id}`,
+          webUrl: `https://moba-shop.net/vote/${id}`,
         },
       },
       buttons: [
@@ -71,7 +71,7 @@ const PrivateBasket = (props) => {
           title: '투표하기로 이동',
           link: {
             mobileWebUrl :`https://moba-shop.net/vote/${id}`,
-            webUrl: `http://moba-shop.net/vote/${id}`,
+            webUrl: `https://moba-shop.net/vote/${id}`,
           },
         },
       ],
