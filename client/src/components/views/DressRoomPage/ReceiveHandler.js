@@ -45,13 +45,11 @@ export const addImg = async (canvas, data) => {
       let flag = true;
       canvas.getObjects().forEach((object) => {
         if (object.id === id) {
-          console.log('canvas has same img!!');
           flag = false;
           return;
         }
       });
       if (flag) {
-        console.log('add new image', img);
         canvas.add(img);
       }
       canvas.renderAll();
@@ -99,7 +97,6 @@ export const getPointer = () => {
 };
 
 export const deleteMouse = async (id) => {
-  console.log('disconnect', pointers[id]);
   delete clients[id];
   if (pointers[id]) {
     try {

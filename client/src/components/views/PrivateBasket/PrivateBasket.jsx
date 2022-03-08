@@ -26,8 +26,6 @@ const PrivateBasket = (props) => {
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
-        console.log('token : ', token);
-        console.log('response data : ', Response.data);
         setProducts(Response.data.reverse());
       })
       .catch((Error) => {
@@ -45,7 +43,6 @@ const PrivateBasket = (props) => {
         setVoteList(voteList.filter((voteItem) => voteItem !== item));
       } else {
         e.target.classList.add('clicked');
-        console.log('개수 : ', voteList.length);
         setVoteList([...voteList, item]);
       }
     }
@@ -89,7 +86,7 @@ const PrivateBasket = (props) => {
   };
 
   const HandleSubmitVote = (e) => {
-    if (voteList.length < 2 || voteList.length > 4) {
+    if (voteList.length < 2 || voteList.length > 3) {
       e.preventDefault();
       toast.warn('상품 개수를 다시 확인해주세요!', {
         position: 'top-center',
@@ -112,11 +109,9 @@ const PrivateBasket = (props) => {
   };
 
   const HandleDeleteProductBtn = (shop_url) => {
-    console.log('delelte');
     axios
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
-        console.log(response);
         setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
@@ -158,8 +153,8 @@ const PrivateBasket = (props) => {
               </div>
             )}
 
-            {checked && voteList.length !== 0 && (voteList.length < 2 || voteList.length > 4) && (
-              <p className={styles.voteDescription}>투표할 상품을 1개 이상 5개 미만으로 선택해주세요</p>
+            {checked && voteList.length !== 0 && (voteList.length < 2 || voteList.length > 3) && (
+              <p className={styles.voteDescription}>투표할 상품을 2~3개 선택해주세요</p>
             )}
           </ul>
 

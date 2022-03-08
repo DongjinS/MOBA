@@ -20,10 +20,7 @@ const AddProduct = (props) => {
     axios
       .post(`/room/${roomNumber}/wishlist`, { url })
       .then((Response) => {
-        console.log('post : ', Response.data);
-        console.log(Response.status);
         if (Response.status === 201) {
-          // setProducts([...products, Response.data]);
           props.handleAddProduct(Response.data);
         }
       })
@@ -36,13 +33,7 @@ const AddProduct = (props) => {
   return (
     <div className={styles.AddWishList}>
       <form>
-        <input
-          className={styles.inputs}
-          value={url}
-          onChange={onChangeUrl}
-          type="text"
-          placeholder="URL을 붙여넣으세요"
-        ></input>
+        <input className={styles.inputs} value={url} onChange={onChangeUrl} type='text' placeholder='URL을 붙여넣으세요'></input>
         <button className={styles.button} onClick={onClickAddBtn}>
           추가
         </button>

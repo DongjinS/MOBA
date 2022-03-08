@@ -69,7 +69,7 @@ const DressRoom = (props) => {
 
   const handleRecievedMouse = (data) => {
     data = JSON.parse(data);
-    if (canvasRef.current.offsetWidth - 25 > data.clientX) {
+    if (canvasRef.current?.offsetWidth - 25 > data.clientX) {
       modifyMouse(data);
     }
   };
@@ -91,7 +91,6 @@ const DressRoom = (props) => {
   };
 
   function hangUp() {
-    console.log('hangUp!!');
     // Disconnect peer connection (WebRTC)
     try {
       peerRef.current.close();
@@ -104,7 +103,6 @@ const DressRoom = (props) => {
     if (userStream.current) {
       userStream.current.getTracks().forEach((track) => {
         // Clearly indicates that the stream no longer uses the source
-        console.log('stop my video!!!');
         track.stop();
       });
     }
@@ -141,16 +139,13 @@ const DressRoom = (props) => {
          * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
          */
         canvas.getObjects().forEach((object) => {
-          // console.log('data : ', data);
           if (object.id === data.id) {
-            // console.log('obj : ', object);
             canvas.remove(object);
           }
         });
         break;
       case 'drawing':
         let path = new fabric.Path(data.path.path);
-        console.log(path);
         path.set(data.path);
         path.selectable = data.selectable;
         path.setCoords();
@@ -167,7 +162,6 @@ const DressRoom = (props) => {
               obj.doubleSelected = true;
             }
           });
-          console.log('double selected!!!', canvas.getObjects());
           canvas.renderAll();
         } else {
           canvas.getObjects().forEach((object) => {
@@ -180,7 +174,6 @@ const DressRoom = (props) => {
         }
         break;
       case 'deselected':
-        console.log('get deselected message');
         canvas.getObjects().forEach((object) => {
           if (object.id === data.id) {
             object.doubleSelected = false;
@@ -219,7 +212,6 @@ const DressRoom = (props) => {
   const lastDeselectedEvent = (canvas) => {
     canvas.getActiveObjects().forEach((obj) => {
       try {
-        console.log('send end event');
         itemChannel.current.send(
           JSON.stringify({
             obj: obj,
@@ -234,7 +226,6 @@ const DressRoom = (props) => {
   };
 
   window.addEventListener('beforeunload', (event) => {
-    console.log('새로고침 이벤트');
     if (canvas) {
       lastDeselectedEvent(canvas);
     }
@@ -246,15 +237,14 @@ const DressRoom = (props) => {
 
   useEffect(async () => {
     getUserInfo();
-    const canvasHeight = canvasRef.current.offsetHeight - 1;
-    const canvasWidth = canvasRef.current.offsetWidth - 1;
+    const canvasHeight = canvasRef.current?.offsetHeight - 1;
+    const canvasWidth = canvasRef.current?.offsetWidth - 1;
     setInitialWidth(canvasWidth);
 
     // 개인 장바구니 상품을 가져온 후 로딩 종료
     setCanvas(initCanvas(canvasWidth, canvasHeight));
 
     setunMountFlag(true); // 이 UseEffect 끝까지는 false 유지.
-    console.log('empty use Effect', unMountFlag);
 
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
@@ -263,17 +253,14 @@ const DressRoom = (props) => {
           userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         }
         userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        console.log('set video stream');
 
         const options = {};
         const userSpeechEvents = hark(stream, options);
         userSpeechEvents.on('speaking', () => {
-          console.log('speaking');
           setIsUserSpeaking(true);
         });
 
         userSpeechEvents.on('stopped_speaking', () => {
-          console.log('stopped speaking');
           setIsUserSpeaking(false);
         });
 
@@ -326,10 +313,7 @@ const DressRoom = (props) => {
     axios
       .get(`/privatebasket/${token}`)
       .then((Response) => {
-        console.log(Response);
         setProducts(Response.data.reverse());
-        console.log('axios get products :', products);
-        console.log('axios get Response :', Response.data);
 
         let shops = Response.data.reduce((acc, cv) => {
           acc = acc.concat(cv.shop_name);
@@ -342,10 +326,7 @@ const DressRoom = (props) => {
       })
       .then(() => {
         setIsLoading(false);
-        console.log('products : ', products);
-        console.log('uniqueShops : ', uniqueShops);
       });
-    console.log('end empty useffect', unMountFlag);
   }, []);
 
   useEffect(() => {
@@ -374,7 +355,6 @@ const DressRoom = (props) => {
       });
       canvas.on('selection:created', (opt) => {
         if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#b33030').length > 0) {
-          console.log('lock items cannot be group', opt);
           canvas.discardActiveObject().renderAll();
         } else {
           opt.selected.forEach((obj) => {
@@ -395,7 +375,6 @@ const DressRoom = (props) => {
       canvas.on('selection:updated', (opt) => {
         const actives = canvas.getActiveObjects();
         if (actives.length >= 2 && actives.filter((obj) => obj.stroke === '#b33030').length > 0) {
-          console.log('lock items cannot be group', opt);
           canvas.discardActiveObject().renderAll();
         } else {
           opt.selected.forEach((obj) => {
@@ -436,7 +415,6 @@ const DressRoom = (props) => {
       });
 
       canvas.on('path:created', (options) => {
-        console.log('path created', options);
         options.path.selectable = false;
         const data = {
           order: 'drawing',
@@ -556,11 +534,9 @@ const DressRoom = (props) => {
     }
 
     return () => {
-      console.log('unmount canvas');
       if (unMountFlag) {
         // 첫 시작시 unmount flag = false,
         setTimeout(() => {
-          console.log('time out!');
           if (canvas) {
             lastDeselectedEvent(canvas);
           }
@@ -573,8 +549,6 @@ const DressRoom = (props) => {
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
     let url;
-
-    console.log('add image', item);
 
     if (item.removedBgImg) {
       url = item.removedBgImg;
@@ -596,7 +570,6 @@ const DressRoom = (props) => {
       });
       img.scale(0.4);
 
-      console.log('new_img', img);
       const sendObj = {
         obj: img,
         order: 'add',
@@ -620,15 +593,11 @@ const DressRoom = (props) => {
   };
 
   const HandleAddProfileImgBtn = (e, profileImg, canvi) => {
-    console.log('HandleAddProfileImgBtn : ', profileImg);
-
     e.preventDefault();
 
     const url = profileImg;
     if (url) {
       new fabric.Image.fromURL(url, (img) => {
-        // console.log(img);
-        // console.log('sender', img._element.currentSrc);
         img.set({
           id: uuid(),
           borderColor: 'orange',
@@ -669,7 +638,6 @@ const DressRoom = (props) => {
 
   const HandleDeleteCanvasBtn = () => {
     canvas.getActiveObjects().forEach((obj) => {
-      console.log('HandleDeleteBtn : ', obj);
       try {
         if (obj.stroke !== '#b33030') {
           // 락 걸린 상품이 아니면
@@ -770,9 +738,6 @@ const DressRoom = (props) => {
   const handleRecieveCall = async (incoming) => {
     peerRef.current = createPeer();
     peerRef.current.addEventListener('datachannel', (event) => {
-      console.log('event : ', event);
-      console.log('event channel: ', event.channel);
-
       switch (event.channel.label) {
         case 'mouse':
           mouseChannel.current = event.channel;
@@ -820,7 +785,6 @@ const DressRoom = (props) => {
                     sendObj.url = obj.profileUrl;
                     sendObj.isProfileImg = true;
                   }
-                  console.log('send img to new peer!');
                   itemChannel.current.send(JSON.stringify(sendObj));
                 } else {
                   const data = {
@@ -898,12 +862,10 @@ const DressRoom = (props) => {
       const options = {};
       const partnerSpeechEvents = hark(partnerVideo.current.srcObject, options);
       partnerSpeechEvents.on('speaking', () => {
-        console.log('partner speaking');
         setIsPartnerSpeaking(true);
       });
 
       partnerSpeechEvents.on('stopped_speaking', () => {
-        console.log('partner stopped speaking');
         setIsPartnerSpeaking(false);
       });
     }
@@ -930,7 +892,6 @@ const DressRoom = (props) => {
   };
 
   const HandleSoundBtnClick = () => {
-    // console.log('partnerVideo : ', partnerVideo.current);
     if (partnerVideo.current) {
       if (isSoundOn) {
         setIsSoundOn(false);
@@ -943,11 +904,7 @@ const DressRoom = (props) => {
   };
 
   const HandleAddtoMyCartBtn = () => {
-    console.log('HandleAddToMyCartBtn ');
-
     canvas.getActiveObjects().forEach((obj) => {
-      console.log('add to my cart : ', obj);
-
       axios
         .post(`/privatebasket`, {
           token: token,
@@ -955,7 +912,6 @@ const DressRoom = (props) => {
         })
         .then((Response) => {
           // Response가 정상일때 products에 상품을 추가한다.
-          console.log(Response);
           if (Response.status === 200) {
             setProducts([obj.product_info, ...products]);
           }
@@ -967,17 +923,13 @@ const DressRoom = (props) => {
     axios
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
-        console.log(response);
         setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
-      .catch(function (error) {
-        // console.log(error.response);
-      });
+      .catch(function (error) {});
   };
 
   /// 콜렉션 추가 ///
   const CollectionItems = () => {
-    console.log('CollectionItems');
     let items = [];
     let dupCheck = [];
     let flag = true;
@@ -1024,7 +976,6 @@ const DressRoom = (props) => {
         dupCheck = [];
         return;
       }
-      console.log('add to my collection : ', obj);
       items.push(obj.product_info);
       dupCheck.push(obj.product_info.category);
     });
@@ -1058,7 +1009,6 @@ const DressRoom = (props) => {
             draggable: true,
             progress: undefined,
           });
-          console.log('아이템 들어왔습니다.', response);
         });
     }
   };
@@ -1067,8 +1017,8 @@ const DressRoom = (props) => {
   window.addEventListener('resize', () => {
     setCanvas((canvas) => {
       try {
-        canvas.setWidth(canvasRef.current.offsetWidth);
-        canvas.setHeight(canvasRef.current.offsetHeight);
+        canvas.setWidth(canvasRef.current?.offsetWidth);
+        canvas.setHeight(canvasRef.current?.offsetHeight);
         return canvas;
       } catch (error) {
         return canvas;
@@ -1084,12 +1034,12 @@ const DressRoom = (props) => {
   const productSidebarRef = useRef();
   const handleShrinkBtn = () => {
     if (smallWidth === 0) {
-      setSmallWidth(canvasRef.current.offsetWidth);
+      setSmallWidth(canvasRef.current?.offsetWidth);
     }
     setIsActive(!isActive);
 
     if (isActive) {
-      canvas.setWidth(document.body.offsetWidth - videoContainerRef.current.offsetWidth - 430);
+      canvas.setWidth(document.body?.offsetWidth - videoContainerRef.current?.offsetWidth - 430);
     } else {
       // canvas.setWidth(initialWidth);
       canvas.setWidth(initialWidth);
@@ -1119,7 +1069,6 @@ const DressRoom = (props) => {
       .getDisplayMedia({ cursor: true })
       .then((stream) => {
         window.resizeTo(window.screen.availWidth * 0.15, window.screen.availHeight);
-        console.log('sharescreen : ', stream.getTracks());
         const screenTrack = stream.getTracks()[0];
         //face를 screen으로 바꿔줌
         senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(screenTrack);
@@ -1136,7 +1085,6 @@ const DressRoom = (props) => {
   function getUserInfo() {
     let token = getCookie('x_auth');
     axios.post('/api/users/info', { token }).then(function (response) {
-      console.log('getUserInfo', response.data);
       setUserId(response.data.username);
       setUserImg(response.data.profileImage);
     });

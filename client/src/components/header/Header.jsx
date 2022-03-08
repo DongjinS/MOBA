@@ -35,7 +35,6 @@ const Header = (props) => {
       } else {
         alert('로그아웃을 실패했습니다.');
       }
-      console.log(response.data);
     });
   }
 
@@ -46,7 +45,7 @@ const Header = (props) => {
       </button>
 
       {isToken ? (
-        <button id="checkout" className={styles.buttons} onClick={logout}>
+        <button id='checkout' className={styles.buttons} onClick={logout}>
           <RiLogoutBoxRLine size={40} />
         </button>
       ) : (

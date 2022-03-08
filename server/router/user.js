@@ -17,7 +17,6 @@ userRouter.post('/register', (req, res) => {
 userRouter.post('/info', async (req, res) => {
   if (req.body.token) {
     const user = await User.findOne({ token: req.body.token });
-    console.log(user.username);
     return res.send(user);
   }
   const user = {
@@ -72,7 +71,7 @@ userRouter.get('/auth', auth, (req, res) => {
 });
 
 userRouter.get('/logout', auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, console.log(req.user._id), { token: '' }, (error, user) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (error, user) => {
     if (error) {
       return res.json({ success: false, error });
     }

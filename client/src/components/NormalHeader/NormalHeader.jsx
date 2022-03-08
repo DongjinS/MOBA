@@ -41,7 +41,6 @@ const NormalHeader = (props) => {
       } else {
         alert('로그아웃을 실패했습니다.');
       }
-      console.log(response.data);
     });
   }
 
