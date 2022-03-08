@@ -50,6 +50,8 @@ const DressRoom = (props) => {
   const [userImg, setUserImg] = useState('');
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [isPartnerSpeaking, setIsPartnerSpeaking] = useState(false);
+  const [hangUpFlag, setHangUpFlag] = useState(true);
+  const [unMountFlag, setunMountFlag] = useState(false);
 
   const canvasRef = useRef();
   const videoContainerRef = useRef();
@@ -63,7 +65,6 @@ const DressRoom = (props) => {
   const roomID = useParams().roomID;
   const mouseChannel = useRef();
   const itemChannel = useRef();
-  const hangUpFlag = useRef();
 
   const navigate = useNavigate();
 
@@ -233,10 +234,20 @@ const DressRoom = (props) => {
     });
   };
 
-  useEffect(async () => {
-    hangUpFlag.current = true;
-    getUserInfo();
+  window.addEventListener('beforeunload', (event) => {
+    console.log('새로고침 이벤트');
+    if (canvas) {
+      lastDeselectedEvent(canvas);
+    }
+    if (hangUpFlag) {
+      hangUp();
+      setHangUpFlag(false);
+    }
+    setunMountFlag(false);
+  });
 
+  useEffect(async () => {
+    getUserInfo();
     const canvasHeight = canvasRef.current.offsetHeight - 1;
     const canvasWidth = canvasRef.current.offsetWidth - 1;
     setInitialWidth(canvasWidth);
@@ -244,9 +255,18 @@ const DressRoom = (props) => {
     // 개인 장바구니 상품을 가져온 후 로딩 종료
     setCanvas(initCanvas(canvasWidth, canvasHeight));
 
+    setunMountFlag(true); // 이 UseEffect 끝까지는 false 유지.
+    console.log('empty use Effect', unMountFlag);
+
     await navigator.mediaDevices
       .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
       .then((stream) => {
+        if (userVideo.current) {
+          userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
+        }
+        userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
+        console.log('set video stream');
+
         const options = {};
         const userSpeechEvents = hark(stream, options);
         userSpeechEvents.on('speaking', () => {
@@ -259,10 +279,6 @@ const DressRoom = (props) => {
           setIsUserSpeaking(false);
         });
 
-        if (userVideo.current) {
-          userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
-          userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
-        }
         socketRef.current = io.connect('/');
         socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
 
@@ -331,6 +347,7 @@ const DressRoom = (props) => {
         console.log('products : ', products);
         console.log('uniqueShops : ', uniqueShops);
       });
+      console.log("end empty useffect", unMountFlag);
   }, []);
 
   useEffect(() => {
@@ -541,25 +558,22 @@ const DressRoom = (props) => {
     }
 
     return () => {
-      if (canvas) {
-        lastDeselectedEvent(canvas);
-      }
-      if (hangUpFlag.current) {
-        hangUp();
-        hangUpFlag.current = false;
+      console.log('unmount canvas');
+      if (unMountFlag) {
+        // 첫 시작시 unmount flag = false,
+        setTimeout(() => {
+          console.log('time out!');
+          if (canvas) {
+            lastDeselectedEvent(canvas);
+          }
+          if (hangUpFlag) {
+            hangUp();
+            setHangUpFlag(false);
+          }
+        }, 2000);
       }
     };
   }, [canvas]);
-
-  window.addEventListener('beforeunload', (event) => {
-    if (canvas) {
-      lastDeselectedEvent(canvas);
-    }
-    if (hangUpFlag.current) {
-      hangUp();
-      hangUpFlag.current = false;
-    }
-  });
 
   const HandleAddImgBtn = (e, item, canvi) => {
     e.preventDefault();
@@ -892,7 +906,7 @@ const DressRoom = (props) => {
         console.log('partner speaking');
         setIsPartnerSpeaking(true);
       });
-  
+
       partnerSpeechEvents.on('stopped_speaking', () => {
         console.log('partner stopped speaking');
         setIsPartnerSpeaking(false);
@@ -903,7 +917,7 @@ const DressRoom = (props) => {
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
 
-    if (userStream.current){
+    if (userStream.current) {
       userStream.current.getVideoTracks().forEach((track) => {
         track.enabled = !track.enabled;
       });
@@ -913,7 +927,7 @@ const DressRoom = (props) => {
   const HandleMicBtnClick = () => {
     isMicOn ? setIsMicOn(false) : setIsMicOn(true);
 
-    if (userStream.current){
+    if (userStream.current) {
       userStream.current.getAudioTracks().forEach((track) => {
         track.enabled = !track.enabled;
       });
@@ -922,7 +936,7 @@ const DressRoom = (props) => {
 
   const HandleSoundBtnClick = () => {
     // console.log('partnerVideo : ', partnerVideo.current);
-    if (partnerVideo.current){
+    if (partnerVideo.current) {
       if (isSoundOn) {
         setIsSoundOn(false);
         partnerVideo.current.muted = true;
