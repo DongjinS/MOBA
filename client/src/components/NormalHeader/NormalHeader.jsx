@@ -50,26 +50,20 @@ const NormalHeader = (props) => {
   return (
     <div>
       <div style={{ height: '70px' }}>
-        <header className={styles.header}>
+        <header className={isOpen ? styles.blackHeader : styles.header}>
           <button onClick={mobaOnClickHandler} className={styles.title}>
             MOBA
           </button>
-
-          {isToken ? (
+          {isToken && (
             <div>
-              {/* <button id="checkout" className={styles.buttons} onClick={logout}>
-                    <RiLogoutBoxRLine size={40} />
-                  </button> */}
               <div onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <MdClose className={styles.closeBtn} size={40} /> : <RiMenuLine className={styles.menuBtn} size={40} />}
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </header>
+        <div>{isOpen ? <Menu /> : <></>}</div>
       </div>
-      <div>{isOpen ? <Menu /> : <></>}</div>
     </div>
   );
 };
