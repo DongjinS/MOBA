@@ -141,9 +141,9 @@ const DressRoom = (props) => {
          * 동진 : object가 JSON.stringfy()를 하면서 데이터가 유실될 가능성에 대해 찾아보자!
          */
         canvas.getObjects().forEach((object) => {
-          console.log('data : ', data);
+          // console.log('data : ', data);
           if (object.id === data.id) {
-            console.log('obj : ', object);
+            // console.log('obj : ', object);
             canvas.remove(object);
           }
         });
@@ -236,7 +236,6 @@ const DressRoom = (props) => {
   useEffect(async () => {
     hangUpFlag.current = true;
     getUserInfo();
-    console.log('useEffect []');
 
     const canvasHeight = canvasRef.current.offsetHeight - 1;
     const canvasWidth = canvasRef.current.offsetWidth - 1;
@@ -260,7 +259,6 @@ const DressRoom = (props) => {
           setIsUserSpeaking(false);
         });
 
-        console.log('rtc socket');
         if (userVideo.current) {
           userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
           userStream.current = stream; // userStream이라는 변수에 stream을 담아놓음
@@ -336,7 +334,6 @@ const DressRoom = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect canvas');
     if (canvas) {
       canvas.on('selection:cleared', (opt) => {
         if (opt.deselected) {
@@ -423,9 +420,6 @@ const DressRoom = (props) => {
         }
       });
 
-      canvas.on('before:path:created', (options) => {
-        console.log('before path created', options);
-      });
       canvas.on('path:created', (options) => {
         console.log('path created', options);
         options.path.selectable = false;
@@ -449,8 +443,6 @@ const DressRoom = (props) => {
             // 그룹으로 움직임
             options.target._objects.forEach((object) => {
               const matrix = object.calcTransformMatrix();
-              console.log(matrix);
-              console.log(object);
               const centerX = matrix[4];
               const centerY = matrix[5];
               const scale = object.scaleX;
@@ -471,8 +463,6 @@ const DressRoom = (props) => {
             });
           } else {
             // 낱개로 움직임
-            console.log(options.target.calcTransformMatrix());
-            console.log(options.target);
             const modifiedObj = {
               obj: options.target,
               id: options.target.id,
@@ -495,8 +485,6 @@ const DressRoom = (props) => {
             // 그룹으로 움직임
             options.target._objects.forEach((object) => {
               const matrix = object.calcTransformMatrix();
-              console.log(matrix);
-              console.log(object);
               const centerX = matrix[4];
               const centerY = matrix[5];
               const scale = object.scaleX;
@@ -517,8 +505,6 @@ const DressRoom = (props) => {
             });
           } else {
             // 낱개로 움직임
-            console.log(options.target.calcTransformMatrix());
-            console.log(options.target);
             const modifiedObj = {
               obj: options.target,
               id: options.target.id,
@@ -552,28 +538,15 @@ const DressRoom = (props) => {
           // 상대 없을 때 send 시 에러
         }
       });
-      // canvas.on("mouse:wheel", function (opt) {
-      //   var delta = opt.e.deltaY;
-      //   var zoom = canvas.getZoom();
-      //   zoom *= 0.999 ** delta;
-      //   if (zoom > 20) zoom = 20;
-      //   if (zoom < 0.01) zoom = 0.01;
-      //   canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-      //   opt.e.preventDefault();
-      //   opt.e.stopPropagation();
-      // });
-
-      // console.log("canvas socket:", socketRef.current);
     }
 
     return () => {
       if (canvas) {
         lastDeselectedEvent(canvas);
-
-        if (hangUpFlag.current) {
-          hangUp();
-          hangUpFlag.current = false;
-        }
+      }
+      if (hangUpFlag.current) {
+        hangUp();
+        hangUpFlag.current = false;
       }
     };
   }, [canvas]);
@@ -581,11 +554,10 @@ const DressRoom = (props) => {
   window.addEventListener('beforeunload', (event) => {
     if (canvas) {
       lastDeselectedEvent(canvas);
-
-      if (hangUpFlag.current) {
-        hangUp();
-        hangUpFlag.current = false;
-      }
+    }
+    if (hangUpFlag.current) {
+      hangUp();
+      hangUpFlag.current = false;
     }
   });
 
@@ -602,8 +574,6 @@ const DressRoom = (props) => {
     }
 
     new fabric.Image.fromURL(url, (img) => {
-      console.log(img);
-      console.log('sender', img._element.currentSrc);
       img.set({
         id: uuid(),
         product_info: item,
@@ -648,8 +618,8 @@ const DressRoom = (props) => {
     const url = profileImg;
     if (url) {
       new fabric.Image.fromURL(url, (img) => {
-        console.log(img);
-        console.log('sender', img._element.currentSrc);
+        // console.log(img);
+        // console.log('sender', img._element.currentSrc);
         img.set({
           id: uuid(),
           borderColor: 'orange',
@@ -841,6 +811,7 @@ const DressRoom = (props) => {
                     sendObj.url = obj.profileUrl;
                     sendObj.isProfileImg = true;
                   }
+                  console.log('send img to new peer!');
                   itemChannel.current.send(JSON.stringify(sendObj));
                 } else {
                   const data = {
@@ -915,44 +886,50 @@ const DressRoom = (props) => {
   const handleTrackEvent = (e) => {
     if (partnerVideo.current) {
       partnerVideo.current.srcObject = e.streams[0];
+      const options = {};
+      const partnerSpeechEvents = hark(partnerVideo.current.srcObject, options);
+      partnerSpeechEvents.on('speaking', () => {
+        console.log('partner speaking');
+        setIsPartnerSpeaking(true);
+      });
+  
+      partnerSpeechEvents.on('stopped_speaking', () => {
+        console.log('partner stopped speaking');
+        setIsPartnerSpeaking(false);
+      });
     }
-    const options = {};
-    const partnerSpeechEvents = hark(partnerVideo.current.srcObject, options);
-    partnerSpeechEvents.on('speaking', () => {
-      console.log('partner speaking');
-      setIsPartnerSpeaking(true);
-    });
-
-    partnerSpeechEvents.on('stopped_speaking', () => {
-      console.log('partner stopped speaking');
-      setIsPartnerSpeaking(false);
-    });
   };
 
   const HandleCameraBtnClick = () => {
     isCameraOn ? setIsCameraOn(false) : setIsCameraOn(true);
 
-    userStream.current.getVideoTracks().forEach((track) => {
-      track.enabled = !track.enabled;
-    });
+    if (userStream.current){
+      userStream.current.getVideoTracks().forEach((track) => {
+        track.enabled = !track.enabled;
+      });
+    }
   };
 
   const HandleMicBtnClick = () => {
     isMicOn ? setIsMicOn(false) : setIsMicOn(true);
 
-    userStream.current.getAudioTracks().forEach((track) => {
-      track.enabled = !track.enabled;
-    });
+    if (userStream.current){
+      userStream.current.getAudioTracks().forEach((track) => {
+        track.enabled = !track.enabled;
+      });
+    }
   };
 
   const HandleSoundBtnClick = () => {
     // console.log('partnerVideo : ', partnerVideo.current);
-    if (isSoundOn) {
-      setIsSoundOn(false);
-      partnerVideo.current.muted = true;
-    } else {
-      setIsSoundOn(true);
-      partnerVideo.current.muted = false;
+    if (partnerVideo.current){
+      if (isSoundOn) {
+        setIsSoundOn(false);
+        partnerVideo.current.muted = true;
+      } else {
+        setIsSoundOn(true);
+        partnerVideo.current.muted = false;
+      }
     }
   };
 
@@ -1155,8 +1132,6 @@ const DressRoom = (props) => {
       setUserImg(response.data.profileImage);
     });
   }
-
-  console.log('useImg : ', userImg);
 
   /* ------ */
 
