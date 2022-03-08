@@ -17,6 +17,7 @@ const voteRouter = require('./router/vote');
 const voteResultRouter = require('./router/voteResult');
 // 컬렉션 관련 //
 const collectionRouter = require('./router/collection');
+const cors = require('cors');
 
 const app = express();
 
@@ -31,6 +32,7 @@ mongoose
   .then(console.log('MongoDB Connected'))
   .catch((error) => console.log(error));
 
+
 app.use(bodyParser.urlencoded({ extended: false, limit: '5mb' }));
 app.use(
   bodyParser.json({
@@ -38,6 +40,8 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+app.use(cors());
 
 ///// 로그인 / 회원가입 관련 /////
 app.use('/api/users', userRouter);
@@ -61,6 +65,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/oauth', oauthRouter);
+
+
 
 ///// 영상 통화 및 화면 공유 /////
 const server = http.createServer(app);

@@ -714,6 +714,7 @@ const DressRoom = (props) => {
         description: '친구랑 코디하기',
         imageUrl: '#',
         link: {
+          mobileWebUrl : window.location.href,
           webUrl: window.location.href,
         },
       },
@@ -721,6 +722,7 @@ const DressRoom = (props) => {
         {
           title: '웹으로 이동',
           link: {
+            mobileWebUrl : window.location.href,
             webUrl: window.location.href,
           },
         },
