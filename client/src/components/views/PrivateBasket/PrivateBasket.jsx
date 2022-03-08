@@ -62,16 +62,16 @@ const PrivateBasket = (props) => {
         description: inputs.text,
         imageUrl: '#',
         link: {
-          mobileWebUrl :`https://moba-shop.link/vote/${id}`,
-          webUrl: `http://moba-shop.link/vote/${id}`,
+          mobileWebUrl :`https://moba-shop.net/vote/${id}`,
+          webUrl: `http://moba-shop.net/vote/${id}`,
         },
       },
       buttons: [
         {
           title: '투표하기로 이동',
           link: {
-            mobileWebUrl :`https://moba-shop.link/vote/${id}`,
-            webUrl: `http://moba-shop.link/vote/${id}`,
+            mobileWebUrl :`https://moba-shop.net/vote/${id}`,
+            webUrl: `http://moba-shop.net/vote/${id}`,
           },
         },
       ],
