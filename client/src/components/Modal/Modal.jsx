@@ -86,7 +86,6 @@ const Modal = (props) => {
             </header>
 
             <main className='main'>
-              {console.log(products)}
               {products.length > 0 ? (
                 products.map((item, index) => (
                   <div className='productCard' key={index}>

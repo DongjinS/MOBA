@@ -7,17 +7,14 @@ let clients = {};
 let pointers = {};
 
 // listeners
-export const addImg = (canvas, data) => {
+export const addImg = async (canvas, data) => {
   const { obj, id, url, product_info, isProfileImg, selected, left, top } = data;
-  console.log(obj.type);
 
   if (obj.type === 'image') {
-    new fabric.Image.fromURL(url, (img) => {
-      console.log('received data', data);
+    await new fabric.Image.fromURL(url, (img) => {
       img.set({
         id: id,
         product_info: product_info,
-        // borderColor: "rgb(90,83,83)",
         borderColor: 'orange',
         borderScaleFactor: 5,
         cornerColor: 'orange',
@@ -27,7 +24,6 @@ export const addImg = (canvas, data) => {
         isProfileImg: isProfileImg,
         profileUrl: url,
       });
-      console.log('received img: ', img);
       img.set(obj);
       img.set('stroke', '');
       img.set('strokeWidth', 1);
@@ -45,9 +41,17 @@ export const addImg = (canvas, data) => {
       } else {
         img.scale(0.4);
       }
-      console.log('received img after set(obj): ', img);
       img.setCoords();
-      canvas.add(img);
+      let flag = true;
+      canvas.getObjects().forEach((object) => {
+        if (object.id === id) {
+          flag = false;
+          return;
+        }
+      });
+      if (flag) {
+        canvas.add(img);
+      }
       canvas.renderAll();
     });
   }
@@ -93,7 +97,6 @@ export const getPointer = () => {
 };
 
 export const deleteMouse = async (id) => {
-  console.log('disconnect', pointers[id]);
   delete clients[id];
   if (pointers[id]) {
     try {

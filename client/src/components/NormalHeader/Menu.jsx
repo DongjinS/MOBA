@@ -57,7 +57,7 @@ const Menu = (props) => {
             <div className={styles.main}>
               <p onClick={navigateCollection}>마이 컬렉션</p>
             </div>
-            <div className={styles.main}>
+            <div style={{ display: 'none' }} className={styles.main}>
               <p onClick={navigateShopTogether}>쇼핑시작</p>
             </div>
           </div>

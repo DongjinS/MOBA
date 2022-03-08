@@ -6,7 +6,7 @@ const qs = require('qs');
 const fetch = require('node-fetch');
 
 const User = require('../models/User');
-const { auth } = require("../middleware/auth");
+const { auth } = require('../middleware/auth');
 
 class Kakao {
   constructor(code) {
@@ -28,7 +28,7 @@ const getAccessToken = async (options) => {
     return await fetch(options.url, {
       method: 'POST',
       headers: {
-        'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
       body: qs.stringify({
         grant_type: 'authorization_code',
@@ -37,9 +37,9 @@ const getAccessToken = async (options) => {
         redirectUri: options.redirectUri,
         code: options.code,
       }),
-    }).then(res => res.json());
+    }).then((res) => res.json());
   } catch (e) {
-    logger.info("error", e);
+    logger.info('error', e);
   }
 };
 
@@ -49,11 +49,11 @@ const getUserInfo = async (url, access_token) => {
       method: 'POST',
       headers: {
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        'Authorization': `Bearer ${access_token}`
-      }
-    }).then(res => res.json());
+        Authorization: `Bearer ${access_token}`,
+      },
+    }).then((res) => res.json());
   } catch (e) {
-    logger.info("error", e);
+    logger.info('error', e);
   }
 };
 
@@ -69,7 +69,7 @@ const getOption = (coperation, code) => {
       // return new Naver(code);
       break;
   }
-}
+};
 
 oauthRouter.get(`/:coperation`, async (req, res) => {
   const coperation = req.params.coperation;
@@ -80,16 +80,14 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
 
   // TODO Redirect Frot Server (쿠키, 세션, local_store 중에 로그인을 유지한다.)
   // TODO Data Base or 쿠키 reflesh Token 저장 방법 모색
-  console.log(userInfo);
 
   let body = {
     username: userInfo.kakao_account.email,
     password: userInfo.kakao_account.email,
     name: userInfo.properties.nickname,
     email: userInfo.kakao_account.email,
-    token: token.access_token
+    token: token.access_token,
   };
-  console.log(body)
 
   User.findOne({ email: body.email }, (error, user) => {
     // user가 없다면
@@ -97,21 +95,18 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
       const user = new User(body);
       user.save((error, userSave) => {
         if (error) {
-          console.log('save error')
+          console.log('save error');
         }
-      })
-
+      });
     }
     // user가 있다면
     user.token = token.access_token;
     user.save(function (error, user) {
-      if (error) return cb(error)
-    })
-  })
+      if (error) return cb(error);
+    });
+  });
 
-  res
-    .cookie('x_auth', token.access_token)
-    .redirect('http://localhost:3000/mainpage')
-})
+  res.cookie('x_auth', token.access_token).redirect('http://localhost:3000/mainpage');
+});
 
 module.exports = oauthRouter;

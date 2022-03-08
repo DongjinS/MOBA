@@ -13,7 +13,6 @@ let mostLikes = [];
 const VoteResult = () => {
   const [voteResultList, setVoteResultList] = useState([]);
   const [isReady, setIsReady] = useState(true);
-  console.log(voteResultList, 'voteResultList');
   function getCookie(name) {
     const cookies = new Cookies();
     return cookies.get(name);
@@ -26,7 +25,6 @@ const VoteResult = () => {
         token: token,
       })
       .then((response) => {
-        console.log(response.data, 'response.data');
         setVoteResultList(response.data.reverse());
         for (var result of response.data) {
           let maxLike = -1;
@@ -56,7 +54,6 @@ const VoteResult = () => {
   }
   window.onload = function () {
     const firstCard = document.querySelector('.card');
-    console.log(firstCard, 'firstCard');
   };
   return (
     <>

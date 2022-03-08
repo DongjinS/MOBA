@@ -77,10 +77,8 @@ function RegisterPage(props) {
 
         async function Nooki(canvas, originalImg) {
           let ctx = canvas.getContext('2d');
-          console.log('hihihi', canvas, originalImg);
           canvas.width = originalImg.width;
           canvas.height = originalImg.height;
-          console.log('hihihi', canvas, originalImg.width, originalImg.height, originalImg.naturalWidth, originalImg.naturalHeight);
           await ctx.drawImage(originalImg, 0, 0, canvas.width, canvas.height);
           try {
             const _id = await ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -189,7 +187,6 @@ function RegisterPage(props) {
     };
 
     dispatch(registerUser(body)).then((response) => {
-      console.log(response.payload);
       if (response.payload.success) {
         navigate('/');
       } else {

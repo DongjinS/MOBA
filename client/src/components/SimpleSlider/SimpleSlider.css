@@ -77,7 +77,7 @@
 }
 
 .collectionSet {
-  margin: auto;
+  margin: 0 auto;
   width: 200px;
   height: 450px;
   position: relative;
@@ -261,4 +261,47 @@
 }
 .i__collection__del:hover {
   color: red;
+}
+@media screen and (max-width: 1024px) {
+  .slider__container {
+    width: 65%;
+    margin: 0px 50px 0px 400px;
+    padding-right: 30px;
+  }
+  .collectionSet {
+    transform: scale(0.72);
+  }
+  .activeSlide:hover .collectionSet {
+    transform: scale(0.65);
+  }
+  .slide {
+    height: 450px;
+  }
+  .slider__container {
+    width: 60%;
+  }
+  .collectionSet {
+    height: 70px;
+    width: 0px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .slider__container {
+    width: 100%;
+    margin: 145px auto;
+    padding-right: 20px;
+  }
+  .collectionSet {
+    transform: scale(0.55);
+  }
+  .activeSlide:hover .collectionSet {
+    transform: scale(0.52);
+  }
+  .slide {
+    height: 350px;
+  }
+  .collectionSet {
+    height: 5px;
+    width: 0px;
+  }
 }

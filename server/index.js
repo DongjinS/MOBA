@@ -72,7 +72,6 @@ app.use('/oauth', oauthRouter);
 const server = http.createServer(app);
 const io = socket(server);
 io.on('connection', (socket) => {
-  console.log('hello this is server IO connection', socket.id);
   socket.on('join room', (roomID) => {
     const userCount = io.sockets.adapter.rooms.get(roomID)?.size;
 
@@ -82,7 +81,6 @@ io.on('connection', (socket) => {
       // Set user id of the user
       socket['userID'] = socket.id;
     } else if (userCount === 1) {
-      console.log('rooms', io.sockets.adapter.rooms.get(roomID));
       io.in(socket.id).socketsJoin(roomID);
       const rooms = io.sockets.adapter.rooms.get(roomID);
       const otherUser = [...rooms][0];
@@ -119,10 +117,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnecting', () => {
-    console.log('disconnecting', socket.id);
-    console.log(socket.rooms);
     socket.rooms.forEach((room) => {
-      console.log(room);
       socket.to(room).emit('peer-leaving', socket.id);
       // Notify other peer that current user is leaving
       // Leave the room
@@ -160,9 +155,7 @@ async function generateUploadURL(req) {
 }
 
 app.get('/s3Url/:id', async (req, res) => {
-  console.log('here');
   const url = await generateUploadURL(req);
-  console.log(url);
   res.send({ url });
 });
 

@@ -16,21 +16,14 @@ basketRouter.param('id', async (req, res, next, value) => {
 // method: post
 // data: 유저 정보(토큰) , products 정보
 basketRouter.post('/', async (req, res) => {
-  console.log('post these products on to private basket');
-  console.log(req.body.products, 'products');
-
   // 토큰으로 유저 찾고 - 잘못된 유저 찾은
   const cur_user = await User.findOne({
     token: req.body.token,
   });
 
-  // console.log(cur_user);
   // 유저의 기존 장바구니의 url 모아서
-  const prev_products_url = cur_user?.products?.map(
-    (product) => product.shop_url
-  );
+  const prev_products_url = cur_user?.products?.map((product) => product.shop_url);
 
-  // console.log(prev_products_url);
   // 새로 장바구니에 넣으려는게 이미 있는지 확인하고
   const add_products = req.body.products?.filter((product) => {
     if (prev_products_url.includes(product.shop_url)) {
@@ -38,11 +31,9 @@ basketRouter.post('/', async (req, res) => {
       return product;
     }
   });
-  // console.log('add_products', add_products);
 
   // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
   if (add_products?.length === 0 || add_products?.includes(undefined)) {
-    console.log('duplicated products');
     res.statusCode = 404;
     res.send('duplicated products');
     return;
@@ -60,16 +51,13 @@ basketRouter.post('/', async (req, res) => {
 
   // 잘 들어갔는지 확인 용도 - 추후에 지워야함
   // post_cur_user = await User.findOne({ token: req.body.token });
-  // console.log(post_cur_user);
   res.statusCode = 200;
   res.send('success post new product in private basket');
 });
 
 // delete helper
 async function deleteProduct(token, products, shop_url) {
-  const new_products = products?.filter(
-    (product) => product.shop_url !== shop_url
-  );
+  const new_products = products?.filter((product) => product.shop_url !== shop_url);
   await User.updateOne(
     { token: token },
     {
@@ -85,33 +73,23 @@ async function deleteProduct(token, products, shop_url) {
 // data: 누구의 장바구니에서 삭제할지 - 유저 정보(토큰), 무엇을 삭제할지 - 상품 정보
 // res: success or fail
 basketRouter.delete('/product', async (req, res) => {
-  // console.log('IN private basket, try to delete the selected products');
-  // console.log(req.body);
-
   const cur_user = await User.findOne({
     token: req.body.token,
   });
 
   try {
     await deleteProduct(cur_user.token, cur_user.products, req.body.shop_url);
-    console.log('success to delete');
     res.send('delete the selected products');
   } catch (error) {
-    console.log('fail to delete');
     res.send('no product to delete in privated basket');
   }
 });
 
 basketRouter.get('/:id', async (req, res) => {
-  console.log('IN private basket, try to get the products');
-  // console.log(req.id);
   const cur_user = await User.findOne({
     token: req.id,
   });
   try {
-    // console.log(cur_user);
-    // console.log(cur_user.products);
-
     res.send(cur_user.products);
   } catch (error) {
     res.send([]);
@@ -161,11 +139,8 @@ function musinsa(html, url) {
   let shop_name, shop_url, img_url, product_name, price, sale_price;
   const $ = cheerio.load(html); // html load
 
-  product_name = $(
-    '#page_product_detail > div.right_area.page_detail_product > div.right_contents.section_product_summary > span > em'
-  ).text();
+  product_name = $('#page_product_detail > div.right_area.page_detail_product > div.right_contents.section_product_summary > span > em').text();
   price = $('#goods_price').text().trim();
-  console.log(price);
   // price parsing - e.g. 110,000원 -> 110000
   price = Number(
     price
@@ -174,10 +149,7 @@ function musinsa(html, url) {
       .reduce((a, b) => a + b)
   );
 
-  sale_price = $(
-    '#sPrice > ul > li > span.txt_price_member.m_list_price'
-  ).text();
-  console.log(sale_price);
+  sale_price = $('#sPrice > ul > li > span.txt_price_member.m_list_price').text();
   sale_price = Number(
     sale_price
       .slice(0, -1)
@@ -207,9 +179,7 @@ function brandi(html, url) {
   shop_name = '브랜디';
   shop_url = url;
   img_url = $("meta[property='og:image']").attr('content');
-  product_name = $(
-    '#container > div > div.wrap-products-info > div.wrap-detail_info > div.detail_basic-info > div.detail_title_area > h1'
-  ).text();
+  product_name = $('#container > div > div.wrap-products-info > div.wrap-detail_info > div.detail_basic-info > div.detail_title_area > h1').text();
   price = $(
     '#container > div > div.wrap-products-info > div.wrap-detail_info > div.detail_basic-info > div.detail-price-wrapper.hideFinalPriceSection > div > div > span > span'
   ).text();
@@ -227,23 +197,16 @@ function brandi(html, url) {
     shop_url: shop_url,
     img: img_url,
   };
-  // console.log(new_product);
 
   return new_product;
 }
 
 async function parse_product(url) {
   let new_product;
-  // console.log(url);
   const split_url = url.split('/');
   const cur_shop = split_url[2];
   // 서비스 가능한 사이트만 req 요청 보내기
-  // console.log(`is cur_shop? ${cur_shop}`)
-  if (
-    ['www.wconcept.co.kr', 'store.musinsa.com', 'www.brandi.co.kr'].includes(
-      cur_shop
-    )
-  ) {
+  if (['www.wconcept.co.kr', 'store.musinsa.com', 'www.brandi.co.kr'].includes(cur_shop)) {
     await axios
       .get(url)
       .then((dataa) => {
@@ -262,12 +225,8 @@ async function parse_product(url) {
             break;
         }
       })
-      .catch(
-        // 리퀘스트 실패 - then 보다 catch 가 먼저 실행됨..
-        console.log('get shopping mall html request is failed')
-      );
+      .catch();
   }
-  // console.log(`new_product : ${JSON.stringify(new_product)}`)
   return new_product;
 }
 

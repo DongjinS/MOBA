@@ -1,9 +1,9 @@
-const ORIGINAL_IMAGE_ID = "original-img";
-const CANVAS_ID = "canvas";
-const FORM_ID = "image-form";
-const DOWNLOAD_BUTTON_ID = "download-button";
-const IMAGE_INPUT_ID = "image-input";
-const IMAGE_LABEL_ID = "image-label";
+const ORIGINAL_IMAGE_ID = 'original-img';
+const CANVAS_ID = 'canvas';
+const FORM_ID = 'image-form';
+const DOWNLOAD_BUTTON_ID = 'download-button';
+const IMAGE_INPUT_ID = 'image-input';
+const IMAGE_LABEL_ID = 'image-label';
 
 window.onload = () => {
   Listeners.inputFileChange(IMAGE_INPUT_ID, IMAGE_LABEL_ID);
@@ -14,8 +14,8 @@ window.onload = () => {
 function download(url) {
   const res = fetch(url);
   const data = res.blob();
-  const ext = url.split(".").pop();
-  const filename = url.split("/").pop();
+  const ext = url.split('.').pop();
+  const filename = url.split('/').pop();
   const metadata = { type: `image/${ext}` };
   return new File([data], filename, metadata);
 }
@@ -23,35 +23,26 @@ function download(url) {
 const Listeners = {
   formSubmit: (formId) => {
     const form = document.getElementById(formId);
-    form.addEventListener("submit", (formEvent) => {
+    form.addEventListener('submit', (formEvent) => {
       formEvent.preventDefault();
       ImageProcessor.getImageDataFromInputFile(download('https://image.msscdn.net/images/goods_img/20190828/1134355/1134355_2_500.jpg'))
         .then((imageData) => ImageProcessor.getImageObject(imageData))
-        .then((imageObject) =>
-          ImageProcessor.createPreviewAndCanvas(
-            imageObject,
-            ORIGINAL_IMAGE_ID,
-            CANVAS_ID,
-            ImageProcessor.drawImageOnCanvas
-          )
-        );
+        .then((imageObject) => ImageProcessor.createPreviewAndCanvas(imageObject, ORIGINAL_IMAGE_ID, CANVAS_ID, ImageProcessor.drawImageOnCanvas));
     });
   },
   downloadButton: (downloadButtonId, originalImageId, canvasId) => {
     const downloadButtonElement = document.getElementById(downloadButtonId);
     const canvasElement = document.getElementById(canvasId);
-    downloadButtonElement.addEventListener("click", (event) => {
+    downloadButtonElement.addEventListener('click', (event) => {
       const originalImage = document.getElementById(originalImageId);
       if (!originalImage) event.preventDefault();
-      const imageToDownload = canvasElement
-        .toDataURL("image/png")
-        .replace("image/png", "image/octet-stream");
-      downloadButtonElement.setAttribute("href", imageToDownload);
+      const imageToDownload = canvasElement.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+      downloadButtonElement.setAttribute('href', imageToDownload);
     });
   },
   inputFileChange: (imageInputId, imageLabelId) => {
     const input = document.getElementById(imageInputId);
-    input.addEventListener("change", (event) => {
+    input.addEventListener('change', (event) => {
       const label = document.getElementById(imageLabelId);
       label.innerText = event.target.files[0].name;
     });
@@ -73,10 +64,9 @@ const ImageProcessor = {
     return new Promise((resolve) => resolve(imageObject));
   },
   createPreviewAndCanvas: (imageObject, imageId, canvasId, canvasCallback) => {
-    const imageElement = document.createElement("img");
+    const imageElement = document.createElement('img');
     imageObject.onload = () => {
       const oldImage = document.getElementById(imageId);
-      console.log(oldImage);
       if (oldImage) {
         oldImage.remove();
       }
@@ -84,13 +74,11 @@ const ImageProcessor = {
       imageElement.width = imageObject.width;
       imageElement.height = imageObject.height;
       imageElement.id = imageId;
-      imageElement.className = "hidden";
+      imageElement.className = 'hidden';
 
-      document
-        .querySelector(".preview-original-image")
-        .appendChild(imageElement);
+      document.querySelector('.preview-original-image').appendChild(imageElement);
 
-      canvasCallback(canvasId, imageId)
+      canvasCallback(canvasId, imageId);
     };
 
     return new Promise((resolve) => resolve());
@@ -98,26 +86,17 @@ const ImageProcessor = {
   drawImageOnCanvas: (canvasElementId, originalImageElementId) => {
     const canvas = document.getElementById(canvasElementId),
       originalImage = document.getElementById(originalImageElementId),
-      canvasContext = canvas.getContext("2d");
+      canvasContext = canvas.getContext('2d');
 
     canvas.height = originalImage.height;
     canvas.width = originalImage.width;
     canvasContext.drawImage(originalImage, 0, 0);
 
-    const imageData = canvasContext.getImageData(
-      0,
-      0,
-      originalImage.width,
-      originalImage.height
-    ),
+    const imageData = canvasContext.getImageData(0, 0, originalImage.width, originalImage.height),
       pixels = imageData.data,
       transparency = { r: 0, g: 0, b: 0, a: 0 };
 
-    for (
-      let cursor = 0, totalOfPixels = pixels.length;
-      cursor < totalOfPixels;
-      cursor += 4
-    ) {
+    for (let cursor = 0, totalOfPixels = pixels.length; cursor < totalOfPixels; cursor += 4) {
       let r = pixels[cursor],
         g = pixels[cursor + 1],
         b = pixels[cursor + 2];

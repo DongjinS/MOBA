@@ -38,18 +38,6 @@ const CreateRoom = (props) => {
     const cookies = new Cookies();
     return cookies.get(name);
   }
-  // ID 받아옴
-  // function getUserInfo() {
-  //   let token = getCookie('x_auth');
-  //   axios.post('/api/users/info', { token }).then(function (response) {
-  //     console.log(response.data.username, 'getUserInfo');
-  //     setUserId(response.data.username);
-  //   });
-  // }
-
-  // if (getCookie('room')) {
-  //   document.location.href = '/invited';
-  // }
 
   function create() {
     const id = uuid();
@@ -77,12 +65,9 @@ const CreateRoom = (props) => {
 
   const deleteAPIWishlistItem = (shop_url) => {
     const token = getCookie('x_auth');
-    console.log(token);
-
     axios
       .delete(`/privatebasket/product`, { data: { token, shop_url } })
       .then(function (response) {
-        console.log(response);
         setProducts(products?.filter((product) => product.shop_url !== shop_url));
       })
       .catch(function (error) {
@@ -91,7 +76,6 @@ const CreateRoom = (props) => {
   };
 
   const deleteItem = (product) => {
-    console.log('create room delete : ', product);
     deleteAPIWishlistItem(product);
   };
 
@@ -123,7 +107,7 @@ const CreateRoom = (props) => {
           handleShopping={create}
           handlePrivateBasket={handlePrivateBasket}
         />
-        <Modal open={modalOpen} close={closeModal} header="나의 장바구니" products={products} deleteItem={deleteItem} />
+        <Modal open={modalOpen} close={closeModal} header='나의 장바구니' products={products} deleteItem={deleteItem} />
       </div>
     </>
   );

@@ -6,16 +6,27 @@
   justify-content: space-between;
   height: 70px;
   width: 100%;
-  /* background-color: rgba(0, 0, 0, 0.05);
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05)); */
   position: fixed;
   top: 0px;
   z-index: 102;
-  transition: 0.5s ease-in-out;
+  transition: 0.2s ease-in-out;
+  background-color: white;
 }
-.header:hover {
-  /* background-color: rgba(99, 99, 99, 0.2); */
+
+.blackHeader {
+  font-family: 'Palanquin Dark', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  z-index: 102;
+  transition: 0.2s ease-in-out;
+  background-color: rgb(39, 39, 39);
 }
+
 .title {
   all: unset;
 }

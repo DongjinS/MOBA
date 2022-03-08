@@ -9,7 +9,6 @@ import { VscClose } from 'react-icons/vsc';
 import { Navigate } from 'react-router-dom';
 
 function SimpleSlider(props) {
-  console.log(props.collectionImg.length, 'collectionImg');
   const NextArrow = ({ onClick }) => {
     return (
       <div className='arrow next' onClick={onClick}>
