@@ -50,7 +50,6 @@ const DressRoom = (props) => {
   const [userImg, setUserImg] = useState('');
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [isPartnerSpeaking, setIsPartnerSpeaking] = useState(false);
-  const [hangUpFlag, setHangUpFlag] = useState(true);
   const [unMountFlag, setunMountFlag] = useState(false);
 
   const canvasRef = useRef();
@@ -239,10 +238,9 @@ const DressRoom = (props) => {
     if (canvas) {
       lastDeselectedEvent(canvas);
     }
-    if (hangUpFlag) {
-      hangUp();
-      setHangUpFlag(false);
-    }
+
+    hangUp();
+
     setunMountFlag(false);
   });
 
@@ -347,7 +345,7 @@ const DressRoom = (props) => {
         console.log('products : ', products);
         console.log('uniqueShops : ', uniqueShops);
       });
-      console.log("end empty useffect", unMountFlag);
+    console.log('end empty useffect', unMountFlag);
   }, []);
 
   useEffect(() => {
@@ -566,10 +564,7 @@ const DressRoom = (props) => {
           if (canvas) {
             lastDeselectedEvent(canvas);
           }
-          if (hangUpFlag) {
-            hangUp();
-            setHangUpFlag(false);
-          }
+          hangUp();
         }, 2000);
       }
     };
