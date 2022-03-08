@@ -36,7 +36,7 @@
   width: 15em;
   height: 2.5em;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 .kakao:hover {
@@ -61,7 +61,7 @@
   width: 15em;
   height: 2.5em;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: 0.5s;
 }
@@ -84,6 +84,8 @@
 
 .loginForm {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
 }
 
@@ -100,4 +102,10 @@
   margin-bottom: 1em;
   font-weight: 600;
   font-size: 1.1em;
+  width: 16em;
+}
+@media screen and (max-width: 500px) {
+  .loginBox {
+    transform: scale(0.8);
+  }
 }

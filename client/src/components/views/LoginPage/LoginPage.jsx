@@ -55,16 +55,16 @@ function LoginPage(props) {
               <button className={styles.buttons} type='submit'>
                 로그인
               </button>
+              <a
+                className={styles.kakao}
+                href={
+                  'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=497af053ca6574eb9e8a19b5797cf024&redirect_uri=http://localhost:8000/oauth/kakao'
+                }
+              >
+                <i className='fa-solid fa-comment fa-lg'></i>
+                <span className={styles.kakao_desc}>카카오 계정으로 로그인</span>
+              </a>
             </form>
-            <a
-              className={styles.kakao}
-              href={
-                'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=497af053ca6574eb9e8a19b5797cf024&redirect_uri=http://localhost:8000/oauth/kakao'
-              }
-            >
-              <i className='fa-solid fa-comment fa-lg'></i>
-              <span className={styles.kakao_desc}>카카오 계정으로 로그인</span>
-            </a>
           </div>
         </div>
       </div>

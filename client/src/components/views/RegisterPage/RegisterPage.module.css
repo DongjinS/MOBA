@@ -9,20 +9,25 @@
 }
 
 .loginBox {
-  width: 40em;
-  height: 43em;
+  width: 33em;
+  height: 41em;
   display: flex;
   align-items: center;
   align-content: center;
   flex-direction: column;
-  margin-top: 5em;
-  /* border: 2px solid black; */
+  margin-top: 2em;
   background-color: white;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 .loginContents {
   width: 25em;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.7em;
 }
 
 .loginText {
@@ -31,8 +36,8 @@
   font-weight: 600;
   width: 100%;
   text-align: left;
-  margin-bottom: 1em;
-  margin-top: 1em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
   text-align: center;
 }
 
@@ -91,7 +96,8 @@
 }
 
 .registerBtn {
-  margin-top: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   background-color: #f37423;
   color: white;
   margin: 1;
@@ -112,4 +118,9 @@
 .registerBtn:hover {
   cursor: pointer;
   background-color: black;
+}
+@media screen and (max-width: 500px) {
+  .loginBox {
+    transform: scale(0.65);
+  }
 }
