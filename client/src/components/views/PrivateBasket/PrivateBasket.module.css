@@ -39,6 +39,32 @@
   -webkit-text-stroke: calc(0.005em + 1px) #000;
 }
 
+.maskText {
+  display: inline-block;
+  /* overflow: hidden; */
+  vertical-align: top;
+  color: white;
+  border-color: white;
+}
+.maskText :hover {
+  display: inline-block;
+  /* overflow: hidden; */
+  vertical-align: top;
+  color: black;
+  transform: scale(0.95);
+}
+
+.maskText > span {
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  display: inline-block;
+}
+
+.selected {
+  color: black;
+  border-radius: 10px;
+  opacity: 1;
+}
+
 .voteContainer {
   width: 100%;
   margin-top: 50px;
@@ -75,44 +101,6 @@
   border: 0;
   cursor: pointer;
 }
-
-.voteInput {
-  width: 100%;
-}
-
-.maskText {
-  display: inline-block;
-  /* overflow: hidden; */
-  vertical-align: top;
-  color: white;
-  border-color: white;
-}
-.maskText :hover {
-  display: inline-block;
-  /* overflow: hidden; */
-  vertical-align: top;
-  color: black;
-  transform: scale(0.95);
-}
-
-.maskText > span {
-  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
-  display: inline-block;
-}
-
-.selected {
-  color: black;
-  border-radius: 10px;
-  opacity: 1;
-}
-/* 
-@media (min-width: 768px) {
-  .experienceGrid {
-    transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
-    transform: unset;
-    margin-left: 240px;
-  }
-} */
 
 .voteDescription {
   margin: 10px;

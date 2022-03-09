@@ -6,8 +6,20 @@ import { useNavigate } from 'react-router-dom';
 
 const Menu = (props) => {
   const navigate = useNavigate();
+  const isMobile = () => {
+    var user = navigator.userAgent;
+    var is_mobile = false;
+    if (user.indexOf('iPhone') > -1 || user.indexOf('Android') > -1) {
+      is_mobile = true;
+    }
+    return is_mobile;
+  };
 
   const navigateDressroom = () => {
+    if (isMobile) {
+      alert('모바일 기기에서는 접속할 수 없습니다.');
+      return;
+    }
     const id = uuid();
     navigate(`/dressroom/${id}`);
   };
@@ -46,7 +58,7 @@ const Menu = (props) => {
         <div className={styles.titles}>
           <div className={styles.title}>
             <div className={styles.main}>
-              <p onClick={navigateDressroom}>코디</p>
+              <p onClick={navigateDressroom}>코디룸</p>
             </div>
             <div className={styles.main}>
               <p onClick={navigatePrivateBascket}>장바구니/투표</p>
@@ -55,7 +67,7 @@ const Menu = (props) => {
               <p onClick={navigateVoteResult}>투표결과</p>
             </div>
             <div className={styles.main}>
-              <p onClick={navigateCollection}>마이 컬렉션</p>
+              <p onClick={navigateCollection}>컬렉션북</p>
             </div>
             <div style={{ display: 'none' }} className={styles.main}>
               <p onClick={navigateShopTogether}>쇼핑시작</p>

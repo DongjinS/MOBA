@@ -7,8 +7,20 @@ import Header from '../../header/Header';
 
 const MainPage = (props) => {
   const navigate = useNavigate();
+  const isMobile = () => {
+    var user = navigator.userAgent;
+    var is_mobile = false;
+    if (user.indexOf('iPhone') > -1 || user.indexOf('Android') > -1) {
+      is_mobile = true;
+    }
+    return is_mobile;
+  };
 
   const navigateDressroom = () => {
+    if (isMobile) {
+      alert('모바일 기기에서는 접속할 수 없습니다.');
+      return;
+    }
     const id = uuid();
     navigate(`/dressroom/${id}`);
   };

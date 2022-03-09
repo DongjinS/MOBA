@@ -103,7 +103,6 @@ const PrivateBasket = (props) => {
     }
 
     const token = getCookie('x_auth');
-
     const id = uuid();
 
     sendCheckedProduct(token, voteList, id, inputs);

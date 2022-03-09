@@ -158,7 +158,11 @@ const DressRoom = (props) => {
         }, 3000);
         break;
       case 'selected':
-        if (data.obj.stroke === '#b33030') {
+        const activeID = canvas.getActiveObjects().map((object) => {
+          return object.id;
+        });
+        // data.obj.stroke === '#b33030' ||
+        if ( activeID.includes(data.id)) {
           // 이미 내가 선택하고 있는 상품이면
           canvas.getObjects().forEach((obj) => {
             if (obj.id === data.id) {
@@ -687,7 +691,7 @@ const DressRoom = (props) => {
     navigator.clipboard.writeText(currentUrl);
     toast.success('초대링크 복사 완료!', {
       position: 'bottom-center',
-      autoClose: 3000,
+      autoClose: 1500,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -948,7 +952,7 @@ const DressRoom = (props) => {
       flag = false;
       toast.warn('상품을 선택해주세요.', {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -961,7 +965,7 @@ const DressRoom = (props) => {
       if (dupCheck.includes(obj.product_info.category)) {
         toast.warn('중복된 카테고리의 상품은 추가할 수 없습니다.', {
           position: 'top-center',
-          autoClose: 3000,
+          autoClose: 1500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -975,7 +979,7 @@ const DressRoom = (props) => {
       } else if (obj.product_info.category === '미지정' || obj.isProfileImg) {
         toast.warn('지원하지 않는 카테고리의 상품이 포함되어 있습니다.', {
           position: 'top-center',
-          autoClose: 3000,
+          autoClose: 1500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -994,7 +998,7 @@ const DressRoom = (props) => {
     if ((flag && items.length < 3) || items > 3) {
       toast.warn('상의, 하의, 신발 하나 씩을 선택해주세요.', {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -1013,7 +1017,7 @@ const DressRoom = (props) => {
         .then((response) => {
           toast.success('컬렉션에 추가되었습니다.', {
             position: 'top-center',
-            autoClose: 3000,
+            autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -1250,7 +1254,7 @@ const DressRoom = (props) => {
                 </div>
                 <ToastContainer
                   position='bottom-center'
-                  autoClose={3000}
+                  autoClose={1500}
                   hideProgressBar={false}
                   newestOnTop={false}
                   closeOnClick
