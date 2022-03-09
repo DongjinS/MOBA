@@ -58,7 +58,7 @@ function LoginPage(props) {
               <a
                 className={styles.kakao}
                 href={
-                  'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=497af053ca6574eb9e8a19b5797cf024&redirect_uri=https://moba-shop.net/oauth/kakao'
+                  'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=497af053ca6574eb9e8a19b5797cf024&redirect_uri=https://moba-shop.net/mainpage'
                 }
               >
                 <i className='fa-solid fa-comment fa-lg'></i>
