@@ -98,10 +98,17 @@ basketRouter.get('/:id', async (req, res) => {
 
 // 내 장바구니 담기
 basketRouter.post('/basket', async (req, res) => {
+  console.log(req.body.token, 'token');
+
   const basket_user = await User.findOne({
     token: req.body.token,
   });
-  res.send(basket_user.products);
+  console.log(basket_user, 'basket_user');
+  try {
+    res.send(basket_user.products);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 basketRouter.post('/basketParsing', async (req, res) => {
