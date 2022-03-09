@@ -246,9 +246,9 @@ const DressRoom = (props) => {
 
     setunMountFlag(true); // 이 UseEffect 끝까지는 false 유지.
 
-    await navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
-      .then((stream) => {
+    await navigator?.mediaDevices
+      ?.getUserMedia({ audio: true, video: true }) // 사용자의 media data를 stream으로 받아옴(video, audio)
+      ?.then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream; // video player에 그 stream을 설정함
         }
@@ -263,50 +263,52 @@ const DressRoom = (props) => {
         userSpeechEvents.on('stopped_speaking', () => {
           setIsUserSpeaking(false);
         });
+      })
+      .catch(function (err) {
+        console.log(err.name + ': ' + err.message);
+      }); // always check for errors at the end.
+    socketRef.current = io.connect('/');
+    socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
 
-        socketRef.current = io.connect('/');
-        socketRef.current.emit('join room', roomID); // roomID를 join room을 통해 server로 전달함
+    socketRef.current.on('exceedRoom', () => {
+      alert('이미 꽉 찬 방입니다!');
+      navigate('/mainpage');
+    });
 
-        socketRef.current.on('exceedRoom', () => {
-          alert('이미 꽉 찬 방입니다!');
-          navigate('/mainpage');
-        });
+    socketRef.current.on('other user', async (userID) => {
+      callUser(userID);
 
-        socketRef.current.on('other user', async (userID) => {
-          callUser(userID);
-
-          mouseChannel.current = await peerRef.current.createDataChannel('mouse');
-          mouseChannel.current.addEventListener('message', (event) => {
-            handleRecievedMouse(event.data);
-          });
-
-          itemChannel.current = await peerRef.current.createDataChannel('item');
-          itemChannel.current.addEventListener('message', (event) => {
-            handleRecievedItem(event.data);
-          });
-
-          otherUser.current = userID;
-        });
-        socketRef.current.on('user joined', (userID) => {
-          otherUser.current = userID;
-        });
-        socketRef.current.on('offer', handleRecieveCall);
-        socketRef.current.on('answer', handleAnswer);
-        socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
-        socketRef.current.on('peer-leaving', function (id) {
-          if (otherUser.current === id) {
-            deleteMouse(id);
-            otherUser.current = '';
-            try {
-              partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
-                track.stop();
-              });
-              partnerVideo.current.srcObject = null;
-            } catch (error) {}
-            peerRef.current.close();
-          }
-        });
+      mouseChannel.current = await peerRef.current.createDataChannel('mouse');
+      mouseChannel.current.addEventListener('message', (event) => {
+        handleRecievedMouse(event.data);
       });
+
+      itemChannel.current = await peerRef.current.createDataChannel('item');
+      itemChannel.current.addEventListener('message', (event) => {
+        handleRecievedItem(event.data);
+      });
+
+      otherUser.current = userID;
+    });
+    socketRef.current.on('user joined', (userID) => {
+      otherUser.current = userID;
+    });
+    socketRef.current.on('offer', handleRecieveCall);
+    socketRef.current.on('answer', handleAnswer);
+    socketRef.current.on('ice-candidate', handleNewICECandidateMsg);
+    socketRef.current.on('peer-leaving', function (id) {
+      if (otherUser.current === id) {
+        deleteMouse(id);
+        otherUser.current = '';
+        try {
+          partnerVideo.current.srcObject.getVideoTracks().forEach((track) => {
+            track.stop();
+          });
+          partnerVideo.current.srcObject = null;
+        } catch (error) {}
+        peerRef.current.close();
+      }
+    });
 
     getPointer();
     setIsLoading(false);
@@ -661,7 +663,7 @@ const DressRoom = (props) => {
         description: '친구랑 코디하기',
         imageUrl: '#',
         link: {
-          mobileWebUrl : window.location.href,
+          mobileWebUrl: window.location.href,
           webUrl: window.location.href,
         },
       },
@@ -669,7 +671,7 @@ const DressRoom = (props) => {
         {
           title: '웹으로 이동',
           link: {
-            mobileWebUrl : window.location.href,
+            mobileWebUrl: window.location.href,
             webUrl: window.location.href,
           },
         },
@@ -696,7 +698,9 @@ const DressRoom = (props) => {
   // ---------- webTRC video call ----------
   const callUser = (userID) => {
     peerRef.current = createPeer(userID);
-    userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current))); //senders에 넣어준다 - 중요!
+    if (userStream.current) {
+      userStream.current.getTracks().forEach((track) => senders.current.push(peerRef.current.addTrack(track, userStream.current))); //senders에 넣어준다 - 중요!
+    }
   };
 
   const createPeer = (userID) => {
@@ -907,7 +911,7 @@ const DressRoom = (props) => {
 
   const HandleAddtoMyCartBtn = () => {
     canvas.getActiveObjects().forEach((obj) => {
-      if (!obj.isProfileImg){
+      if (!obj.isProfileImg) {
         axios
           .post(`/privatebasket`, {
             token: token,
