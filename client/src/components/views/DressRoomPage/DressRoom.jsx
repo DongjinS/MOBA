@@ -972,7 +972,7 @@ const DressRoom = (props) => {
         items = [];
         dupCheck = [];
         return;
-      } else if (obj.product_info.category === '미지정') {
+      } else if (obj.product_info.category === '미지정' || obj.isProfileImg) {
         toast.warn('지원하지 않는 카테고리의 상품이 포함되어 있습니다.', {
           position: 'top-center',
           autoClose: 3000,
