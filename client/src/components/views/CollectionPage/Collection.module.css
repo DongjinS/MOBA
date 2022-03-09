@@ -39,6 +39,7 @@
 .title p:hover {
   transform: scale(0.95);
 }
+
 .normal {
   color: white;
 }

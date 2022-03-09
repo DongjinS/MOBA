@@ -137,88 +137,97 @@ function SimpleSlider(props) {
             ))}
         </Slider>
       ) : (
-        <Slider {...defaultSettings}>
-          {props.collectionImg &&
-            props.collectionImg.map((items, index) => (
-              <div key={index} className={index === imageIndex ? 'slide activeSlide' : 'slide'}>
-                <VscClose
-                  onClick={() => {
-                    props.handleDelete(index);
-                  }}
-                  className='i__collection__del'
-                  size={25}
-                />
-                <div className='collectionSet'>
-                  <img className='collectionImgTop' src={items.top.removedBgImg} alt='img' />
-                  <div className='con-tooltip bottom'>
-                    <AiFillPlusCircle className='i__plus' />
-                    <div
+        <>
+          {props.collectionImg.length === 0 ? (
+            <div className='noCollection'>
+              <img width={240} src='./images/collection.png' />
+              <span>나만의 컬렉션을 만들어 보세요</span>
+            </div>
+          ) : (
+            <Slider {...defaultSettings}>
+              {props.collectionImg &&
+                props.collectionImg.map((items, index) => (
+                  <div key={index} className={index === imageIndex ? 'slide activeSlide' : 'slide'}>
+                    <VscClose
                       onClick={() => {
-                        window.open(items.top.shop_url);
+                        props.handleDelete(index);
                       }}
-                      className='tooltip'
-                    >
-                      <div className='tooltip__img'>
-                        <img width={70} height={70} src={items.top.img} />
+                      className='i__collection__del'
+                      size={25}
+                    />
+                    <div className='collectionSet'>
+                      <img className='collectionImgTop' src={items.top.removedBgImg} alt='img' />
+                      <div className='con-tooltip bottom'>
+                        <AiFillPlusCircle className='i__plus' />
+                        <div
+                          onClick={() => {
+                            window.open(items.top.shop_url);
+                          }}
+                          className='tooltip'
+                        >
+                          <div className='tooltip__img'>
+                            <img width={70} height={70} src={items.top.img} />
+                          </div>
+                          <div className='tooltip__description'>
+                            <span>{items.top.shop_name}</span>
+                            <span>{items.top.product_name}</span>
+                            <span>{items.top.sale_price && items.top.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                          </div>
+                          <div className='tooltip__icon'>
+                            <FiChevronRight className='i__right' />
+                          </div>
+                        </div>
                       </div>
-                      <div className='tooltip__description'>
-                        <span>{items.top.shop_name}</span>
-                        <span>{items.top.product_name}</span>
-                        <span>{items.top.sale_price && items.top.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                      <img className='collectionImgBottom' src={items.bottom.removedBgImg} alt='img'></img>
+                      <div className='con-tooltip bottom con-bottom'>
+                        <AiFillPlusCircle className='i__plus' />
+                        <div
+                          onClick={() => {
+                            window.open(items.bottom.shop_url);
+                          }}
+                          className='tooltip'
+                        >
+                          <div className='tooltip__img'>
+                            <img width={70} height={70} src={items.bottom.img} />
+                          </div>
+                          <div className='tooltip__description'>
+                            <span>{items.bottom.shop_name}</span>
+                            <span>{items.bottom.product_name}</span>
+                            <span>{items.bottom.sale_price && items.bottom.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                          </div>
+                          <div className='tooltip__icon'>
+                            <FiChevronRight className='i__right' />
+                          </div>
+                        </div>
                       </div>
-                      <div className='tooltip__icon'>
-                        <FiChevronRight className='i__right' />
+                      <img className='collectionImgShoes' src={items.shoes.removedBgImg} alt='img'></img>
+                      <div className='con-tooltip con-shoes'>
+                        <AiFillPlusCircle className='i__plus' />
+                        <div
+                          onClick={() => {
+                            window.open(items.shoes.shop_url);
+                          }}
+                          className='tooltip'
+                        >
+                          <div className='tooltip__img'>
+                            <img width={70} height={70} src={items.shoes.img} />
+                          </div>
+                          <div className='tooltip__description'>
+                            <span>{items.shoes.shop_name}</span>
+                            <span>{items.shoes.product_name}</span>
+                            <span>{items.shoes.sale_price && items.shoes.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
+                          </div>
+                          <div className='tooltip__icon'>
+                            <FiChevronRight className='i__right' />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <img className='collectionImgBottom' src={items.bottom.removedBgImg} alt='img'></img>
-                  <div className='con-tooltip bottom con-bottom'>
-                    <AiFillPlusCircle className='i__plus' />
-                    <div
-                      onClick={() => {
-                        window.open(items.bottom.shop_url);
-                      }}
-                      className='tooltip'
-                    >
-                      <div className='tooltip__img'>
-                        <img width={70} height={70} src={items.bottom.img} />
-                      </div>
-                      <div className='tooltip__description'>
-                        <span>{items.bottom.shop_name}</span>
-                        <span>{items.bottom.product_name}</span>
-                        <span>{items.bottom.sale_price && items.bottom.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
-                      </div>
-                      <div className='tooltip__icon'>
-                        <FiChevronRight className='i__right' />
-                      </div>
-                    </div>
-                  </div>
-                  <img className='collectionImgShoes' src={items.shoes.removedBgImg} alt='img'></img>
-                  <div className='con-tooltip con-shoes'>
-                    <AiFillPlusCircle className='i__plus' />
-                    <div
-                      onClick={() => {
-                        window.open(items.shoes.shop_url);
-                      }}
-                      className='tooltip'
-                    >
-                      <div className='tooltip__img'>
-                        <img width={70} height={70} src={items.shoes.img} />
-                      </div>
-                      <div className='tooltip__description'>
-                        <span>{items.shoes.shop_name}</span>
-                        <span>{items.shoes.product_name}</span>
-                        <span>{items.shoes.sale_price && items.shoes.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
-                      </div>
-                      <div className='tooltip__icon'>
-                        <FiChevronRight className='i__right' />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </Slider>
+                ))}
+            </Slider>
+          )}
+        </>
       )}
     </div>
   );
