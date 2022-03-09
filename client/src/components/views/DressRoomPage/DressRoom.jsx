@@ -907,17 +907,19 @@ const DressRoom = (props) => {
 
   const HandleAddtoMyCartBtn = () => {
     canvas.getActiveObjects().forEach((obj) => {
-      axios
-        .post(`/privatebasket`, {
-          token: token,
-          products: [obj.product_info],
-        })
-        .then((Response) => {
-          // Response가 정상일때 products에 상품을 추가한다.
-          if (Response.status === 200) {
-            setProducts([obj.product_info, ...products]);
-          }
-        });
+      if (!obj.isProfileImg){
+        axios
+          .post(`/privatebasket`, {
+            token: token,
+            products: [obj.product_info],
+          })
+          .then((Response) => {
+            // Response가 정상일때 products에 상품을 추가한다.
+            if (Response.status === 200) {
+              setProducts([obj.product_info, ...products]);
+            }
+          });
+      }
     });
   };
 
