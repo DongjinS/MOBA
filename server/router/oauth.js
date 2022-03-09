@@ -13,7 +13,7 @@ class Kakao {
     this.url = 'https://kauth.kakao.com/oauth/token';
     this.clientID = '497af053ca6574eb9e8a19b5797cf024';
     this.clientSecret = 'HLhen6EGLnjgs2g7OmfBNGnwnYpWWekL';
-    this.redirectUri = 'http://localhost:8000/oauth/kakao';
+    this.redirectUri = 'https://moba-shop.net/oauth/kakao';
     this.code = code;
     this.userInfoUrl = 'https://kapi.kakao.com/v2/user/me';
   }
@@ -106,7 +106,7 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
     });
   });
 
-  res.cookie('x_auth', token.access_token).redirect('http://localhost:3000/mainpage');
+  res.cookie('x_auth', token.access_token).redirect('https://moba-shop.net/mainpage');
 });
 
 module.exports = oauthRouter;
