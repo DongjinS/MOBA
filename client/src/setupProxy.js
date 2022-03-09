@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://moba-shop.net',
+      target: 'http://localhost:8000',
       changeOrigin: true,
     })
   );
