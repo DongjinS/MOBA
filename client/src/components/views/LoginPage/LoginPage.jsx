@@ -55,7 +55,7 @@ function LoginPage(props) {
               <button className={styles.buttons} type='submit'>
                 로그인
               </button>
-              <a
+              {/* <a
                 className={styles.kakao}
                 href={
                   'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=497af053ca6574eb9e8a19b5797cf024&redirect_uri=https://moba-shop.net/mainpage'
@@ -63,7 +63,7 @@ function LoginPage(props) {
               >
                 <i className='fa-solid fa-comment fa-lg'></i>
                 <span className={styles.kakao_desc}>카카오 계정으로 로그인</span>
-              </a>
+              </a> */}
             </form>
           </div>
         </div>
