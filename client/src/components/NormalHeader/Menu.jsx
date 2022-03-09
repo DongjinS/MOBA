@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const Menu = (props) => {
   const navigate = useNavigate();
   const isMobile = () => {
-    var user = navigator.userAgent;
-    var is_mobile = false;
+    const user = navigator.userAgent;
+    let is_mobile = false;
     if (user.indexOf('iPhone') > -1 || user.indexOf('Android') > -1) {
       is_mobile = true;
     }
@@ -16,7 +16,7 @@ const Menu = (props) => {
   };
 
   const navigateDressroom = () => {
-    if (isMobile) {
+    if (isMobile()) {
       alert('모바일 기기에서는 접속할 수 없습니다.');
       return;
     }
