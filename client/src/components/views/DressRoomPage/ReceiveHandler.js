@@ -37,7 +37,7 @@ export const addImg = async (canvas, data) => {
         img.set('strokeWidth', 10);
       }
       if (isProfileImg) {
-        img.scale(0.2);
+        img.scale(0.1);
       } else {
         img.scale(0.4);
       }

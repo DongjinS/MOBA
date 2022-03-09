@@ -62,7 +62,7 @@ const PrivateBasket = (props) => {
         description: inputs.text,
         imageUrl: '#',
         link: {
-          mobileWebUrl :`https://moba-shop.net/vote/${id}`,
+          mobileWebUrl: `https://moba-shop.net/vote/${id}`,
           webUrl: `https://moba-shop.net/vote/${id}`,
         },
       },
@@ -70,7 +70,7 @@ const PrivateBasket = (props) => {
         {
           title: '투표하기로 이동',
           link: {
-            mobileWebUrl :`https://moba-shop.net/vote/${id}`,
+            mobileWebUrl: `https://moba-shop.net/vote/${id}`,
             webUrl: `https://moba-shop.net/vote/${id}`,
           },
         },
@@ -160,45 +160,54 @@ const PrivateBasket = (props) => {
             )}
           </ul>
 
-          {/* <div className={styles.experienceGrid}> */}
-          <div className={checked ? styles.experienceGrid + ' ' + styles.gridChecked : styles.experienceGrid}>
-            <div className={styles.experienceList}>
-              {products.map((item, index) => {
-                const originalPrice = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                const salePrice = item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          {products.length > 0 ? (
+            <div className={checked ? styles.experienceGrid + ' ' + styles.gridChecked : styles.experienceGrid}>
+              <div className={styles.experienceList}>
+                {products.map((item, index) => {
+                  const originalPrice = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                  const salePrice = item.sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-                return (
-                  <div key={index} style={{ position: 'relative' }}>
-                    <div className={styles.productContainer}>
-                      <div className={styles.productImgContainer}>
-                        <img className={styles.itemImg} src={item.removedBgImg} />
-                        <div className={!checked ? styles.productInfo : styles.voteInfo}>
-                          {!checked && (
-                            <div onClick={() => HandleDeleteProductBtn(item.shop_url)} className={styles.deleteContainer}>
-                              <VscTrash className={styles.deleteBtn} size='30px' />
-                            </div>
-                          )}
-                          <div className={styles.productWrap} onClick={(e) => handleProductClick(e, item)}></div>
-                          <div className={styles.infoContainer}>
-                            <span className={styles.shopName}>{item.shop_name}</span>
-                            <div className={styles.productName}>{item.product_name}</div>
-                            {originalPrice === salePrice ? (
-                              <div className={styles.originalPrice}>{originalPrice}원</div>
-                            ) : (
-                              <div>
-                                <div className={styles.price}>{originalPrice}원</div>
-                                <div className={styles.salePrice}>{salePrice}원</div>
+                  return (
+                    <div key={index} style={{ position: 'relative' }}>
+                      <div className={styles.productContainer}>
+                        <div className={styles.productImgContainer}>
+                          <img className={styles.itemImg} src={item.removedBgImg} />
+                          <div className={!checked ? styles.productInfo : styles.voteInfo}>
+                            {!checked && (
+                              <div onClick={() => HandleDeleteProductBtn(item.shop_url)} className={styles.deleteContainer}>
+                                <VscTrash className={styles.deleteBtn} size='30px' />
                               </div>
                             )}
+                            <div className={styles.productWrap} onClick={(e) => handleProductClick(e, item)}></div>
+                            <div className={styles.infoContainer}>
+                              <span className={styles.shopName}>{item.shop_name}</span>
+                              <div className={styles.productName}>{item.product_name}</div>
+                              {originalPrice === salePrice ? (
+                                <div className={styles.originalPrice}>{originalPrice}원</div>
+                              ) : (
+                                <div>
+                                  <div className={styles.price}>{originalPrice}원</div>
+                                  <div className={styles.salePrice}>{salePrice}원</div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div
+              className={styles.noProductContainer}
+              style={{  }}
+            >
+              <img src='/images/privateBasket.png' className={styles.noProductImg}></img>
+              <div className={styles.noProductDesc}>장바구니에 상품이 없어요</div>
+            </div>
+          )}
 
           <div className={styles.experienceLoading}>
             <ToastContainer

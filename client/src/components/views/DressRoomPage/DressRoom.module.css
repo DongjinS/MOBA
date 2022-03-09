@@ -156,8 +156,16 @@
   /* background-color: pink; */
 }
 
-.sidebarTop :hover {
+.sidebarTop :hover .chevronIcon {
   color: #f37423;
+  /* opacity: 0.8; */
+}
+
+.sidebarTop :hover .openTooltip {
+  display: block;
+}
+.sidebarTop :hover .closeTooltip {
+  display: block;
 }
 
 .chevronIcon {
@@ -395,6 +403,137 @@
 .toolbarBtn:hover {
   background-color: #f37423;
   box-shadow: 1px 1px 1px 1px #b0b0b0;
+}
+
+.openTooltip {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: -100px;
+  /* width: 100px; */
+  /* max-width: 200px; */
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.closeTooltip {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: -60px;
+  /* width: 100px; */
+  /* max-width: 200px; */
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.removeTooltip {
+  display: none;
+  position: absolute;
+  left: -90px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.addCartTooltip {
+  display: none;
+  position: absolute;
+  left: -145px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.DrawingFalseTooltip {
+  display: none;
+  position: absolute;
+  left: -165px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.DrawingTrueTooltip {
+  display: none;
+  position: absolute;
+  left: -125px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.collectionTooltip {
+  display: none;
+  position: absolute;
+  left: -145px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.addFaceTooltip {
+  display: none;
+  position: absolute;
+  left: -180px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.toolbarBtn:hover .removeTooltip {
+  display: block;
+}
+.toolbarBtn:hover .addCartTooltip {
+  display: block;
+}
+.toolbarBtn:hover .DrawingFalseTooltip {
+  display: block;
+}
+.toolbarBtn:hover .DrawingTrueTooltip {
+  display: block;
+}
+.toolbarBtn:hover .collectionTooltip {
+  display: block;
+}
+.toolbarBtn:hover .addFaceTooltip {
+  display: block;
 }
 
 .pointers {

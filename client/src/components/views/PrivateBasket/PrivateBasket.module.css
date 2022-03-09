@@ -262,6 +262,26 @@
   text-overflow: ellipsis;
 }
 
+.noProductContainer {
+  margin: 20em 0px 0px 35em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: smoothAppear 0.8s;
+}
+
+.noProductImg {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.noProductDesc {
+  font-size: 40px;
+  font-weight: 800;
+  color: grey;
+}
+
 @keyframes smoothAppear {
   from {
     opacity: 0;
@@ -321,6 +341,9 @@
   .voteDescription {
     font-size: 12px;
   }
+  .noProductDesc {
+    font-size: 30px;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -366,6 +389,15 @@
     height: 75px;
     width: 80px;
     font-size: 20px;
+  }
+  .noProductContainer {
+    margin: 10em 0px 0px 0em;
+  }
+  .noProductImg {
+    width: 150px;
+  }
+  .noProductDesc {
+    font-size: 30px;
   }
 }
 

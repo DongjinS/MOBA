@@ -29,10 +29,13 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdClose } from 'react-icons/md';
 import { BiChevronLeft } from 'react-icons/bi';
 import { CgScreen } from 'react-icons/cg';
+import { BsFillBookmarkStarFill } from 'react-icons/bs';
+import { RiBookmark3Fill } from 'react-icons/ri';
+import { GiSaveArrow } from 'react-icons/gi';
 
 import { BsFillShareFill } from 'react-icons/bs';
 import { RiMenuLine } from 'react-icons/ri';
-import { BsFillCollectionFillMdFace } from 'react-icons/bs';
+import { BsFillCollectionFillMdFace, BsBookmarkStarFill, BsSave2Fill } from 'react-icons/bs';
 import { MdFace } from 'react-icons/md';
 import Menu from '../../NormalHeader/Menu';
 import hark from 'hark';
@@ -610,7 +613,7 @@ const DressRoom = (props) => {
           product_info: '',
           profileUrl: url,
         });
-        img.scale(0.2);
+        img.scale(0.1);
 
         console.log('new_img', img);
         const sendObj = {
@@ -661,7 +664,7 @@ const DressRoom = (props) => {
         description: '친구랑 코디하기',
         imageUrl: '#',
         link: {
-          mobileWebUrl : window.location.href,
+          mobileWebUrl: window.location.href,
           webUrl: window.location.href,
         },
       },
@@ -669,7 +672,7 @@ const DressRoom = (props) => {
         {
           title: '웹으로 이동',
           link: {
-            mobileWebUrl : window.location.href,
+            mobileWebUrl: window.location.href,
             webUrl: window.location.href,
           },
         },
@@ -1184,7 +1187,7 @@ const DressRoom = (props) => {
                       ))
                     ) : (
                       <div className={styles.emptyBascket}>
-                        <img className={styles.emptyImg} src='/images/privateBascket2.png' alt='빈장바구니'></img>
+                        <img className={styles.emptyImg} src='/images/privateBasket2.png' alt='빈장바구니'></img>
                         <div className={styles.emptyInfo}>장바구니에 </div>
                         <div className={styles.emptyInfo}>상품이 없어요</div>
                       </div>
@@ -1197,31 +1200,44 @@ const DressRoom = (props) => {
                 <div className={styles.sidebarTop}>
                   <div ref={shrinkBtnRef} onClick={handleShrinkBtn}>
                     <BiChevronLeft className={styles.chevronIcon} size='50' />
+                    {isActive ? <span className={styles.openTooltip}>펼쳐보기</span> : <span className={styles.closeTooltip}>접기</span>}
                   </div>
                 </div>
                 <div className={styles.toolbar}>
                   <button className={styles.toolbarBtn} onClick={HandleDeleteCanvasBtn}>
+                    <span className={styles.removeTooltip}>지우기</span>
                     <BsTrash size='30' />
                   </button>
                   <button className={styles.toolbarBtn} onClick={HandleAddtoMyCartBtn}>
+                    <span className={styles.addCartTooltip}>장바구니 저장</span>
                     <MdAddShoppingCart size='30' />
                   </button>
 
                   {isDrawing ? (
                     <button className={styles.toolbarBtn} onClick={DrawingFalse}>
+                      <span className={styles.DrawingFalseTooltip}>그리기 모드 해제</span>
                       <BsHandIndexThumb size='30' />
                     </button>
                   ) : (
                     <button className={styles.toolbarBtn} onClick={HandleDrawing}>
+                      <span className={styles.DrawingTrueTooltip}>그리기 모드</span>
                       <BsPencilFill size='30' />
                     </button>
                   )}
 
                   {/* 컬렉션 기능 추가 */}
                   <button className={styles.toolbarBtn} onClick={CollectionItems}>
-                    <BsFillCollectionFill size='30' />
+                    {/* <BsFillCollectionFill size='30' /> */}
+                    {/* <BsBookmarkStarFill size='30' /> */}
+                    <span className={styles.collectionTooltip}>내 컬렉션 저장</span>
+                    <BsFillBookmarkStarFill size='30' />
+
+                    {/* <RiBookmark3Fill size='30' /> */}
+                    {/* <GiSaveArrow size='30' /> */}
+                    {/* <BsSave2Fill size='30' /> */}
                   </button>
                   <button className={styles.toolbarBtn} onClick={(e) => HandleAddProfileImgBtn(e, userImg, canvas)}>
+                    <span className={styles.addFaceTooltip}>프로필 이미지 추가</span>
                     <MdFace size='30' />
                   </button>
                   {/* 컬렉션 기능 추가 */}
