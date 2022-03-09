@@ -171,6 +171,15 @@
 .vote__number {
   font-size: 2em;
 }
+.noVote {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+.noVote span {
+  font-size: 30px;
+}
 @media screen and (max-width: 1300px) {
   .resultPage {
     flex-direction: column;

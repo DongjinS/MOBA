@@ -46,7 +46,7 @@ const MainPage = (props) => {
         <div className={styles.titles}>
           <div className={styles.title}>
             <div className={styles.main}>
-              <p onClick={navigateDressroom}>코디</p>
+              <p onClick={navigateDressroom}>코디룸</p>
             </div>
             <div className={styles.main}>
               <p onClick={navigatePrivateBascket}>장바구니/투표</p>
@@ -55,7 +55,7 @@ const MainPage = (props) => {
               <p onClick={navigateVoteResult}>투표결과</p>
             </div>
             <div className={styles.main}>
-              <p onClick={navigateCollection}>마이 컬렉션</p>
+              <p onClick={navigateCollection}>컬렉션북</p>
             </div>
             <div style={{ display: 'none' }} className={styles.main}>
               <p onClick={navigateShopTogether}>쇼핑시작</p>

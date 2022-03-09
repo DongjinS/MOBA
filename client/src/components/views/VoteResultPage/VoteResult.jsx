@@ -69,18 +69,27 @@ const VoteResult = () => {
               </div>
             </div>
             <div className={styles.votes__container}>
-              {voteResultList.map((items, index) => (
-                <div className={styles.vote__container} key={index}>
-                  <Accordion
-                    voteNum={voteResultList.length - index}
-                    title={items.room_message}
-                    content={items}
-                    mostLikes={mostLikes}
-                    index={index}
-                    handleDelete={handleDelete}
-                  />
+              {voteResultList.length === 0 ? (
+                <div className={styles.noVote}>
+                  <img width={80} height={80} src='./images/voteresult.png' />
+                  <span>투표 결과가 없어요</span>
                 </div>
-              ))}
+              ) : (
+                <>
+                  {voteResultList.map((items, index) => (
+                    <div className={styles.vote__container} key={index}>
+                      <Accordion
+                        voteNum={voteResultList.length - index}
+                        title={items.room_message}
+                        content={items}
+                        mostLikes={mostLikes}
+                        index={index}
+                        handleDelete={handleDelete}
+                      />
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </>
         )}

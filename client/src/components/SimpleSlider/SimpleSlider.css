@@ -70,6 +70,17 @@
   top: 45%;
 }
 /*collection*/
+.noCollection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 75vh;
+}
+.noCollection span {
+  font-size: 24px;
+  color: grey;
+}
 .collectionSets {
   display: flex;
   flex-direction: column;
