@@ -14,14 +14,12 @@
   flex-direction: column;
   width: 60%;
   border-radius: 10px;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   padding: 1em;
   margin-top: 5em;
 }
 .vote__container {
   display: flex;
   border-radius: 10px;
-  /* box-shadow: 0px 2px 5px 2px rgba(240, 231, 211, 1); */
   width: 95%;
   height: 33em;
   align-items: center;
