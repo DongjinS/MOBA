@@ -273,7 +273,7 @@
 
 .noProductImg {
   width: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .noProductDesc {
@@ -391,7 +391,7 @@
     font-size: 20px;
   }
   .noProductContainer {
-    margin: 10em 0px 0px 0em;
+    margin: 6em 0px 0px 0em;
   }
   .noProductImg {
     width: 150px;

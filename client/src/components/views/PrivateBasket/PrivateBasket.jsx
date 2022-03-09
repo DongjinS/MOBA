@@ -200,11 +200,8 @@ const PrivateBasket = (props) => {
               </div>
             </div>
           ) : (
-            <div
-              className={styles.noProductContainer}
-              style={{  }}
-            >
-              <img src='/images/privateBasket.png' className={styles.noProductImg}></img>
+            <div className={styles.noProductContainer} style={{}}>
+              <img src='/images/emptyBasket.png' className={styles.noProductImg}></img>
               <div className={styles.noProductDesc}>장바구니에 상품이 없어요</div>
             </div>
           )}
