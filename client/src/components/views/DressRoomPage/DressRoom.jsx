@@ -161,16 +161,15 @@ const DressRoom = (props) => {
           canvas.getActiveObjects().forEach((obj) => {
             if (obj.id === data.id) {
               if (data.obj.stroke === '#b33030') {
-                console.log('doubleSelected!!');
                 obj.doubleSelected = true;
               } else {
                 // conflict 상황 - 나는 골랐는데 상대는 아직 안고른 상황
                 //obj select 풀기
                 //일단 모든 select 풀기;
-                console.log('conflict event!!');
                 obj.doubleSelected = false;
                 unlock(obj);
                 canvas.discardActiveObject().renderAll();
+                // 자동으로 selection:cleared 이벤트 발생!
               }
               return;
             }
@@ -370,6 +369,7 @@ const DressRoom = (props) => {
       canvas.on('selection:created', (opt) => {
         if (opt.selected.length >= 2 && opt.selected.filter((obj) => obj.stroke === '#b33030').length > 0) {
           canvas.discardActiveObject().renderAll();
+          // 자동으로 selection:cleared 이벤트 발생!
         } else {
           opt.selected.forEach((obj) => {
             try {
@@ -390,6 +390,7 @@ const DressRoom = (props) => {
         const actives = canvas.getActiveObjects();
         if (actives.length >= 2 && actives.filter((obj) => obj.stroke === '#b33030').length > 0) {
           canvas.discardActiveObject().renderAll();
+          // 자동으로 selection:cleared 이벤트 발생!
         } else {
           opt.selected.forEach((obj) => {
             try {
@@ -625,8 +626,6 @@ const DressRoom = (props) => {
           profileUrl: url,
         });
         img.scale(0.1);
-
-        console.log('new_img', img);
         const sendObj = {
           obj: img,
           order: 'add',
@@ -665,6 +664,7 @@ const DressRoom = (props) => {
       }
     });
     canvas.discardActiveObject().renderAll();
+    // 자동으로 selection:cleared 이벤트 발생!
   };
 
   const shareKakao = () => {

@@ -53,7 +53,6 @@ const RoomMemu = (props) => {
     const token = getCookie('x_auth');
 
     if (checkedInputs.length === 0) {
-      console.log('선택된 상품이 없습니다.');
       return;
     }
     axios

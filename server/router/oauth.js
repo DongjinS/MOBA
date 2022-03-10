@@ -77,7 +77,7 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
   const options = getOption(coperation, code);
   const token = await getAccessToken(options);
   const userInfo = await getUserInfo(options.userInfoUrl, token.access_token);
-  console.log(token);
+
 
   // TODO Redirect Frot Server (쿠키, 세션, local_store 중에 로그인을 유지한다.)
   // TODO Data Base or 쿠키 reflesh Token 저장 방법 모색
@@ -96,7 +96,7 @@ oauthRouter.get(`/:coperation`, async (req, res) => {
       const user = new User(body);
       user.save((error, userSave) => {
         if (error) {
-          console.log('save error');
+          console.log(error);
         }
       });
     }
