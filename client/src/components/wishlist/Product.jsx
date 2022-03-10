@@ -17,7 +17,7 @@ const Product = (props) => {
         <img className={styles.productItemImg} src={item.img} alt='상품 이미지' onClick={() => {}} />
       </div>
       <div className={styles.productItemDetails}>
-        <a className={styles.productItemTitle} onClick={() => window.open(item.shop_url, '_blank')}>
+        <a className={styles.productItemTitle} onClick={() => window.open(item.shop_url, '_blank')} href='#!'>
           {item.product_name}
         </a>
         <div className={styles.line}></div>

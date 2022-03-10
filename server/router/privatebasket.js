@@ -35,7 +35,7 @@ basketRouter.post('/', async (req, res) => {
   
     // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
     if (add_products?.length === 0 || add_products?.includes(undefined)) {
-      res.statusCode = 202;
+      res.statusCode = 404;
       res.send('duplicated products');
       return;
     }

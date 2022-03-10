@@ -24,7 +24,7 @@ const PrivateBasket = (props) => {
 
   useEffect(() => {
     axios
-      .get(`/privatebasket/${token}`)
+      .get(`/privatebasket/${getCookie('x_auth')}`)
       .then((Response) => {
         setProducts(Response.data.reverse());
       })
@@ -170,7 +170,7 @@ const PrivateBasket = (props) => {
                     <div key={index} style={{ position: 'relative' }}>
                       <div className={styles.productContainer}>
                         <div className={styles.productImgContainer}>
-                          <img className={styles.itemImg} src={item.removedBgImg} />
+                          <img className={styles.itemImg} src={item.removedBgImg} alt="img"/>
                           <div className={!checked ? styles.productInfo : styles.voteInfo}>
                             {!checked && (
                               <div onClick={() => HandleDeleteProductBtn(item.shop_url)} className={styles.deleteContainer}>
@@ -200,7 +200,7 @@ const PrivateBasket = (props) => {
             </div>
           ) : (
             <div className={styles.noProductContainer} style={{}}>
-              <img src='/images/emptyBasket.png' className={styles.noProductImg}></img>
+              <img src='/images/emptyBasket.png' className={styles.noProductImg} alt="img"></img>
               <div className={styles.noProductDesc}>장바구니에 상품이 없어요</div>
             </div>
           )}

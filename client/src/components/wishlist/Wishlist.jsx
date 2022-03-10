@@ -1,23 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Wishlist.module.css';
 import Product from './Product';
 
 const WishList = (props) => {
   let products = props.data;
-
-  const [checkedInputs, setCheckedInputs] = useState([]);
-
-  const changeHandler = (checked, id) => {
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else {
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-    }
-  };
-
-  const onClickVoteBtn = () => {
-    /* 투표하기 만들기*/
-  };
 
   return (
     <>

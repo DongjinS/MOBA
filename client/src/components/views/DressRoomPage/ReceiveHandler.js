@@ -1,6 +1,5 @@
 import { fabric } from 'fabric';
 
-let canvas;
 let pointerContainer;
 let pointer;
 let clients = {};
@@ -77,7 +76,6 @@ export const modifyMouse = (data) => {
     pointers[data.id] = pointerContainer.appendChild(pointer.cloneNode());
   }
 
-  canvas = document.getElementById('canvas');
   pointers[data.id].style.left = data.clientX + 'px';
   pointers[data.id].style.top = data.clientY + 'px';
   pointers[data.id].style.position = 'absolute';
@@ -90,7 +88,6 @@ export const modifyMouse = (data) => {
 };
 
 export const getPointer = () => {
-  canvas = document.getElementById('canvas');
   pointerContainer = document.getElementById('pointers');
   pointer = document.createElement('img');
   pointer.setAttribute('class', 'pointer');

@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory, useParams, useNavigate } from 'react-router-dom';
-import { parse } from 'qs';
+import { useParams } from 'react-router-dom';
 import styles from './Vote.module.css';
 import Header from '../../header/Header';
 import './Vote.css';
@@ -64,8 +63,8 @@ const Vote = () => {
                   setChooseOne(items.shop_url);
                 }}
               >
-                <img className="voteContainer" src={items.img} alt="img" />
-                <BsCheckLg className="i__check" />
+                <img className='voteContainer' src={items.img} alt='img' />
+                <BsCheckLg className='i__check' />
               </div>
             ))}
           </div>
@@ -73,7 +72,7 @@ const Vote = () => {
             <button
               className={styles.completeBtn}
               onClick={() => {
-                if (chooseOne != '') {
+                if (chooseOne !== '') {
                   handleOnClick(chooseOne);
                 } else {
                   alert('상품을 선택해주세요');

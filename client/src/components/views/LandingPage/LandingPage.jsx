@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Auth from '../../../hoc/auth';
 import Header from '../../header/Header';
@@ -9,7 +8,7 @@ function LandingPage() {
   const navigate = useNavigate();
   const [token, setToken] = useState('');
 
-  useEffect(async () => {
+  useEffect(() => {
     function getCookie(name) {
       const cookies = new Cookies();
       return cookies.get(name);
@@ -18,9 +17,7 @@ function LandingPage() {
     if (token) {
       navigate('/mainpage');
     }
-    await axios.get('/').then((response) => {
-      console.log('시작 페이지입니다.');
-    });
+    
   }, [token]);
 
   const signin = () => {

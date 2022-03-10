@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../../_actions/user_action';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import Auth from '../../../hoc/auth';
 import Header from '../../header/Header';
 import styles from './InvitedPage.module.css';
@@ -13,7 +10,6 @@ function InvitedPage(props) {
     return cookies.get(name);
   }
 
-  const navigate = useNavigate();
   const handleClick = () => {
     const room = getCookie('room');
     const shopWidth = window.screen.width * 0.85;

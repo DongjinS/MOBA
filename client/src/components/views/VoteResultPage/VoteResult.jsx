@@ -1,14 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import NormalHeader from '../../NormalHeader/NormalHeader';
 import styles from './VoteResult.module.css';
 import './VoteResult.css';
 import Accordion from '../../Accordion/Accordion';
-import { MdHowToVote } from 'react-icons/md';
 import Auth from '../../../hoc/auth';
 
-let tmp;
 let mostLikes = [];
 const VoteResult = () => {
   const [voteResultList, setVoteResultList] = useState([]);
@@ -17,12 +15,11 @@ const VoteResult = () => {
     const cookies = new Cookies();
     return cookies.get(name);
   }
-  const token = getCookie('x_auth');
 
   useEffect(() => {
     axios
       .post(`/voteresult`, {
-        token: token,
+        token: getCookie('x_auth'),
       })
       .then((response) => {
         setVoteResultList(response.data.reverse());

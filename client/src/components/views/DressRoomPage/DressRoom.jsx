@@ -18,24 +18,19 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Icons
-import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb, BsFillCollectionFill } from 'react-icons/bs';
+import { BsCameraVideoFill, BsCameraVideoOffFill, BsPencilFill, BsHandIndexThumb } from 'react-icons/bs';
 import { BsFillMicFill, BsFillMicMuteFill, BsTrash } from 'react-icons/bs';
 import { GoUnmute, GoMute } from 'react-icons/go';
 import { MdAddShoppingCart } from 'react-icons/md';
-import { IoTrashOutline } from 'react-icons/io';
-import { BsCartPlus } from 'react-icons/bs';
-import { FaTrash, FaTrashAlt } from 'react-icons/fa';
+
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdClose } from 'react-icons/md';
 import { BiChevronLeft } from 'react-icons/bi';
 import { CgScreen } from 'react-icons/cg';
 import { BsFillBookmarkStarFill } from 'react-icons/bs';
-import { RiBookmark3Fill } from 'react-icons/ri';
-import { GiSaveArrow } from 'react-icons/gi';
 
 import { BsFillShareFill } from 'react-icons/bs';
 import { RiMenuLine } from 'react-icons/ri';
-import { BsFillCollectionFillMdFace, BsBookmarkStarFill, BsSave2Fill } from 'react-icons/bs';
 import { MdFace } from 'react-icons/md';
 import Menu from '../../NormalHeader/Menu';
 import hark from 'hark';
@@ -48,7 +43,6 @@ const DressRoom = (props) => {
   const [isSoundOn, setIsSoundOn] = useState(true);
   const [products, setProducts] = useState([]);
   const [userId, setUserId] = useState('');
-  const [uniqueShops, setUniqueShops] = useState([]);
   const [initialWidth, setInitialWidth] = useState(0);
   const [userImg, setUserImg] = useState('');
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
@@ -340,7 +334,6 @@ const DressRoom = (props) => {
           acc = acc.concat(cv.shop_name);
           return acc;
         }, []);
-        setUniqueShops([...new Set(shops)]);
       })
       .catch((Error) => {
         console.log(Error);
@@ -959,17 +952,18 @@ const DressRoom = (props) => {
                 draggable: true,
                 progress: undefined,
               });
-            } else if (Response.status === 202) {
-              toast.warn('중복된 상품입니다.', {
-                position: 'top-center',
-                autoClose: 1500,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
             }
+          })
+          .catch((Error) => {
+            toast.warn('중복된 상품입니다.', {
+              position: 'top-center',
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           });
       }
     });

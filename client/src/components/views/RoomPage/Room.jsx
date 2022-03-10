@@ -1,10 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import io from "socket.io-client";
 import Header from "../../header/Header";
 import styles from "./Room.module.css";
-import { useHistory, useParams, useNavigate } from "react-router-dom";
-import AddProduct from "../../addUrl/AddProduct";
-import WishList from "../../wishlist/Wishlist";
+import { useParams } from "react-router-dom";
 import RoomMemu from "../../memu/RoomMemu";
 import axios from "axios";
 import InviteBtn from "../../inviteBtn/InviteBtn";
