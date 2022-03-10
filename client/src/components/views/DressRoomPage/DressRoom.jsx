@@ -161,12 +161,24 @@ const DressRoom = (props) => {
         const activeID = canvas.getActiveObjects().map((object) => {
           return object.id;
         });
-        // data.obj.stroke === '#b33030' ||
-        if ( activeID.includes(data.id)) {
+
+        if (activeID.includes(data.id)) {
           // 이미 내가 선택하고 있는 상품이면
-          canvas.getObjects().forEach((obj) => {
+          canvas.getActiveObjects().forEach((obj) => {
             if (obj.id === data.id) {
-              obj.doubleSelected = true;
+              if (data.obj.stroke === '#b33030') {
+                console.log('doubleSelected!!');
+                obj.doubleSelected = true;
+              } else {
+                // conflict 상황 - 나는 골랐는데 상대는 아직 안고른 상황
+                //obj select 풀기
+                //일단 모든 select 풀기;
+                console.log('conflict event!!');
+                obj.doubleSelected = false;
+                unlock(obj);
+                canvas.discardActiveObject().renderAll();
+              }
+              return;
             }
           });
           canvas.renderAll();
@@ -926,8 +938,37 @@ const DressRoom = (props) => {
           })
           .then((Response) => {
             // Response가 정상일때 products에 상품을 추가한다.
-            if (Response.status === 200) {
+            if (Response.status === 201) {
               setProducts([obj.product_info, ...products]);
+              toast.success('장바구니에 성공적으로 들어갔습니다.', {
+                position: 'top-center',
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            } else if (Response.status === 204) {
+              toast.warn('게스트는 장바구니에 상품을 넣을 수 없습니다.', {
+                position: 'top-center',
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            } else if (Response.status === 202) {
+              toast.warn('중복된 상품입니다.', {
+                position: 'top-center',
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
             }
           });
       }

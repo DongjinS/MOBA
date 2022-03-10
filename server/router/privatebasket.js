@@ -21,38 +21,43 @@ basketRouter.post('/', async (req, res) => {
     token: req.body.token,
   });
 
-  // 유저의 기존 장바구니의 url 모아서
-  const prev_products_url = cur_user?.products?.map((product) => product.shop_url);
-
-  // 새로 장바구니에 넣으려는게 이미 있는지 확인하고
-  const add_products = req.body.products?.filter((product) => {
-    if (prev_products_url.includes(product.shop_url)) {
-    } else {
-      return product;
+  if (cur_user) {
+    // 유저의 기존 장바구니의 url 모아서
+    const prev_products_url = cur_user?.products?.map((product) => product.shop_url);
+  
+    // 새로 장바구니에 넣으려는게 이미 있는지 확인하고
+    const add_products = req.body.products?.filter((product) => {
+      if (prev_products_url?.includes(product.shop_url)) {
+      } else {
+        return product;
+      }
+    });
+  
+    // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
+    if (add_products?.length === 0 || add_products?.includes(undefined)) {
+      res.statusCode = 202;
+      res.send('duplicated products');
+      return;
     }
-  });
-
-  // 새로 넣으려는 상품 전부 중복이면 ( 0 | undefined) 바로 리턴
-  if (add_products?.length === 0 || add_products?.includes(undefined)) {
-    res.statusCode = 404;
-    res.send('duplicated products');
-    return;
+  
+    // 장바구니에 추가하기
+    await User.updateOne(
+      { token: req.body.token },
+      {
+        $addToSet: {
+          products: add_products,
+        },
+      }
+    );
+  
+    // 잘 들어갔는지 확인 용도 - 추후에 지워야함
+    // post_cur_user = await User.findOne({ token: req.body.token });
+    res.statusCode = 201;
+    res.send('success post new product in private basket');
+  } else {
+    res.statusCode = 204;
+    res.send('cannot find user');
   }
-
-  // 장바구니에 추가하기
-  await User.updateOne(
-    { token: req.body.token },
-    {
-      $addToSet: {
-        products: add_products,
-      },
-    }
-  );
-
-  // 잘 들어갔는지 확인 용도 - 추후에 지워야함
-  // post_cur_user = await User.findOne({ token: req.body.token });
-  res.statusCode = 200;
-  res.send('success post new product in private basket');
 });
 
 // delete helper
