@@ -4,6 +4,7 @@ import styles from './MainPage.module.css';
 import Auth from '../../../hoc/auth';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../header/Header';
+import { FaLightbulb } from 'react-icons/fa';
 
 const MainPage = (props) => {
   const navigate = useNavigate();
@@ -73,7 +74,16 @@ const MainPage = (props) => {
               <p onClick={navigateShopTogether}>쇼핑시작</p>
             </div>
           </div>
-          {/* <div className={styles.subtitle}></div> */}
+          <div className={styles.subtitle}></div>
+        </div>
+        <div
+          className={styles.info}
+          onClick={() => {
+            window.open('https://bony-metatarsal-e54.notion.site/MOBA-10735eb895714cea8f106abae2150996');
+          }}
+        >
+          <span>?</span>
+          <span className={styles.tooltip}>모바 사용법</span>
         </div>
       </div>
     </>
