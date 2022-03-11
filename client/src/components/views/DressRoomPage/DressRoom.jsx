@@ -646,6 +646,16 @@ const DressRoom = (props) => {
         canvi.add(img);
         canvi.renderAll();
       });
+    } else {
+      toast.warn('프로필 이미지가 없습니다', {
+        position: 'top-center',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -965,6 +975,16 @@ const DressRoom = (props) => {
               progress: undefined,
             });
           });
+      } else {
+        toast.warn('프로필 이미지는 장바구니에 넣을 수 없습니다.', {
+          position: 'top-center',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
   };
