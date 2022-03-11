@@ -20,7 +20,7 @@ userRouter.post('/info', async (req, res) => {
     return res.send(user);
   }
   const user = {
-    username: 'Guest',
+    name: 'Guest',
   };
   return res.send(user);
 });
@@ -62,12 +62,16 @@ userRouter.post('/login', (req, res) => {
 });
 
 userRouter.get('/auth', auth, (req, res) => {
-  res.status(200).json({
-    isAuth: true,
-    _id: req.user._id,
-    username: req.user.username,
-    email: req.user.email,
-  });
+  if (res.error){
+    res.redirect('https://moba-shop.net/mainpage');
+  } else {
+    res.status(200).json({
+      isAuth: true,
+      _id: req.user._id,
+      username: req.user.username,
+      email: req.user.email,
+    });
+  }
 });
 
 userRouter.get('/logout', auth, (req, res) => {

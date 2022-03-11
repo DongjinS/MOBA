@@ -31,6 +31,8 @@ const Header = (props) => {
   async function logout() {
     await axios.get('/api/users/logout').then((response) => {
       if (response.data.success) {
+        const cookies = new Cookies();
+        cookies.remove('x_auth', { path: '/' });
         navigate('/');
       } else {
         alert('로그아웃을 실패했습니다.');

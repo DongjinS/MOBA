@@ -1064,22 +1064,34 @@ const DressRoom = (props) => {
     }
 
     if (flag && items.length === 3) {
-      axios
-        .post(`/collection/items`, {
-          token: token,
-          products: items,
-        })
-        .then((response) => {
-          toast.success('컬렉션에 추가되었습니다.', {
-            position: 'top-center',
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+      if (token){
+        axios
+          .post(`/collection/items`, {
+            token: token,
+            products: items,
+          })
+          .then((response) => {
+            toast.success('컬렉션에 추가되었습니다.', {
+              position: 'top-center',
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           });
+      } else {
+        toast.warn('게스트는 컬렉션을 추가할 수 없습니다.', {
+          position: 'top-center',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
+      }
     }
   };
   /// 콜렉션 추가 ///
@@ -1155,7 +1167,7 @@ const DressRoom = (props) => {
   function getUserInfo() {
     let token = getCookie('x_auth');
     axios.post('/api/users/info', { token }).then(function (response) {
-      setUserId(response.data.username);
+      setUserId(response.data.name);
       setUserImg(response.data.profileImage);
     });
   }

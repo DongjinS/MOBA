@@ -57,8 +57,12 @@ const CreateRoom = (props) => {
   const logout = () => {
     axios.get('/api/users/logout').then((response) => {
       if (response.data.success) {
+        const cookies = new Cookies();
+        cookies.remove('x_auth', { path: '/' });
         navigate('/');
       }
+      const cookies = new Cookies();
+      cookies.remove('x_auth', { path: '/' });
       navigate('/');
     });
   };
