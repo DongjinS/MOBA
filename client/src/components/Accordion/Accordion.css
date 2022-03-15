@@ -1,0 +1,240 @@
+.accordion-item {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.accordion-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  background-color: white;
+  color: black;
+  font-size: 25px;
+  cursor: pointer;
+  /* border: 1px solid #aaaaaa; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.accordion-title span {
+  margin-left: 10px;
+}
+.i__active {
+  margin-right: 10px;
+}
+.i__delete {
+  margin-right: 10px;
+}
+.accordion-content {
+  position: relative;
+  width: 100%;
+  /* background-color: rgb(255, 218, 169);
+  background-color: #f4f4f4;
+  background-color: #c4c4c4;
+  background-color: #f0f0f0;
+  background: linear-gradient(45deg, #fff0e3, #f7d2c3); */
+  background: linear-gradient(45deg, rgba(255, 204, 109, 0.5), #f3732391);
+  padding: 50px 5px;
+  /* border: 1px solid #aaaaaa; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  border-top: 0;
+  animation: ssr 0.5s ease;
+}
+@keyframes ssr {
+  0% {
+    height: 0%;
+    opacity: 0;
+  }
+  100% {
+    height: 85%;
+    opacity: 1;
+  }
+}
+.card {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-direction: column;
+  border-radius: 50%;
+  opacity: 0;
+
+  animation: card 0.4s forwards ease-in;
+  animation-delay: 0.5s;
+  /* display: none; */
+}
+@keyframes card {
+  100% {
+    opacity: 1;
+  }
+}
+
+.card:hover > .productInfo {
+  opacity: 0.8;
+}
+
+.card img {
+  width: 200px;
+  height: 200px;
+}
+.productInfo {
+  opacity: 0;
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212;
+  color: white;
+  font-size: 16px;
+}
+
+.product_shop {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* color: black; */
+}
+
+.product_name {
+  text-align: center;
+  align-items: center;
+  width: 80%;
+  display: flex;
+  flex: 1.4;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* color: black; */
+  font-size: 14px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.percent {
+  font-size: 70px;
+}
+.voteNums {
+  font-size: 30px;
+}
+.winCard > .voteRank {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  font-size: 40px;
+  text-decoration: underline;
+  text-underline-position: under;
+  text-decoration-color: #f37423;
+}
+.voteRank {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  font-size: 40px;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+.i__crown {
+  position: absolute;
+  top: -33px;
+  left: 7px;
+  font-size: 45px;
+  color: #f37423;
+  -webkit-text-stroke-color: black;
+}
+@media screen and (max-width: 1200px) {
+  .card {
+    width: 240px;
+    height: 240px;
+  }
+}
+@media screen and (max-width: 800px) {
+  .card {
+    width: 180px;
+    height: 180px;
+  }
+  .card img {
+    width: 155px;
+    height: 155px;
+  }
+  .voteRank {
+    font-size: 30px;
+  }
+  .winCard > .voteRank {
+    font-size: 30px;
+  }
+  .i__crown {
+    top: -20px;
+    font-size: 30px;
+  }
+  .percent {
+    font-size: 40px;
+  }
+  .voteNums {
+    font-size: 23px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .card {
+    width: 160px;
+    height: 160px;
+  }
+  .card img {
+    width: 135px;
+    height: 135px;
+  }
+  .voteRank {
+    font-size: 24px;
+  }
+  .winCard > .voteRank {
+    font-size: 24px;
+  }
+  .i__crown {
+    top: -20px;
+    font-size: 24px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .card {
+    width: 105px;
+    height: 105px;
+  }
+  .card img {
+    width: 90px;
+    height: 90px;
+  }
+  .voteRank {
+    font-size: 20px;
+    left: 1px;
+  }
+  .winCard > .voteRank {
+    font-size: 20px;
+    left: 1px;
+  }
+  .i__crown {
+    top: -17px;
+    font-size: 20px;
+    left: 2px;
+  }
+  .percent {
+    font-size: 30px;
+  }
+  .voteNums {
+    font-size: 18px;
+  }
+}

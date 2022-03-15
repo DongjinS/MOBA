@@ -1,0 +1,126 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f0f0f0;
+}
+
+.loginBox {
+  width: 33em;
+  height: 41em;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  margin-top: 2em;
+  background-color: white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.loginContents {
+  width: 25em;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.7em;
+}
+
+.loginText {
+  color: black;
+  font-size: 34px;
+  font-weight: 600;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.imgContainer {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.uploadImage {
+  color: 'white';
+  width: 120px;
+  height: 150px;
+  object-fit: fit;
+  border: 1px solid #f0f0f0;
+}
+
+.userInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.infoInputs {
+  border: 1px solid #c0c0c0;
+  width: 100%;
+  padding: 14px;
+  color: black;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.uploadBtn {
+  cursor: pointer;
+  padding: 2px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #c4c4c4;
+}
+
+.inputs {
+  border: 1px solid #c0c0c0;
+  width: 100%;
+  padding: 14px;
+  color: black;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.registerBtn {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  background-color: #f37423;
+  color: white;
+  margin: 1;
+  margin-bottom: 0.3em;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  height: 2.5em;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: 0.5s ease-in all;
+}
+
+.registerBtn:hover {
+  cursor: pointer;
+  background-color: black;
+}
+@media screen and (max-width: 500px) {
+  .loginBox {
+    transform: scale(0.65);
+  }
+}

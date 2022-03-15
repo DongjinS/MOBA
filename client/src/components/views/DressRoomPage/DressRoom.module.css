@@ -1,0 +1,942 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap');
+
+:root {
+  --main-color: #f0f0f0;
+  --main-color-dark: grey;
+  --main-color-light: grey;
+  --text-color: black;
+}
+
+.title {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  margin-left: 0.5em;
+  padding: 0.3em;
+  color: #f37423;
+  background-color: transparent;
+  border: 0;
+}
+.title:hover {
+  text-decoration: none;
+  color: #f37423;
+  cursor: pointer;
+}
+
+.loadingContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto 15vw;
+  grid-template-rows: 70px auto;
+  height: 100vh;
+  grid-template-areas:
+    'header  header'
+    'main     b   ';
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 15px 10px 15px 10px;
+  font-size: 20px; */
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 700;
+  background-color: #f0f0f0;
+  color: black;
+  /* border-bottom: 3px solid black; */
+}
+
+.logo {
+  display: flex;
+  z-index: 103;
+}
+
+.copyBtn {
+  border: 0;
+  font-size: 20px;
+  color: orange;
+  background-color: #2c2c2c;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.copyBtn:hover {
+  color: #f37423;
+}
+
+.menuBtn {
+  /* z-index: 103; */
+  cursor: pointer;
+  color: #4c4c4c;
+}
+
+.closeBtn {
+  /* z-index: 104; */
+  color: white;
+  cursor: pointer;
+}
+
+.body {
+  /* flex: 1; */
+  flex-grow: 1;
+  flex-basis: 0;
+  overflow: hidden;
+  /* background-color: #e4e2f5; */
+  /* background-color: black; */
+  display: flex;
+  position: relative;
+}
+
+.shrink .ProductSidebar {
+  width: 11.2rem;
+}
+
+.shrink .hide {
+  /* opacity: 0; */
+  display: none;
+  pointer-events: none;
+  transition-delay: 0s;
+}
+
+.shrink .chevronIcon {
+  transform: rotate(-180deg);
+}
+
+.ProductSidebar {
+  /* overflow-x: hidden; */
+  position: sticky;
+  top: 0;
+  left: 0;
+  min-height: 0px;
+  height: 100%;
+  background-color: var(--main-color);
+  width: 26.5rem;
+  padding: 0rem 0rem 1rem 0.5rem;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease-in-out;
+}
+
+.ProductSidebar::before {
+  content: '';
+  position: absolute;
+  width: 3rem;
+  height: 100%;
+  top: 0;
+  left: 100%;
+}
+
+.ProductSidebar:hover .shrinkBtn,
+.shrinkBtn.hovered {
+  transform: translateY(-50%) translateX(0px);
+  opacity: 1;
+  pointer-events: all;
+  z-index: 50;
+}
+
+.sidebarTop {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 50;
+  margin: 10px;
+  width: 50px;
+  /* padding: 10px; */
+  /* background-color: pink; */
+}
+
+.sidebarTop :hover .chevronIcon {
+  color: #f37423;
+  /* opacity: 0.8; */
+}
+
+.sidebarTop :hover .openTooltip {
+  display: block;
+}
+.sidebarTop :hover .closeTooltip {
+  display: block;
+}
+
+.chevronIcon {
+  line-height: 40px;
+  /* size: 10; */
+  transition: 0.5s;
+  z-index: 50;
+  cursor: pointer;
+  color: #4c4c4c;
+}
+
+.sidebarLinks {
+  overflow: auto;
+}
+
+.sidebarLinks::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+  /* display: none; */
+}
+
+.sidebarLinks::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.sidebarLinks:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.sidebarLinks:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  /* border-radius: 10px; */
+}
+
+.productLists {
+  list-style: none;
+}
+
+.productLists {
+  position: relative;
+  /* margin-right: 0.6rem; */
+  /* margin-right: 20px; */
+}
+
+.tooltipElement {
+  position: relative;
+  padding: 0 0 10px 0;
+  /* margin: 10px; */
+}
+
+.productBox {
+  color: var(--text-color);
+  /* font-weight: 400;
+  font-size: 0.9rem; */
+  display: flex;
+  align-items: center;
+  height: 156px;
+  justify-content: center;
+  overflow: hidden;
+  /* padding: 3px; */
+}
+
+.productBox:hover {
+  border: 3px solid orange;
+  /* border-radius: 10px; */
+  /* box-sizing: border-box; */
+  /* box-shadow: 0 0 0 3px #000 inset; */
+  z-index: 20;
+  overflow: auto;
+  opacity: 0.7;
+  overflow: hidden;
+}
+.productBox:hover > .addProductIcon {
+  visibility: visible;
+  opacity: 1;
+  z-index: 10;
+}
+
+.productBox:hover > div > .newProductImg {
+  transform: scale(0.9);
+}
+
+.newProductImg {
+  /* font-size: 1.3rem; */
+  text-align: center;
+  min-width: 150px;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  /* border-radius: 10px; */
+  /* width: 5rem; */
+  cursor: pointer;
+  transition: all ease 0.5s 0s;
+}
+
+.addProductIcon {
+  position: absolute;
+  visibility: hidden;
+  /* margin: 0 auto; */
+  left: 55px;
+  cursor: pointer;
+}
+
+.hide {
+  background-color: #e0e0e0;
+  width: 250px;
+  transition: opacity 0.3s 0.2s;
+  /* border-radius: 0 10px 10px 0; */
+}
+
+.info {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px 15px;
+}
+
+.removeProductIcon {
+  position: absolute;
+  top: 15px;
+  right: 12px;
+  z-index: 50;
+  cursor: pointer;
+  color: #4c4c4c;
+}
+
+.removeProductIcon:hover {
+  color: red;
+}
+
+.shopName {
+  color: white;
+  background-color: black;
+  padding: 2px 8px;
+  font-size: 15px;
+  margin-top: 15px;
+  /* border-radius: 5px; */
+}
+
+.shopLink:link {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:visited {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.productName {
+  margin-top: 18px;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.emptyBascket {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyImg {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.emptyInfo {
+  text-align: center;
+  color: grey;
+  font-size: 21px;
+  width: 130px;
+}
+
+.canvasContainer {
+  flex: 1;
+  color: #1f2027;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: width 0.2s ease-in-out;
+}
+
+.toolbar {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  top: 20px;
+  right: 20px;
+  height: 350px;
+  /* border: 1px solid #456125; */
+  transition: width 0.2s ease-in-out;
+  z-index: 51;
+  justify-content: space-between;
+  /* border-radius: 50px; */
+}
+
+.toolbarBtn {
+  background-color: orange;
+  border-radius: 30px;
+  padding: 15px;
+  color: white;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px 1px #b0b0b0;
+}
+
+.toolbarBtn:hover {
+  background-color: #f37423;
+  box-shadow: 1px 1px 1px 1px #b0b0b0;
+}
+
+.openTooltip {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: -100px;
+  /* width: 100px; */
+  /* max-width: 200px; */
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.closeTooltip {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: -60px;
+  /* width: 100px; */
+  /* max-width: 200px; */
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.removeTooltip {
+  display: none;
+  position: absolute;
+  left: -90px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.addCartTooltip {
+  display: none;
+  position: absolute;
+  left: -145px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.DrawingFalseTooltip {
+  display: none;
+  position: absolute;
+  left: -165px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.DrawingTrueTooltip {
+  display: none;
+  position: absolute;
+  left: -125px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.collectionTooltip {
+  display: none;
+  position: absolute;
+  left: -145px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+.addFaceTooltip {
+  display: none;
+  position: absolute;
+  left: -180px;
+  max-width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  color: white;
+  background: #f37423;
+  opacity: 0.8;
+}
+
+.toolbarBtn:hover .removeTooltip {
+  display: block;
+}
+.toolbarBtn:hover .addCartTooltip {
+  display: block;
+}
+.toolbarBtn:hover .DrawingFalseTooltip {
+  display: block;
+}
+.toolbarBtn:hover .DrawingTrueTooltip {
+  display: block;
+}
+.toolbarBtn:hover .collectionTooltip {
+  display: block;
+}
+.toolbarBtn:hover .addFaceTooltip {
+  display: block;
+}
+
+.pointers {
+  width: inherit;
+  height: inherit;
+  position: relative;
+}
+
+.canvas {
+  grid-area: main;
+  /* background-color: white; */
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid black; */
+  width: inherit;
+  height: inherit;
+  z-index: 10;
+  transition: width 0.2s ease-in-out;
+
+  /* border: 3px solid black; */
+}
+
+.sidebarB {
+  /* width: 300px; */
+  grid-area: b;
+  transition: width 0.2s ease-in-out;
+}
+
+.video_container {
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 10px; */
+  height: 100%;
+}
+
+.user1 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+}
+
+.userSpeaking {
+  border: 4px solid orange;
+}
+.partnerSpeaking {
+  border: 4px solid orange;
+}
+
+.video {
+  /* border-radius: 5px; */
+  /* border: 3px solid #000; */
+  height: 100%;
+  object-fit: cover;
+  /* 좌우 반전 해제 */
+  /* transform: rotateY(180deg); */
+  /* -webkit-transform: rotateY(180deg); Safari and Chrome */
+  /* -moz-transform: rotateY(180deg); Firefox  */
+}
+
+.control_box1 {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  width: 200px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  justify-content: space-around;
+  display: flex;
+}
+
+.controlBtn {
+  font-size: 20px;
+  background-color: grey;
+  color: white;
+  opacity: 0.7;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.controlBtn:hover {
+  background-color: white;
+  color: grey;
+  border: 1px solid grey;
+}
+
+/* @keyframes slideDetail {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideShort {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.shortSidebarA {
+  width: 200px;
+  background-color: #e4e4e4;
+  overflow: auto;
+
+  animation-duration: 0.5s;
+  animation-name: slideShort;
+}
+
+.shortSidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.shortSidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid white;
+}
+.shortSidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.shortSidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.DetailsidebarA {
+  grid-area: a;
+  background-color: #e5e5e5;
+  overflow: auto;
+  transition: all ease 200s 0s;
+  width: 600px;
+  margin-left: 10px;
+
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+  transition: ease all 2s;
+  -webkit-transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
+  transition: width 2s, height 2s, background-color 2s, transform 2s;
+
+  animation: openSiderbar;
+}
+
+.displayNone {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  transition: ease all 0.5s;
+  animation-duration: 0.5s;
+  animation-name: slideOut;
+}
+
+.show {
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.cardBody {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.openSidebar {
+  animation: slide 1s ease-in-out 0s 1 normal forwards;
+  animation-duration: 0.5s;
+  animation-name: slideDetail;
+}
+
+.closeSidebar {
+  animation: slide 0.5s ease-in-out 0s 1 reverse forwards;
+}
+
+.DetailsidebarA::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.DetailsidebarA::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid white;
+}
+.DetailsidebarA:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.DetailsidebarA:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.Swishlist {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ScontainerProduct {
+  height: 140px;
+  width: 150px;
+  display: flex;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.DcontainerProduct {
+  height: 140px;
+  width: 400px;
+  display: flex;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.containerImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: center;
+  position: relative;
+}
+
+.selectShop {
+  cursor: pointer;
+  margin: 5px;
+  padding: 3px 10px 3px 10px;
+  background-color: grey;
+  color: white;
+  border-radius: 30px;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.activeShop {
+  cursor: pointer;
+  margin: 5px;
+  padding: 3px 10px 3px 10px;
+  background-color: grey;
+  color: black;
+  background-color: orange;
+  border-radius: 30px;
+  border: 1px solid black;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bodyContainer {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+.SbodyContainer {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.wishlist {
+  padding-left: 10px;
+}
+
+.containerProduct {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  border: 1px solid black;
+  margin-top: 5px;
+  margin: 3px;
+  justify-content: space-between;
+}
+
+.productInfo {
+  display: flex;
+  margin: 3px;
+  width: 100%;
+  width: 300px;
+}
+
+.productImg {
+  height: 130px;
+  width: 130px;
+  border: 1px solod black;
+  border-radius: 10%;
+  z-index: 50;
+}
+
+.shopLink:link {
+  color: red;
+  text-decoration: none;
+}
+.shopLink:visited {
+  color: black;
+  text-decoration: none;
+}
+.shopLink:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.productAddbtn {
+  height: 100%;
+  width: 50px;
+  border-radius: 15px 0px 0px 15px;
+}
+
+.productDelbtn {
+  height: 100%;
+  width: 50px;
+  border-radius: 0px 15px 15px 0px;
+}
+
+.video2 {
+  border-radius: 5px;
+  border: 3px solid #000;
+  height: 100%;
+  object-fit: cover;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+
+.shrinkBtn {
+  position: absolute;
+  top: 50%;
+  height: 35px;
+  padding: 0 0.3rem;
+  background-color: var(--main-color);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px -3px rgba(70, 46, 118, 0.3);
+  right: -3rem;
+  top: 1rem;
+  transform: translateY(-50%) translateX(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.1s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 50;
+}
+
+.shrinkBtn:hover {
+  z-index: 50;
+  color: white;
+  background-color: var(--main-color-dark);
+} */

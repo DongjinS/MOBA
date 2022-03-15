@@ -1,0 +1,426 @@
+.container {
+  width: 100%;
+  height: 100%;
+  font-family: Roboto, Noto Sans KR, 'sans-serif', sans-serif;
+}
+
+.experienceContents {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  /* padding-top: 100px; */
+}
+
+.experienceCategory {
+  position: fixed;
+  width: 500;
+  height: auto;
+  z-index: 2;
+  top: 45%;
+  /* left: 20px; */
+  padding-left: 20px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  transform: translateY(-50%) translateZ(0);
+  -webkit-transform: translateY(-50%) translateZ(0);
+  transition: margin 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) 0.1s, opacity 0.3s ease;
+}
+
+.categoryName {
+  cursor: pointer;
+  margin: 0.2em 0;
+  line-height: 0.77em;
+  font-size: 109px;
+  font-weight: 900;
+  color: transparent;
+  transition: 0.5s;
+  -webkit-text-stroke: calc(0.005em + 1px) #000;
+}
+
+.maskText {
+  display: inline-block;
+  /* overflow: hidden; */
+  vertical-align: top;
+  color: white;
+  border-color: white;
+}
+.maskText :hover {
+  display: inline-block;
+  /* overflow: hidden; */
+  vertical-align: top;
+  color: black;
+  transform: scale(0.95);
+}
+
+.maskText > span {
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  display: inline-block;
+}
+
+.selected {
+  color: black;
+  border-radius: 10px;
+  opacity: 1;
+}
+
+.voteContainer {
+  width: 100%;
+  margin-top: 50px;
+  animation: slide 0.6s;
+  transition: 0.5s;
+}
+
+.voteForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.voteText {
+  width: 320px;
+  height: 100px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: solid 2px black;
+  font-size: 16px;
+  resize: none;
+}
+.voteText::placeholder {
+  font-size: 16px;
+}
+
+.voteBtn {
+  font-size: 30px;
+  width: 100px;
+  height: 100px;
+  color: white;
+  background-color: black;
+  border: 0;
+  cursor: pointer;
+}
+
+.voteDescription {
+  margin: 10px;
+  color: red;
+  font-size: 17px;
+  animation: smoothAppear 0.8s;
+  width: 100%;
+}
+
+.experienceGrid {
+  margin: 0px 0px 0px 460px;
+  padding-bottom: 50px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+.experienceList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  position: relative;
+  height: 100%;
+  background-color: white;
+  transition: 0.5s;
+}
+
+.productContainer {
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.productImgContainer {
+  flex-grow: 0;
+  margin: 5px;
+  position: relative;
+  padding: 5px;
+  width: 260px;
+  height: 315px;
+  vertical-align: top;
+  animation: slide 0.3s;
+  transition: 0.5s;
+}
+
+.productWrap {
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  position: absolute;
+}
+
+.deleteContainer {
+  z-index: 102;
+  bottom: 40px;
+  right: 40px;
+}
+
+.productWrap :hover ~ .productContainer > .itemImg {
+  transform: scale(0.85);
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.productContainer :hover > .productInfo {
+  opacity: 0.85;
+  background-color: #f0f0f0;
+  color: black;
+}
+
+.productContainer :hover > .checkedIcon {
+  opacity: 0.5;
+  color: black;
+}
+
+.productContainer :hover > .itemImg {
+  transform: scale(0.85);
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.itemImg {
+  width: 100%;
+  height: 100%;
+}
+
+.checkedIcon {
+  position: absolute;
+  opacity: 0;
+  top: 100px;
+  left: 65px;
+}
+
+.deleteBtn {
+  cursor: pointer;
+  z-index: 200;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  opacity: 1;
+}
+
+.productInfo {
+  position: absolute;
+  opacity: 0;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.voteInfo {
+  background-color: #f0f0f0;
+  color: black;
+  position: absolute;
+  opacity: 0.9;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: smoothAppear 0.8s;
+}
+
+.infoContainer {
+  margin: 10% 10%;
+}
+
+.shopName {
+  font-size: 16px;
+  background-color: black;
+  color: white;
+  padding: 2px 8px;
+}
+
+.productName {
+  margin-top: 20px;
+  font-size: 20px;
+  font-family: Roboto, Noto Sans KR, 'sans-serif', sans-serif;
+  width: 100%;
+  height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noProductContainer {
+  margin: 20em 0px 0px 35em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: smoothAppear 0.8s;
+}
+
+.noProductImg {
+  width: 200px;
+  margin-bottom: 50px;
+}
+
+.noProductDesc {
+  font-size: 40px;
+  font-weight: 800;
+  color: grey;
+}
+
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+@keyframes slide {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+.openAnimation {
+  animation: slide 1s ease-in-out 0s 1 normal forwards;
+}
+
+.closeAnimation {
+  animation: slide 0.5s ease-in-out 0s 1 reverse forwards;
+}
+
+.originalPrice {
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.price {
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  color: grey;
+  text-decoration: line-through;
+}
+
+.salePrice {
+  font-size: 20px;
+  font-weight: 800;
+  color: #a02226;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .categoryName {
+    font-size: 90px;
+  }
+  .experienceGrid {
+    margin: 0 0 0 380px;
+  }
+  .voteContainer {
+    width: 320px;
+  }
+  .voteDescription {
+    font-size: 12px;
+  }
+  .noProductDesc {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .experienceContents {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .experienceCategory {
+    padding: 0;
+    position: relative;
+    width: 100vw;
+    text-align: center;
+    background-color: white;
+    z-index: 10;
+    transform: none;
+    -webkit-transform: none;
+  }
+  .experienceGrid {
+    margin: 0 auto;
+  }
+  .experienceList {
+    justify-content: center;
+  }
+  .categoryName {
+    font-size: 50px;
+    width: 100%;
+    height: 100%;
+    margin: 10px 0;
+    text-align: center;
+  }
+  .voteContainer {
+    margin: 10px 0;
+  }
+  .voteText {
+    width: 280px;
+    height: 75px;
+  }
+  .voteBtn {
+    height: 75px;
+    width: 80px;
+    font-size: 20px;
+  }
+  .noProductContainer {
+    margin: 6em 0px 0px 0em;
+  }
+  .noProductImg {
+    width: 150px;
+  }
+  .noProductDesc {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 581px) {
+  .productImgContainer {
+    width: 200px;
+    height: 260px;
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .productImgContainer {
+    width: 170px;
+    height: 230px;
+  }
+
+  .voteText {
+    width: 240px;
+    height: 80px;
+  }
+  .voteBtn {
+    height: 80px;
+    width: 80px;
+    font-size: 18px;
+  }
+
+  .voteDescription {
+    padding: 0 50px;
+    font-size: 6;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .productImgContainer {
+    width: 300px;
+    height: 350px;
+  }
+}

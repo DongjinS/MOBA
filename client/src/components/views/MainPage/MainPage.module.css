@@ -1,0 +1,178 @@
+@font-face {
+  font-family: 'InfinitySans-BoldA1';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-BoldA1.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.mainPage {
+  background-color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.img {
+  width: 100%;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: auto;
+  position: fixed;
+  opacity: 0.2;
+  transform: scale(1);
+  animation: scale 1.5s forwards ease-in;
+  opacity: 1;
+  z-index: 22;
+}
+
+.titles {
+  z-index: 2;
+  width: 73%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  transform: scale(0.94);
+  font-family: 'InfinitySans-BoldA1';
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.main {
+  width: max-content;
+  animation: showtitle 0.7s forwards ease-in;
+  animation-delay: 1.5s;
+  color: rgba(0, 0, 0, 0);
+  filter: blur(10px);
+}
+
+.main p {
+  opacity: 1;
+  margin: 0 auto;
+
+  font-size: 80px;
+  cursor: pointer;
+  z-index: 4;
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.main p:hover {
+  /* vertical-align: top; */
+  color: #f37423;
+  transform: scale(0.95);
+}
+
+.subtitle {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.subtitle p {
+  color: white;
+  font-size: 50px;
+  margin: 0;
+}
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 40px;
+  height: 40px;
+  font-size: 26px;
+  /* background-color: white; */
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  animation: showtooltip 0.7s forwards ease-in;
+  animation-delay: 1.5s;
+}
+.info:hover {
+  color: #f37423;
+  border: 2px solid #f37423;
+}
+.info:hover .tooltip {
+  opacity: 0.8;
+}
+.tooltip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: -3px;
+  right: 50px;
+  width: 112px;
+  height: 43px;
+  z-index: 2;
+  opacity: 0;
+  font-size: 15px;
+  color: white;
+  border: 1px solid none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #f37423;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 1200px) {
+}
+
+@media screen and (max-width: 900px) {
+  .main p {
+    font-size: 65px;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .main p {
+    font-size: 45px;
+  }
+}
+
+@keyframes scale {
+  100% {
+    transform: scale(1.1);
+    opacity: 0.25;
+    z-index: 1;
+  }
+}
+
+@keyframes showtitle {
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    z-index: 12;
+    color: white;
+  }
+}
+@keyframes showtooltip {
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    z-index: 12;
+  }
+}

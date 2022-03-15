@@ -1,0 +1,150 @@
+.productContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Products */
+.productItem {
+  width: 20%;
+  position: relative;
+  margin: 1rem;
+  text-align: center;
+  border: 1px solid black;
+  background-color: white;
+  padding: 5px;
+  border-radius: 1.5%;
+  flex: 0 0 auto;
+
+  align-content: space-between;
+}
+
+.productDelete {
+  position: absolute;
+  /* color: #ececec; */
+  color: #1b1a20;
+  border: 0.5px solid white;
+  top: 5px;
+  right: 15px;
+  font-size: 1.5em;
+  /* background-color: #1b1a20; */
+}
+
+.productLabel {
+  position: absolute;
+  color: #ececec;
+  top: 10px;
+  left: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 1em;
+  background-color: #1b1a20;
+  border: 0.5px solid white;
+  cursor: default;
+  z-index: 1;
+}
+
+.productCheckbox {
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+
+  padding: 10px;
+  margin-top: 8px;
+  margin-right: 10px;
+}
+
+.productItem button {
+  background: #272727;
+  border: none;
+  padding: 10px 30px;
+  color: #ececec;
+  /* margin-top: 10px; */
+  cursor: pointer;
+}
+.productItemImg {
+  border-radius: 1.5%;
+  width: 100%;
+  object-fit: cover;
+  height: 30vh;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.containerImg:hover {
+  border-radius: 1.5%;
+  width: 100%;
+  justify-content: space-between;
+  opacity: 0.5;
+}
+
+.productItemDetails {
+  text-align: center;
+  /* padding: 24px 0; */
+}
+.line {
+  display: inline-block;
+  width: 95%;
+  border-bottom: 2px solid #eabf00;
+  /* margin: 16px 0; */
+}
+.productItemTitle {
+  font-size: 14px;
+  color: grey;
+}
+.productsFilter {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0;
+}
+.sort select {
+  background-color: #fff;
+  outline: none;
+  border: 1px solid #ececec;
+  border-radius: 2px;
+  margin-left: 10px;
+  width: auto;
+  height: 35px;
+  cursor: pointer;
+}
+
+.itemDelete {
+  position: absolute;
+  top: 7px;
+  right: 15px;
+  font-size: 21px;
+  color: black;
+  font-weight: 800;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.productItemPrice {
+  display: inline-block;
+}
+
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .productItem {
+    width: 25%;
+  }
+}
+
+@media all and (min-width: 200px) and (max-width: 1200px) {
+  .productItem {
+    width: 28%;
+  }
+}
+
+@media all and (min-width: 500px) and (max-width: 900px) {
+  .productItem {
+    width: 40%;
+  }
+}
+
+@media all and (max-width: 500px) {
+  .productItem {
+    width: 90%;
+  }
+}

@@ -1,0 +1,214 @@
+@font-face {
+  font-family: 'InfinitySans-BoldA1';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-BoldA1.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.resultPage {
+  font-family: 'InfinitySans-BoldA1';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  height: 90vh;
+}
+
+/*title*/
+.titles {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  flex: 1;
+  width: 100%;
+  /* height: 100px; */
+  /* height: 55%; */
+}
+.title {
+  width: max-content;
+  height: 100%;
+}
+.title p {
+  font-size: 100px;
+  color: black;
+  margin: 0;
+  cursor: default;
+  -webkit-text-stroke: calc(0.005em + 1px) rgb(0, 0, 0);
+}
+
+.title p:last-child {
+  text-align: center;
+  /* font-size: 200px; */
+}
+/*votes container*/
+.votes__container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+  flex: 2.7;
+  overflow: auto;
+  padding-top: 10px;
+  /* border: 2px solid white; */
+}
+.votes__container::-webkit-scrollbar {
+  visibility: hidden;
+  cursor: pointer;
+  width: 8px;
+  height: 10px;
+}
+
+.votes__container::-webkit-scrollbar-thumb {
+  visibility: hidden;
+  cursor: pointer;
+  background-color: white; /*스크롤바의 색상*/
+  border: 1px solid white;
+}
+.votes__container:hover::-webkit-scrollbar {
+  visibility: visible;
+  cursor: pointer;
+  width: 8px;
+}
+
+.votes__container:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+  cursor: pointer;
+  background-color: #9d9d9d; /*스크롤바의 색상*/
+  border: 1px solid grey;
+  /* border-radius: 10px; */
+}
+.vote__container {
+  display: flex;
+  width: 95%;
+  align-items: center;
+  margin-bottom: 1.2em;
+  flex-direction: column;
+  padding: 0, 1em, 0, 1em;
+  /* background-color: black; */
+}
+.vote__title {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  /* margin-bottom: 0.5em; */
+  font-weight: 600;
+}
+.voteNum {
+  margin-left: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: black;
+  padding: 0.5em 1em 0.5em 1em;
+  color: white;
+  flex: 1;
+}
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 0.5em 1em 0.5em 1em;
+  flex: 6;
+}
+.message span {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: white;
+}
+.message span:first-child {
+  font-size: 2.5em;
+}
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: black;
+  padding: 0.5em 1em 0.5em 1em;
+  cursor: pointer;
+  color: white;
+  margin-right: 1em;
+  width: 6em;
+  flex: 1;
+}
+.cards {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.card {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18em;
+  height: 23em;
+  flex-direction: column;
+  border-radius: 10px;
+  border-radius: 10px;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.card img {
+  width: 15em;
+  height: 20em;
+}
+.card span {
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.i__close {
+  font-size: 3em;
+}
+.vote__number {
+  font-size: 2em;
+}
+.noVote {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+.noVote span {
+  font-size: 30px;
+}
+@media screen and (max-width: 1300px) {
+  .resultPage {
+    flex-direction: column;
+  }
+
+  .titles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0.5;
+    width: 100%;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+  }
+  .title p {
+    font-size: 85px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .title p {
+    font-size: 70px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .title p {
+    font-size: 50px;
+  }
+}

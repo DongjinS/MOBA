@@ -1,0 +1,140 @@
+@font-face {
+  font-family: 'InfinitySans-BoldA1';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-BoldA1.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.mainPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 90%;
+  /* opacity: 0.9; */
+  position: fixed;
+  z-index: 100;
+}
+
+.background {
+  width: 100%;
+  height: 100vh;
+  background-color: #121212;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: auto;
+  position: fixed;
+  opacity: 0.9;
+  z-index: 101;
+  animation: bg1_slideIn 0.5s;
+}
+
+.titles {
+  z-index: 102;
+  opacity: 1;
+  width: 73%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  transform: scale(0.94);
+  font-family: 'InfinitySans-BoldA1';
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.main {
+  width: max-content;
+  animation: showtitle 0.3s forwards ease-in;
+  /* animation-delay: 1.5s; */
+  /* color: rgba(0, 0, 0, 0); */
+  filter: blur(10px);
+}
+
+.main p {
+  opacity: 1;
+  margin: 0 auto;
+
+  font-size: 100px;
+  cursor: pointer;
+  z-index: 22;
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.main p:hover {
+  /* vertical-align: top; */
+  color: #f37423;
+  transform: scale(0.95);
+  opacity: 1;
+  z-index: 23;
+}
+
+.subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.subtitle p {
+  color: white;
+  font-size: 50px;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes scale {
+  100% {
+    transform: scale(1.1);
+    opacity: 0.25;
+    z-index: 1;
+  }
+}
+
+@keyframes showtitle {
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    z-index: 12;
+    color: white;
+  }
+}
+
+@keyframes bg1_slideIn {
+  from {
+    top: -200%;
+  }
+  to {
+    top: 0%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .main p {
+    font-size: 80px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .main p {
+    font-size: 60px;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .main p {
+    font-size: 50px;
+  }
+}
