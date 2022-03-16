@@ -26,25 +26,29 @@
 
 MOBA는 ‘함께 쇼핑 / 코디하기'를 통해 기존 온라인 쇼핑 경험을 개선하고 확장해나가는 서비스입니다.
 
+
 1. 크롬 익스텐션을 이용해 편리하게 쇼핑할 수 있습니다.
     <br>
-    
-    ![익스텐션](https://user-images.githubusercontent.com/46275039/158514860-d92a01d9-bf08-4fb2-99ec-be6930b778a7.gif)
+
+    <img src = "https://user-images.githubusercontent.com/46275039/158514860-d92a01d9-bf08-4fb2-99ec-be6930b778a7.gif" width="400" height="250">
 
     
 2. 친구와 영상 통화를 하며 캔버스 위에서 자유롭게 코디할 수 있습니다.
     <br> 
-
-    ![코디하기](https://user-images.githubusercontent.com/92354996/158513632-af0f9dae-f13a-47fe-b1c3-4a109eb1f98a.gif)
+    
+    <img src = "https://user-images.githubusercontent.com/92354996/158513632-af0f9dae-f13a-47fe-b1c3-4a109eb1f98a.gif" width="400" height="250">
     
 
 3. 다른 사람의 의견이 궁금한 상품에 대해 투표를 진행할 수 있습니다.
     <br>
     
-    ![장바구니:투표](https://user-images.githubusercontent.com/46275039/158517272-9aa195c8-ac94-496e-a3fb-dfac908e7487.gif)
-    
+    <img src = "https://user-images.githubusercontent.com/46275039/158517272-9aa195c8-ac94-496e-a3fb-dfac908e7487.gif" width="400" height="250">
+
     
 4. 자신의 코디 / 다른 사람의 코디를 컬렉션화 하여 저장할 수 있습니다.
+    <br>
+    
+    <img src = "https://user-images.githubusercontent.com/46275039/158517272-9aa195c8-ac94-496e-a3fb-dfac908e7487.gif" width="400" height="250">
 
 
 ## 서비스 구조도
