@@ -43,9 +43,11 @@ MOBA는 ‘함께 쇼핑 / 코디하기'를 통해 기존 온라인 쇼핑 경�
     <br>
     
     <img src = "https://user-images.githubusercontent.com/46275039/158517272-9aa195c8-ac94-496e-a3fb-dfac908e7487.gif" width="400" height="250">
+    <br>
+    <img src = "https://user-images.githubusercontent.com/76726411/158535304-28b1e492-282b-46e4-8f88-266a0548e380.gif" width="400" height="250">
 
     
-4. 자신의 코디 / 다른 사람의 코디를 컬렉션화 하여 저장할 수 있습니다.
+4. 자신의 코디를 컬렉션화 하여 저장할 수 있습니다. 다른 사람들의 컬렉션도 구경할 수 있습니다.
     <br>
     
     <img src = "https://user-images.githubusercontent.com/76726411/158522047-081f3746-a963-41ec-ae6e-797b00a58dc2.gif" width="400" height="250">
