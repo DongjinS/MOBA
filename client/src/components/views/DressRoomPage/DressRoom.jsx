@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
 import Cookies from 'universal-cookie';
 import ClothesLoading from '../../loading/ClothesLoading';
+
+import { throttle } from 'lodash';
 
 // import hark from 'hark';
 
@@ -246,6 +248,15 @@ const DressRoom = (props) => {
 
     setunMountFlag(false);
   });
+
+  const throttled = useCallback(
+    throttle((mouseChannel, mouseobj) => {
+      try {
+        mouseChannel.current.send(JSON.stringify(mouseobj));
+      } catch {}
+    }, 16),
+    []
+  );
 
   useEffect(async () => {
     getUserInfo();
@@ -541,7 +552,8 @@ const DressRoom = (props) => {
         */
         try {
           mouseobj.id = socketRef.current.id;
-          mouseChannel.current.send(JSON.stringify(mouseobj));
+          // console.log('in try');
+          throttled(mouseChannel, mouseobj);
         } catch (error) {
           // 상대 없을 때 send 시 에러
         }
@@ -1064,7 +1076,7 @@ const DressRoom = (props) => {
     }
 
     if (flag && items.length === 3) {
-      if (token){
+      if (token) {
         axios
           .post(`/collection/items`, {
             token: token,
