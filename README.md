@@ -17,7 +17,7 @@
 
 ![Untitled](https://user-images.githubusercontent.com/70636283/158506932-26f1e4aa-ce07-4e98-9092-2965cee73390.png)
 
-웹사이트 : [바로가기](https://moba-shop.net)
+웹사이트 : [바로가기](https://moba-shop.net) (과금 문제로 현재는 서비스를 중단하였습니다.)
 
 발표영상 : [바로가기](https://www.youtube.com/watch?v=l02mPrpn0rc)
 
